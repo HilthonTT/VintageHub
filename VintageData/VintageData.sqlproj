@@ -65,6 +65,7 @@
     <Folder Include="dbo\Stored Procedures\User" />
     <Folder Include="dbo\Stored Procedures\Order" />
     <Folder Include="dbo\Stored Procedures\OrderDetails" />
+    <Folder Include="Publish Locations" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Category.sql" />
@@ -104,5 +105,8 @@
     <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_Update.sql" />
     <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Order\spOrder_Delete.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Publish Locations\VintageData.publish.xml" />
   </ItemGroup>
 </Project>
