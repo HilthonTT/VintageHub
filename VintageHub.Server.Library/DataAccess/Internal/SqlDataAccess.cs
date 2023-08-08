@@ -71,13 +71,16 @@ public class SqlDataAccess : ISqlDataAccess
         return row;
     }
 
-    public async Task SaveDataAsync<T>(string storedProcedure, T parameters)
+    public async Task<int> SaveDataAsync<T>(string storedProcedure, T parameters)
     {
         string connectionString = GetConnectionString();
 
         using var connection = new SqlConnection(connectionString);
-        await connection.ExecuteAsync(storedProcedure, parameters,
+        using var multi = await connection.QueryMultipleAsync(storedProcedure, parameters,
             commandType: CommandType.StoredProcedure);
+
+        int insertedId = await multi.ReadSingleAsync<int>();
+        return insertedId;
     }
 
     public void StartTransaction()
@@ -92,10 +95,13 @@ public class SqlDataAccess : ISqlDataAccess
         _isClosed = false;
     }
 
-    public async Task SaveDataInTransactionAsync<T>(string storedProcedure, T parameters)
+    public async Task<int> SaveDataInTransactionAsync<T>(string storedProcedure, T parameters)
     {
-        await _connection.ExecuteAsync(storedProcedure, parameters,
-            commandType: CommandType.StoredProcedure, transaction: _transaction);
+        using var multi = await _connection.QueryMultipleAsync(storedProcedure, parameters,
+            commandType: CommandType.StoredProcedure);
+
+        int insertedId = await multi.ReadSingleAsync<int>();
+        return insertedId;
     }
 
     public async Task<List<T>> LoadDataInTransactionAsync<T, U>(string storedProcedure, U parameters)

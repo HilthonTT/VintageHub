@@ -8,7 +8,7 @@ public interface ISqlDataAccess
     Task<T> LoadFirstOrDefaultAsync<T, U>(string storedProcedure, U parameters);
     Task<T> LoadFirstOrDefaultInTransactionAsync<T, U>(string storedProcedure, U parameters);
     void RollbackTransaction();
-    Task SaveDataAsync<T>(string storedProcedure, T parameters);
-    Task SaveDataInTransactionAsync<T>(string storedProcedure, T parameters);
+    Task<int> SaveDataAsync<T>(string storedProcedure, T parameters);
+    Task<int> SaveDataInTransactionAsync<T>(string storedProcedure, T parameters);
     void StartTransaction();
 }
