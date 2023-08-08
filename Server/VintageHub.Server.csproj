@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\VintageHub.Client.csproj" />
-    <ProjectReference Include="..\Shared\VintageHub.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
