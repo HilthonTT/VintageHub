@@ -51,6 +51,15 @@ public class UserData : IUserData
         };
     }
 
+    private void RemoveUserCache(UserModel user)
+    {
+        string idKey = CacheNamePrefix + user.Id;
+        string oidKey = CacheNamePrefix + user.ObjectIdentifier;
+
+        _cache.Remove(idKey);
+        _cache.Remove(oidKey);
+    }
+
     public async Task<List<UserModel>> GetAllUsersAsync()
     {
         var output = _cache.Get<List<UserModel>>(CacheName);
@@ -105,6 +114,8 @@ public class UserData : IUserData
 
     public async Task<int> InsertUserAsync(UserModel user)
     {
+        _cache.Remove(CacheName);
+
         string storedProcedure = GetStoredProcedure("Insert");
         object parameters = GetInsertParameters(user);
 
@@ -113,6 +124,8 @@ public class UserData : IUserData
 
     public async Task<int> UpdateUserAsync(UserModel user)
     {
+        RemoveUserCache(user);
+
         string storedProcedure = GetStoredProcedure("Update");
         object parameters = GetUpdateParameters(user);
 
@@ -121,6 +134,8 @@ public class UserData : IUserData
 
     public async Task<int> DeleteUserAsync(UserModel user)
     {
+        RemoveUserCache(user);
+
         string storedProcedure = GetStoredProcedure("Delete");
         object parameters = new { user.Id };
 
