@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[spCategory_Delete]
+﻿CREATE PROCEDURE [dbo].[spEra_Delete]
 	@Id INT
 AS
 BEGIN
 	SET NOCOUNT ON;
-		
-	DELETE FROM [dbo].[Category]
+
+	DELETE FROM [dbo].[Era]
 	WHERE Id = @Id;
 
 	SELECT @Id AS 'InsertedId';

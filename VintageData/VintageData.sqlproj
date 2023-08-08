@@ -61,6 +61,10 @@
     <Folder Include="dbo\Stored Procedures" />
     <Folder Include="dbo\Stored Procedures\Category" />
     <Folder Include="dbo\Stored Procedures\Artifact" />
+    <Folder Include="dbo\Stored Procedures\Era" />
+    <Folder Include="dbo\Stored Procedures\User" />
+    <Folder Include="dbo\Stored Procedures\Order" />
+    <Folder Include="dbo\Stored Procedures\OrderDetails" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Category.sql" />
@@ -79,5 +83,26 @@
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_Update.sql" />
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Era\spEra_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Era\spEra_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Era\spEra_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Era\spEra_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Era\spEra_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\User\spUser_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\User\spUser_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\User\spUser_GetByOid.sql" />
+    <Build Include="dbo\Stored Procedures\User\spUser_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\User\spUser_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\User\spUser_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_GetByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_Update.sql" />
+    <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_GetByOrderId.sql" />
+    <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_Update.sql" />
+    <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_Delete.sql" />
   </ItemGroup>
 </Project>

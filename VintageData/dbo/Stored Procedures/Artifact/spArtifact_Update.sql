@@ -23,5 +23,7 @@ BEGIN
 		[Availability] = @Availability
 	WHERE Id = @Id;
 
+	SELECT @Id AS 'InsertedId';
+
 	RETURN 0;
 END

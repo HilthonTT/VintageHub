@@ -7,5 +7,7 @@ BEGIN
 	DELETE FROM [dbo].[Artifact]
 	WHERE Id = @Id;
 
+	SELECT @Id AS 'InsertedId';
+
 	RETURN 0;
 END
