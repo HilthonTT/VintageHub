@@ -2,6 +2,7 @@
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [UserId] INT NOT NULL, 
+    [TotalPrice] MONEY NOT NULL, 
     [IsComplete] BIT NOT NULL DEFAULT 0, 
     [IsCanceled] BIT NOT NULL DEFAULT 0, 
     [DateOrdered] DATETIME2 NOT NULL DEFAULT GETUTCDATE(), 
