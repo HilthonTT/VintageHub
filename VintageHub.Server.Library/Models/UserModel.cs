@@ -6,6 +6,7 @@ public class UserModel
     public int Id { get; set; }
 
     [Required]
+    [StringLength(36)]
     public string ObjectIdentifier { get; set; }
 
     [Required]

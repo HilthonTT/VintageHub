@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Era]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Name] NVARCHAR(50) NOT NULL, 
+    [Description] NVARCHAR(256) NOT NULL
+)
