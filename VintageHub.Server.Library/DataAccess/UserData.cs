@@ -6,7 +6,7 @@ using VintageHub.Server.Library.Models;
 namespace VintageHub.Server.Library.DataAccess;
 public class UserData : IUserData
 {
-    private static readonly TimeSpan CacheTimespan = TimeSpan.FromMinutes(30);
+    private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(UserData);
     private const string CacheNamePrefix = $"{CacheName}_";
     private readonly ISqlDataAccess _sql;
@@ -70,7 +70,7 @@ public class UserData : IUserData
 
             output = await _sql.LoadDataAsync<UserModel, dynamic>(storedProcedure, parameters);
 
-            _cache.Set(CacheName, output, CacheTimespan);
+            _cache.Set(CacheName, output, CacheTimeSpan);
         }
 
         return output;
@@ -88,7 +88,7 @@ public class UserData : IUserData
             output = await _sql.LoadFirstOrDefaultAsync<UserModel, dynamic>(
                 storedProcedure, parameters);
 
-            _cache.Set(key, output, CacheTimespan);
+            _cache.Set(key, output, CacheTimeSpan);
         }
 
         return output;
@@ -106,7 +106,7 @@ public class UserData : IUserData
             output = await _sql.LoadFirstOrDefaultAsync<UserModel, dynamic>(
                 storedProcedure, parameters);
 
-            _cache.Set(key, output, CacheTimespan);
+            _cache.Set(key, output, CacheTimeSpan);
         }
 
         return output;
