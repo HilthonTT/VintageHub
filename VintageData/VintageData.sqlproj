@@ -66,6 +66,7 @@
     <Folder Include="dbo\Stored Procedures\Order" />
     <Folder Include="dbo\Stored Procedures\OrderDetails" />
     <Folder Include="Publish Locations" />
+    <Folder Include="dbo\Stored Procedures\Review" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Category.sql" />
@@ -105,8 +106,16 @@
     <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_Update.sql" />
     <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Order\spOrder_Delete.sql" />
+    <Build Include="dbo\Tables\Review.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_GetByArtifactId.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Locations\VintageData.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="VintageData.refactorlog" />
   </ItemGroup>
 </Project>

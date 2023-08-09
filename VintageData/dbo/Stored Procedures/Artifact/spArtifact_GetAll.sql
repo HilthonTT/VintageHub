@@ -3,7 +3,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT [Id], [Name], [Description], [ImageUrl], [Quantity], [Price], [CategoryId], [EraId], [Availability]
+	SELECT [Id], [Name], [Description], [ImageUrl], [Quantity], [Rating], [Price], [CategoryId], [EraId], [Availability]
 	FROM [dbo].[Artifact];
 
 	RETURN 0;
