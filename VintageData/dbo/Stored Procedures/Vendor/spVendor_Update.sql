@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[spVendor_Update]
 	@Id INT,
+	@OwnerUserId INT,
 	@Name NVARCHAR(50),
 	@Description NVARCHAR(256),
 	@DateFounded DATETIME2
@@ -8,7 +9,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE [dbo].[Vendor]
-	SET [Name] = @Name,
+	SET [OwnerUserId] = @OwnerUserId,
+		[Name] = @Name,
 		[Description] = @Description,
 		[DateFounded] = @DateFounded
 	WHERE Id = @Id;
