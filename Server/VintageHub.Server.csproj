@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\VintageHub.Client.csproj" />
+    <ProjectReference Include="..\Server.Library\Server.Library.csproj" />
   </ItemGroup>
 
   <ItemGroup>

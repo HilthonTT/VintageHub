@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using VintageHub.Server.Library.DataAccess.Interfaces;
-using VintageHub.Server.Library.DataAccess.Internal.Interfaces;
-using VintageHub.Server.Library.Models;
-
-namespace VintageHub.Server.Library.DataAccess;
+﻿namespace Server.Library.DataAccess;
 public class CategoryData : ICategoryData
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);

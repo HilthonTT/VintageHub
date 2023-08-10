@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
-using Server.Library.DataAccess.Interfaces;
-using VintageHub.Server.Library.DataAccess.Internal.Interfaces;
-using VintageHub.Server.Library.Models;
-
-namespace Server.Library.DataAccess;
+﻿namespace Server.Library.DataAccess;
 public class OrderData : IOrderData
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);

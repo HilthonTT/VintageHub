@@ -1,6 +1,4 @@
-﻿using VintageHub.Server.Library.Models;
-
-namespace VintageHub.Server.Library.DataAccess.Interfaces;
+﻿namespace Server.Library.DataAccess.Interfaces;
 public interface ICategoryData
 {
     Task<int> DeleteCategoryAsync(CategoryModel category);

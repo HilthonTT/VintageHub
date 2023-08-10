@@ -1,4 +1,4 @@
-﻿namespace VintageHub.Server.Library.Models;
+﻿namespace Server.Library.Models;
 public class OrderDetailsModel
 {
     public int Id { get; set; }

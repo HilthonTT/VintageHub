@@ -1,4 +1,4 @@
-﻿namespace VintageHub.Server.Library.DataAccess.Internal.Interfaces;
+﻿namespace Server.Library.DataAccess.Internal.Interfaces;
 
 public interface ISqlDataAccess
 {

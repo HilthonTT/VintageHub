@@ -1,6 +1,4 @@
-﻿using VintageHub.Server.Library.Models;
-
-namespace Server.Library.DataAccess.Interfaces;
+﻿namespace Server.Library.DataAccess.Interfaces;
 public interface IOrderData
 {
     Task<int> DeleteOrderAsync(OrderModel order);

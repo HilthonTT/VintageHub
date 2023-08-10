@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VintageHub.Server.Library.Models;
+﻿namespace Server.Library.Models;
 public class ReviewModel
 {
     public int Id { get; set; }

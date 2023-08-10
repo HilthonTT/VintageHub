@@ -1,11 +1,4 @@
-﻿using Dapper;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using System.Data;
-using VintageHub.Server.Library.DataAccess.Internal.Interfaces;
-
-namespace VintageHub.Server.Library.DataAccess.Internal;
+﻿namespace Server.Library.DataAccess.Internal;
 public class SqlDataAccess : ISqlDataAccess
 {
     private const string DbName = "VintageData";
