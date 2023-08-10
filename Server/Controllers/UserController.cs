@@ -42,6 +42,12 @@ public class UserController : ControllerBase
         try
         {
             var user = await _userData.GetUserByIdAsync(id);
+
+            if (user is null)
+            {
+                return NotFound("User not found.");
+            }
+
             return Ok(user);
         }
         catch (Exception ex) 
@@ -57,6 +63,12 @@ public class UserController : ControllerBase
         try
         {
             var user = await _userData.GetUserByOidAsync(oid);
+
+            if (user is null)
+            {
+                return NotFound("User not found.");
+            }
+
             return Ok(user);
         }
         catch (Exception ex)
