@@ -5,6 +5,7 @@ public class OrderData : IOrderData
     private const string CacheName = nameof(OrderData);
     private const string CacheNamePrefix = $"{CacheName}_";
     private const string CacheNameUserPrefix = $"{CacheName}_User_";
+    private const string CacheNameDetailsPrefix = $"{CacheName}_Details_";
     private readonly ISqlDataAccess _sql;
     private readonly IMemoryCache _cache;
     private readonly ILogger<OrderData> _logger;
@@ -104,6 +105,24 @@ public class OrderData : IOrderData
             object parameters = new { UserId = userId };
 
             output = await _sql.LoadDataAsync<OrderModel, dynamic>(
+                storedProcedure, parameters);
+
+            _cache.Set(key, output, CacheTimeSpan);
+        }
+
+        return output;
+    }
+
+    public async Task<List<OrderDetailsModel>> GetOrderDetailsByOrderIdAsync(int orderId)
+    {
+        string key = CacheNameDetailsPrefix + orderId;
+        var output = _cache.Get<List<OrderDetailsModel>>(key);
+        if (output is null)
+        {
+            string storedProcedure = GetOrderDetailsStoredProcedure("GetByOrderId");
+            object parameters = new { OrderId = orderId };
+
+            output = await _sql.LoadDataAsync<OrderDetailsModel, dynamic>(
                 storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
