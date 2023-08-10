@@ -7,6 +7,6 @@ public interface IOrderData
     Task<List<OrderModel>> GetAllOrdersAsync();
     Task<OrderModel> GetOrderByIdAsync(int id);
     Task<List<OrderModel>> GetOrdersByUserIdAsync(int userId);
-    Task InsertOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails);
-    Task UpdateOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails);
+    Task<int> InsertOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails);
+    Task<int> UpdateOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails);
 }

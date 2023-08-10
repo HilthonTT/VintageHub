@@ -3,15 +3,15 @@
 	@ArtifactId INT,
 	@Title NVARCHAR(50),
 	@Description NVARCHAR(256),
-	@IsPositive BIT
+	@Rating DECIMAL
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @InsertedId INT;
 
-	INSERT INTO [dbo].[Review] ([UserId], [ArtifactId], [Title], [Description], [IsPositive])
-	VALUES (@UserId, @ArtifactId, @Title, @Description, @IsPositive)
+	INSERT INTO [dbo].[Review] ([UserId], [ArtifactId], [Title], [Description], [Rating])
+	VALUES (@UserId, @ArtifactId, @Title, @Description, @Rating)
 
 	SET @InsertedId = SCOPE_IDENTITY();
 

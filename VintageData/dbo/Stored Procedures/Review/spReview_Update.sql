@@ -2,7 +2,7 @@
 	@Id INT,
 	@Title NVARCHAR(50),
 	@Description NVARCHAR(256),
-	@IsPositive BIT
+	@Rating DECIMAL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -10,7 +10,7 @@ BEGIN
 	UPDATE [dbo].[Review]
 	SET [Title] = @Title,
 		[Description] = @Description,
-		[IsPositive] = @IsPositive
+		[Rating] = @Rating
 	WHERE [Id] = @Id;
 
 	SELECT @Id AS 'InsertedId';

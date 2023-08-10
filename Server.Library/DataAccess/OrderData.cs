@@ -136,7 +136,7 @@ public class OrderData : IOrderData
         return output;
     }
 
-    public async Task InsertOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails)
+    public async Task<int> InsertOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails)
     {
         try
         {
@@ -157,6 +157,8 @@ public class OrderData : IOrderData
             }
 
             _sql.CommitTransaction();
+
+            return orderId;
         }
         catch (Exception ex)
         {
@@ -166,7 +168,7 @@ public class OrderData : IOrderData
         }
     }
 
-    public async Task UpdateOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails)
+    public async Task<int> UpdateOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails)
     {
         try
         {
@@ -187,6 +189,8 @@ public class OrderData : IOrderData
             _sql.CommitTransaction();
 
             RemoveOrderCache(order);
+
+            return order.Id;
         }
         catch (Exception ex)
         {

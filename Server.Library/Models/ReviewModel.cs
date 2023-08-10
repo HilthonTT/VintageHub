@@ -20,5 +20,6 @@ public class ReviewModel
     public string Description { get; set; }
 
     [Required]
-    public bool IsPositive { get; set; }
+    [Range(0, 5)]
+    public double Rating { get; set; }
 }
