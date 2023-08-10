@@ -57,7 +57,7 @@ public class CategoryData : ICategoryData
         return output;
     }
 
-    public async Task<CategoryModel> GetCategoryAsync(int id)
+    public async Task<CategoryModel> GetCategoryByIdAsync(int id)
     {
         string key = CacheNamePrefix + id;
         var output = _cache.Get<CategoryModel>(key);

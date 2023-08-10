@@ -11,6 +11,7 @@ public class ArtifactData : IArtifactData
     private readonly IMemoryCache _cache;
     private const string CacheName = nameof(ArtifactData);
     private const string CacheNamePrefix = $"{CacheName}_";
+    private const string CacheNameVendorPrefix = $"{CacheName}_Vendor_";
 
     public ArtifactData(
         ISqlDataAccess sql,
@@ -35,6 +36,7 @@ public class ArtifactData : IArtifactData
             artifact.Quantity,
             artifact.Rating,
             artifact.Price,
+            artifact.VendorId,
             artifact.CategoryId,
             artifact.EraId,
             artifact.Availability,
@@ -65,7 +67,25 @@ public class ArtifactData : IArtifactData
         return output;
     }
 
-    public async Task<ArtifactModel> GetArtifactAsync(int id)
+    public async Task<List<ArtifactModel>> GetAllArtifactsByVendorIdAsync(int vendorId)
+    {
+        string key = CacheNameVendorPrefix + vendorId;
+        var output = _cache.Get<List<ArtifactModel>>(key);
+        if (output is null)
+        {
+            string storedProcedure = GetStoredProcedure("GetByVendorId");
+            object parameters = new { VendorId = vendorId };
+
+            output = await _sql.LoadDataAsync<ArtifactModel, dynamic>(
+                storedProcedure, parameters);
+
+            _cache.Set(key, output, CacheTimeSpan);
+        }
+
+        return output;
+    }
+
+    public async Task<ArtifactModel> GetArtifactByIdAsync(int id)
     {
         string key = CacheNamePrefix + id;
         var output = _cache.Get<ArtifactModel>(key);

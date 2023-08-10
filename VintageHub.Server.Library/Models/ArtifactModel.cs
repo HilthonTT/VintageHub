@@ -26,6 +26,9 @@ public class ArtifactModel
     public decimal Price { get; set; }
 
     [Required]
+    public int VendorId { get; set; }
+
+    [Required]
     public int CategoryId { get; set; }
 
     [Required]

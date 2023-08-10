@@ -67,6 +67,7 @@
     <Folder Include="dbo\Stored Procedures\OrderDetails" />
     <Folder Include="Publish Locations" />
     <Folder Include="dbo\Stored Procedures\Review" />
+    <Folder Include="dbo\Stored Procedures\Vendor" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Category.sql" />
@@ -111,6 +112,13 @@
     <Build Include="dbo\Stored Procedures\Review\spReview_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_Update.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_Delete.sql" />
+    <Build Include="dbo\Tables\Vendor.sql" />
+    <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Vendor\spVendor_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Vendor\spVendor_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Vendor\spVendor_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetByVendorId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Locations\VintageData.publish.xml" />
