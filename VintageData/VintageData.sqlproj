@@ -132,6 +132,7 @@
     <Build Include="dbo\Scripts\User\Index_User_Id.sql" />
     <Build Include="dbo\Scripts\User\Index_User_Oid.sql" />
     <Build Include="dbo\Scripts\Review\Index_Review_ArtifactId.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_GetById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Locations\VintageData.publish.xml" />

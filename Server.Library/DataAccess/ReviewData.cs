@@ -4,6 +4,7 @@ public class ReviewData : IReviewData
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(ReviewData);
     private const string CacheNamePrefix = $"{CacheName}_";
+    private const string CacheNameArtifactPrefix = $"{CacheName}_Artifact_";
     private readonly ISqlDataAccess _sql;
     private readonly IMemoryCache _cache;
     private readonly ILogger<ReviewData> _logger;
@@ -48,13 +49,31 @@ public class ReviewData : IReviewData
 
     private void RemoveReviewCache(ReviewModel review)
     {
-        string key = CacheNamePrefix + review.ArtifactId;
+        string key = CacheNameArtifactPrefix + review.ArtifactId;
         _cache.Remove(key);
     }
 
-    public async Task<List<ReviewModel>> GetReviewsByArtifactId(int artifactId)
+    public async Task<ReviewModel> GetReviewByIdAsync(int id)
     {
-        string key = CacheNamePrefix + artifactId;
+        string key = CacheNamePrefix + id;
+        var output = _cache.Get<ReviewModel>(key);
+        if (output is null)
+        {
+            string storedProcedure = GetStoredProcedure("GetById");
+            object parameters = new { Id = id };
+
+            output = await _sql.LoadFirstOrDefaultAsync<ReviewModel, dynamic>(
+                storedProcedure, parameters);
+
+            _cache.Set(key, output, CacheTimeSpan);
+        }
+
+        return output;
+    }
+
+    public async Task<List<ReviewModel>> GetReviewsByArtifactIdAsync(int artifactId)
+    {
+        string key = CacheNameArtifactPrefix + artifactId;
         var output = _cache.Get<List<ReviewModel>>(key);
         if (output is null)
         {
@@ -153,6 +172,8 @@ public class ReviewData : IReviewData
 
     public async Task<int> DeleteReviewAsync(ReviewModel review)
     {
+        RemoveReviewCache(review);
+
         string storedProcedure = GetStoredProcedure("Delete");
         object parameters = new { review.Id };
 
