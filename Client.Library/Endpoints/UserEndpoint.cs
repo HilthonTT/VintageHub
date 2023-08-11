@@ -17,7 +17,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            var response = await _httpClient.GetAsync("User");
+            using var response = await _httpClient.GetAsync("User");
             response.EnsureSuccessStatusCode();
 
             var users = await response.Content.ReadFromJsonAsync<List<UserModel>>();
@@ -34,7 +34,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            var response = await _httpClient.GetAsync($"User/{id}");
+            using var response = await _httpClient.GetAsync($"User/{id}");
             response.EnsureSuccessStatusCode();
 
             var user = await response.Content.ReadFromJsonAsync<UserModel>();
@@ -51,7 +51,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            var response = await _httpClient.GetAsync($"User/auth/{oid}");
+            using var response = await _httpClient.GetAsync($"User/auth/{oid}");
             response.EnsureSuccessStatusCode();
 
             var user = await response.Content.ReadFromJsonAsync<UserModel>();
@@ -68,7 +68,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync("User", user);
+            using var response = await _httpClient.PostAsJsonAsync("User", user);
             response.EnsureSuccessStatusCode();
 
             var createdUser = await response.Content.ReadFromJsonAsync<UserModel>();
@@ -85,7 +85,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            var response = await _httpClient.PutAsJsonAsync("User", user);
+            using var response = await _httpClient.PutAsJsonAsync("User", user);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -98,7 +98,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            var response = await _httpClient.DeleteAsync($"User/{user.Id}");
+            using var response = await _httpClient.DeleteAsync($"User/{user.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)

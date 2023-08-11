@@ -1,5 +1,5 @@
 ﻿namespace Client.Library.Models;
-internal class ReviewModel
+public class ReviewModel
 {
     public int Id { get; set; }
     public int UserId { get; set; }

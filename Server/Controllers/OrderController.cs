@@ -89,7 +89,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> InsertOrderAsync([FromBody] OrderRequestModel request)
+    public async Task<ActionResult<OrderModel>> InsertOrderAsync([FromBody] OrderRequestModel request)
     {
         if (ModelState.IsValid is false)
         {

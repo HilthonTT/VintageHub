@@ -5,14 +5,15 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System.Net.Http.Json;
 
 namespace Client.Library.Endpoints;
-public class CategoryEndpoint : ICategoryEndpoint
+public class ReviewEndpoint : IReviewEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
-    private const string CacheName = nameof(CategoryEndpoint);
+    private const string CacheName = nameof(ReviewEndpoint);
+    private const string CacheNamePrefix = $"{CacheName}_";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
-    public CategoryEndpoint(
+    public ReviewEndpoint(
         HttpClient httpClient,
         ILocalStorage localStorage)
     {
@@ -20,19 +21,19 @@ public class CategoryEndpoint : ICategoryEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<CategoryModel>> GetAllCategoriesAsync()
+    public async Task<List<ReviewModel>> GetAllReviewsByArtifactId(int artifactId)
     {
         try
         {
-            var output = await _localStorage.GetAsync<List<CategoryModel>>(CacheName);
-
+            string key = CacheNamePrefix + artifactId;
+            var output = await _localStorage.GetAsync<List<ReviewModel>>(key);
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync("Category");
+                using var response = await _httpClient.GetAsync($"Review/artifact/{artifactId}");
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<CategoryModel>>();
-                await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
+                output = await response.Content.ReadFromJsonAsync<List<ReviewModel>>();
+                await _localStorage.SetAsync(key, output, CacheTimeSpan);
             }
 
             return output;
@@ -44,14 +45,14 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
     }
 
-    public async Task<CategoryModel> GetCategoryByIdAsync(int id)
+    public async Task<ReviewModel> GetReviewByIdAsync(int id)
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Category/{id}");
+            using var response = await _httpClient.GetAsync($"Review/{id}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<CategoryModel>();
+            return await response.Content.ReadFromJsonAsync<ReviewModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -60,14 +61,14 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
     }
 
-    public async Task<CategoryModel> InsertCategoryAsync(CategoryModel category)
+    public async Task<ReviewModel> InsertReviewAsync(ReviewModel review)
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync("Category", category);
+            using var response = await _httpClient.PostAsJsonAsync("Review", review);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<CategoryModel>();
+            return await response.Content.ReadFromJsonAsync<ReviewModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -76,11 +77,11 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
     }
 
-    public async Task UpdateCategoryAsync(CategoryModel category)
+    public async Task UpdateReviewAsync(ReviewModel review)
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync("Category", category);
+            using var response = await _httpClient.PutAsJsonAsync("Review", review);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -89,11 +90,11 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
     }
 
-    public async Task DeleteCategoryAsync(CategoryModel category)
+    public async Task DeleteReviewAsync(ReviewModel review)
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"Category/{category.Id}");
+            using var response = await _httpClient.DeleteAsync($"Review/{review.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)

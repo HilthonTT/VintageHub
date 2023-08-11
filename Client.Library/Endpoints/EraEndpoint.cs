@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System.Net.Http.Json;
 
 namespace Client.Library.Endpoints;
-public class CategoryEndpoint : ICategoryEndpoint
+public class EraEndpoint : IEraEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
-    private const string CacheName = nameof(CategoryEndpoint);
+    private const string CacheName = nameof(EraEndpoint);
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
-    public CategoryEndpoint(
+    public EraEndpoint(
         HttpClient httpClient,
         ILocalStorage localStorage)
     {
@@ -20,18 +20,17 @@ public class CategoryEndpoint : ICategoryEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<CategoryModel>> GetAllCategoriesAsync()
+    public async Task<List<EraModel>> GetAllErasAsync()
     {
         try
         {
-            var output = await _localStorage.GetAsync<List<CategoryModel>>(CacheName);
-
+            var output = await _localStorage.GetAsync<List<EraModel>>(CacheName);
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync("Category");
+                using var response = await _httpClient.GetAsync("Era");
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<CategoryModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<EraModel>>();
                 await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
             }
 
@@ -44,14 +43,14 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
     }
 
-    public async Task<CategoryModel> GetCategoryByIdAsync(int id)
+    public async Task<EraModel> GetEraByIdAsync(int id)
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Category/{id}");
+            using var response = await _httpClient.GetAsync($"Era/{id}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<CategoryModel>();
+            return await response.Content.ReadFromJsonAsync<EraModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -60,14 +59,14 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
     }
 
-    public async Task<CategoryModel> InsertCategoryAsync(CategoryModel category)
+    public async Task<EraModel> InsertEraAsync(EraModel era)
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync("Category", category);
+            using var response = await _httpClient.PostAsJsonAsync("Era", era);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<CategoryModel>();
+            return await response.Content.ReadFromJsonAsync<EraModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -76,11 +75,11 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
     }
 
-    public async Task UpdateCategoryAsync(CategoryModel category)
+    public async Task UpdateEraAsync(EraModel era)
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync("Category", category);
+            using var response = await _httpClient.PutAsJsonAsync("Era", era);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -89,11 +88,11 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
     }
 
-    public async Task DeleteCategoryAsync(CategoryModel category)
+    public async Task DeleteEraAsync(EraModel era)
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"Category/{category.Id}");
+            using var response = await _httpClient.DeleteAsync($"Era/{era.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
