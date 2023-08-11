@@ -9,7 +9,6 @@ public class ArtifactEndpoint : IArtifactEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(ArtifactEndpoint);
-    private const string CacheNamePrefix = $"{CacheName}_";
     private const string CacheNameVendorPrefix = $"{CacheName}_Vendor_";
 
     private readonly HttpClient _httpClient;
@@ -29,16 +28,14 @@ public class ArtifactEndpoint : IArtifactEndpoint
         {
             var output = await _localStorage.GetAsync<List<ArtifactModel>>(CacheName);
 
-            if (output is not null)
+            if (output is null)
             {
-                return output;
+                var response = await _httpClient.GetAsync("Artifact");
+                response.EnsureSuccessStatusCode();
+
+                output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
+                await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
             }
-
-            var response = await _httpClient.GetAsync("Artifact");
-            response.EnsureSuccessStatusCode();
-
-            output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
-            await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
 
             return output;
         }
@@ -53,21 +50,10 @@ public class ArtifactEndpoint : IArtifactEndpoint
     {
         try
         {
-            string key = CacheNamePrefix + id;
-            var output = await _localStorage.GetAsync<ArtifactModel>(key);
-
-            if (output is not null)
-            {
-                return output;
-            }
-
             var response = await _httpClient.GetAsync($"Artifact/{id}");
             response.EnsureSuccessStatusCode();
 
-            output = await response.Content.ReadFromJsonAsync<ArtifactModel>();
-            await _localStorage.SetAsync(key, output, CacheTimeSpan);
-
-            return output;
+            return await response.Content.ReadFromJsonAsync<ArtifactModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -76,12 +62,12 @@ public class ArtifactEndpoint : IArtifactEndpoint
         }
     }
 
-    public async Task<ArtifactModel> GetArtifactByVendorIdAsync(int vendorId)
+    public async Task<List<ArtifactModel>> GetArtifactByVendorIdAsync(int vendorId)
     {
         try
         {
             string key = CacheNameVendorPrefix + vendorId;
-            var output = await _localStorage.GetAsync<ArtifactModel>(key);
+            var output = await _localStorage.GetAsync<List<ArtifactModel>>(key);
 
             if (output is not null)
             {
@@ -91,7 +77,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
             var response = await _httpClient.GetAsync($"Artifact/vendor/{vendorId}");
             response.EnsureSuccessStatusCode();
 
-            output = await response.Content.ReadFromJsonAsync<ArtifactModel>();
+            output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
             await _localStorage.SetAsync(key, output, CacheTimeSpan);
 
             return output;

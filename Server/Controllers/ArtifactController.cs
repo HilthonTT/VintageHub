@@ -37,18 +37,13 @@ public class ArtifactController : ControllerBase
     }
 
     [HttpGet("vendor/{id}")]
-    public async Task<ActionResult<ArtifactModel>> GetArtifactByVendorIdAsync(int id)
+    public async Task<ActionResult<List<ArtifactModel>>> GetArtifactByVendorIdAsync(int id)
     {
         try
         {
-            var artifact = await _artifactData.GetAllArtifactsByVendorIdAsync(id);
+            var artifacts = await _artifactData.GetAllArtifactsByVendorIdAsync(id);
 
-            if (artifact is null)
-            {
-                return NotFound("Artifact not found.");
-            }
-
-            return Ok(artifact);
+            return Ok(artifacts);
         }
         catch (Exception ex)
         {
