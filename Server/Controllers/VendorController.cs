@@ -98,17 +98,12 @@ public class VendorController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteVendorAsync([FromBody] VendorModel vendor)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteVendorAsync(int id)
     {
-        if (ModelState.IsValid is false)
-        {
-            return BadRequest(ModelState);
-        }
-
         try
         {
-            await _vendorData.DeleteVendorAsync(vendor);
+            await _vendorData.DeleteVendorAsync(id);
             return NoContent();
         }
         catch (Exception ex)

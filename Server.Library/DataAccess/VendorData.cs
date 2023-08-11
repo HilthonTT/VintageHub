@@ -31,9 +31,9 @@ public class VendorData : IVendorData
         };
     }
 
-    private void RemoveVendorCache(VendorModel vendor)
+    private void RemoveVendorCache(int id)
     {
-        string idKey = CacheNamePrefix + vendor.Id;
+        string idKey = CacheNamePrefix + id;
         _cache.Remove(idKey);
     }
 
@@ -82,19 +82,19 @@ public class VendorData : IVendorData
 
     public async Task<int> UpdateVendorAsync(VendorModel vendor)
     {
-        RemoveVendorCache(vendor);
+        RemoveVendorCache(vendor.Id);
 
         string storedProcedure = GetStoredProcedure("Update");
 
         return await _sql.SaveDataAsync(storedProcedure, vendor);
     }
 
-    public async Task<int> DeleteVendorAsync(VendorModel vendor)
+    public async Task<int> DeleteVendorAsync(int id)
     {
-        RemoveVendorCache(vendor);
+        RemoveVendorCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { vendor.Id };
+        object parameters = new { Id = id };
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

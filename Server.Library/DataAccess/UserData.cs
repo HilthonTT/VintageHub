@@ -127,8 +127,9 @@ public class UserData : IUserData
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
 
-    public async Task<int> DeleteUserAsync(UserModel user)
+    public async Task<int> DeleteUserAsync(int id)
     {
+        var user = await GetUserByIdAsync(id);
         RemoveUserCache(user);
 
         string storedProcedure = GetStoredProcedure("Delete");

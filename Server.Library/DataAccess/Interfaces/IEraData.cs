@@ -1,7 +1,7 @@
 ﻿namespace Server.Library.DataAccess.Interfaces;
 public interface IEraData
 {
-    Task<int> DeleteEraAsync(EraModel era);
+    Task<int> DeleteEraAsync(int id);
     Task<List<EraModel>> GetAllErasAsync();
     Task<EraModel> GetEraByIdAsync(int id);
     Task<int> InsertEraAsync(EraModel era);

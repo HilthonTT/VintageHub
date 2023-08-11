@@ -129,17 +129,12 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteOrderAsync([FromBody] OrderModel order)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteOrderAsync(int id)
     {
-        if (ModelState.IsValid is false)
-        {
-            return BadRequest(ModelState);
-        }
-
         try
         {
-            await _orderData.DeleteOrderAsync(order);
+            await _orderData.DeleteOrderAsync(id);
             return NoContent();
         }
         catch (Exception ex)

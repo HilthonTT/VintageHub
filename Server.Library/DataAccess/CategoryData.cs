@@ -29,9 +29,9 @@ public class CategoryData : ICategoryData
         };
     }
 
-    private void RemoveCategoryCache(CategoryModel category)
+    private void RemoveCategoryCache(int id)
     {
-        string idKey = CacheNamePrefix + category.Id;
+        string idKey = CacheNamePrefix + id;
         _cache.Remove(idKey);
     }
 
@@ -80,19 +80,19 @@ public class CategoryData : ICategoryData
 
     public async Task<int> UpdateCategoryAsync(CategoryModel category)
     {
-        RemoveCategoryCache(category);
+        RemoveCategoryCache(category.Id);
 
         string storedProcedure = GetStoredProcedure("Update");
 
         return await _sql.SaveDataAsync(storedProcedure, category);
     }
 
-    public async Task<int> DeleteCategoryAsync(CategoryModel category)
+    public async Task<int> DeleteCategoryAsync(int id)
     {
-        RemoveCategoryCache(category);
+        RemoveCategoryCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { category.Id };
+        object parameters = new { Id = id };
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

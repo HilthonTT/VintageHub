@@ -38,9 +38,9 @@ public class ArtifactData : IArtifactData
         };
     }
 
-    private void RemoveArtifactCache(ArtifactModel artifact)
+    private void RemoveArtifactCache(int id)
     {
-        string idKey = CacheNamePrefix + artifact.Id;
+        string idKey = CacheNamePrefix + id;
 
         _cache.Remove(idKey);
     }
@@ -108,19 +108,19 @@ public class ArtifactData : IArtifactData
 
     public async Task<int> UpdateArtifactAsync(ArtifactModel artifact)
     {
-        RemoveArtifactCache(artifact);
+        RemoveArtifactCache(artifact.Id);
 
         string storedProcedure = GetStoredProcedure("Update");
 
         return await _sql.SaveDataAsync(storedProcedure, artifact);
     }
 
-    public async Task<int> DeleteArtifactAsync(ArtifactModel artifact)
+    public async Task<int> DeleteArtifactAsync(int id)
     {
-        RemoveArtifactCache(artifact);
+        RemoveArtifactCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { artifact.Id };
+        object parameters = new { Id = id };
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

@@ -1,7 +1,7 @@
 ﻿namespace Server.Library.DataAccess.Interfaces;
 public interface IArtifactData
 {
-    Task<int> DeleteArtifactAsync(ArtifactModel artifact);
+    Task<int> DeleteArtifactAsync(int id);
     Task<List<ArtifactModel>> GetAllArtifactsAsync();
     Task<List<ArtifactModel>> GetAllArtifactsByVendorIdAsync(int vendorId);
     Task<ArtifactModel> GetArtifactByIdAsync(int id);

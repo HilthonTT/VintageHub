@@ -119,8 +119,8 @@ public class ArtifactController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteArtifactAsync([FromBody] ArtifactModel artifact)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteArtifactAsync(int id)
     {
         if (ModelState.IsValid is false)
         {
@@ -129,7 +129,7 @@ public class ArtifactController : ControllerBase
 
         try
         {
-            await _artifactData.DeleteArtifactAsync(artifact);
+            await _artifactData.DeleteArtifactAsync(id);
             return NoContent();
         }
         catch (Exception ex)

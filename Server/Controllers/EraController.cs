@@ -98,17 +98,12 @@ public class EraController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteEraAsync([FromBody] EraModel era)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteEraAsync(int id)
     {
-        if (ModelState.IsValid is false)
-        {
-            return BadRequest(ModelState);
-        }
-
         try
         {
-            await _eraData.DeleteEraAsync(era);
+            await _eraData.DeleteEraAsync(id);
             return NoContent();
         }
         catch (Exception ex)

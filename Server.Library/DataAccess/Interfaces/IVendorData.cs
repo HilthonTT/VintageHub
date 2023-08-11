@@ -1,7 +1,7 @@
 ﻿namespace Server.Library.DataAccess.Interfaces;
 public interface IVendorData
 {
-    Task<int> DeleteVendorAsync(VendorModel vendor);
+    Task<int> DeleteVendorAsync(int id);
     Task<List<VendorModel>> GetAllVendorsAsync();
     Task<VendorModel> GetVendorByIdAsync(int id);
     Task<int> InsertVendorAsync(VendorModel vendor);

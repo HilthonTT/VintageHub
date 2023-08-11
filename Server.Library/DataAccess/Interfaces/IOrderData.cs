@@ -1,7 +1,7 @@
 ﻿namespace Server.Library.DataAccess.Interfaces;
 public interface IOrderData
 {
-    Task<int> DeleteOrderAsync(OrderModel order);
+    Task<int> DeleteOrderAsync(int id);
     Task<List<OrderModel>> GetAllOrdersAsync();
     Task<OrderModel> GetOrderByIdAsync(int id);
     Task<List<OrderDetailsModel>> GetOrderDetailsByOrderIdAsync(int orderId);

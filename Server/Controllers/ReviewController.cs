@@ -97,17 +97,12 @@ public class ReviewController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteReviewAsync([FromBody] ReviewModel review)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteReviewAsync(int id)
     {
-        if (ModelState.IsValid is false)
-        {
-            return BadRequest(ModelState);
-        }
-
         try
         {
-            await _reviewData.DeleteReviewAsync(review);
+            await _reviewData.DeleteReviewAsync(id);
             return NoContent();
         }
         catch (Exception ex)

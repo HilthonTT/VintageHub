@@ -72,9 +72,9 @@ public class OrderData : IOrderData
         };
     }
 
-    private void RemoveOrderCache(OrderModel order)
+    private void RemoveOrderCache(int id)
     {
-        string idkey = CacheNamePrefix + order.Id;
+        string idkey = CacheNamePrefix + id;
         _cache.Remove(idkey);
     }
 
@@ -201,7 +201,7 @@ public class OrderData : IOrderData
 
             _sql.CommitTransaction();
 
-            RemoveOrderCache(order);
+            RemoveOrderCache(order.Id);
 
             return order.Id;
         }
@@ -213,12 +213,12 @@ public class OrderData : IOrderData
         }
     }
 
-    public async Task<int> DeleteOrderAsync(OrderModel order)
+    public async Task<int> DeleteOrderAsync(int id)
     {
-        RemoveOrderCache(order);
+        RemoveOrderCache(id);
 
         string storedProcedure = GetOrderStoredProcedure("Delete");
-        object parameters = new { order.Id };
+        object parameters = new { Id = id };
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

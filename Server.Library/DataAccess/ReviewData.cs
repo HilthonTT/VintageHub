@@ -47,9 +47,9 @@ public class ReviewData : IReviewData
         };
     }
 
-    private void RemoveReviewCache(ReviewModel review)
+    private void RemoveReviewCache(int id)
     {
-        string key = CacheNameArtifactPrefix + review.ArtifactId;
+        string key = CacheNameArtifactPrefix + id;
         _cache.Remove(key);
     }
 
@@ -170,12 +170,12 @@ public class ReviewData : IReviewData
         }
     }
 
-    public async Task<int> DeleteReviewAsync(ReviewModel review)
+    public async Task<int> DeleteReviewAsync(int id)
     {
-        RemoveReviewCache(review);
+        RemoveReviewCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { review.Id };
+        object parameters = new { Id = id };
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

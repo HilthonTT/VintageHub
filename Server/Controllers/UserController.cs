@@ -120,17 +120,12 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteUserAsync([FromBody] UserModel user)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteUserAsync(int id)
     {
-        if (ModelState.IsValid is false)
-        {
-            return BadRequest(ModelState);
-        }
-
         try
         {
-            await _userData.DeleteUserAsync(user);
+            await _userData.DeleteUserAsync(id);
             return NoContent();
         }
         catch (Exception ex)

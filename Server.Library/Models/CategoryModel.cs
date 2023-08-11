@@ -1,7 +1,7 @@
 ﻿namespace Server.Library.Models;
 public class CategoryModel
 {
-    public string Id { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [StringLength(50)]

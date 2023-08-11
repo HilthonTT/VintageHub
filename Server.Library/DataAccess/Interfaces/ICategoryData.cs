@@ -1,7 +1,7 @@
 ﻿namespace Server.Library.DataAccess.Interfaces;
 public interface ICategoryData
 {
-    Task<int> DeleteCategoryAsync(CategoryModel category);
+    Task<int> DeleteCategoryAsync(int id);
     Task<List<CategoryModel>> GetAllCategoriesAsync();
     Task<CategoryModel> GetCategoryByIdAsync(int id);
     Task<int> InsertCategoryAsync(CategoryModel category);

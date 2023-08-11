@@ -89,12 +89,12 @@ public class CategoryController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteCategoryAsync([FromBody] CategoryModel category)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteCategoryAsync(int id)
     {
         try
         {
-            await _categoryData.DeleteCategoryAsync(category);
+            await _categoryData.DeleteCategoryAsync(id);
 
             return NoContent();
         }

@@ -29,9 +29,9 @@ public class EraData : IEraData
         };
     }
 
-    private void RemoveEraCache(EraModel era)
+    private void RemoveEraCache(int id)
     {
-        string idKey = CacheNamePrefix + era.Id;
+        string idKey = CacheNamePrefix + id;
         _cache.Remove(idKey);
     }
 
@@ -80,19 +80,19 @@ public class EraData : IEraData
 
     public async Task<int> UpdateEraAsync(EraModel era)
     {
-        RemoveEraCache(era);
+        RemoveEraCache(era.Id);
 
         string storedProcedure = GetStoredProcedure("Update");
 
         return await _sql.SaveDataAsync(storedProcedure, era);
     }
 
-    public async Task<int> DeleteEraAsync(EraModel era)
+    public async Task<int> DeleteEraAsync(int id)
     {
-        RemoveEraCache(era);
+        RemoveEraCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { era.Id };
+        object parameters = new { Id = id };
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
