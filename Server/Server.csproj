@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>VintageHub.Server-e49a682b-15e8-4cf5-94ee-294c84d0b5ec</UserSecretsId>
   </PropertyGroup>
@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\VintageHub.Client.csproj" />
+    <ProjectReference Include="..\Client\Client.csproj" />
     <ProjectReference Include="..\Server.Library\Server.Library.csproj" />
   </ItemGroup>
 
