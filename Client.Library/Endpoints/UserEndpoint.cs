@@ -17,7 +17,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            var response = await _httpClient.GetAsync("Users");
+            var response = await _httpClient.GetAsync("User");
             response.EnsureSuccessStatusCode();
 
             var users = await response.Content.ReadFromJsonAsync<List<UserModel>>();
@@ -26,7 +26,7 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            throw;
+            return null;
         }
     }
 
@@ -43,7 +43,7 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            throw;
+            return null;
         }
     }
 
@@ -60,7 +60,7 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            throw;
+            return null;
         }
     }
 
@@ -77,7 +77,7 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            throw;
+            return null;
         }
     }
 
