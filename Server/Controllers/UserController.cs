@@ -79,6 +79,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<ActionResult<UserModel>> InsertUserAsync([FromBody] UserModel user)
     {
         if (ModelState.IsValid is false)

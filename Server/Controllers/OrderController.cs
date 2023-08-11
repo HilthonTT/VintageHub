@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using Server.Library.Models;
 using VintageHub.Server.Models;
 
 namespace VintageHub.Server.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+[RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
 public class OrderController : ControllerBase
 {
     private readonly IOrderData _orderData;
@@ -43,8 +47,8 @@ public class OrderController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error fetching the orders: {error}", ex.Message);
-            return StatusCode(500, "Error fetching the orders.");
+            _logger.LogError("Error fetching the orders by user Id: {error}", ex.Message);
+            return StatusCode(500, $"Error fetching the orders by user id of {userId}.");
         }
     }
 
@@ -58,8 +62,8 @@ public class OrderController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error fetching the order details: {error}", ex.Message);
-            return StatusCode(500, "Error fetching the order details.");
+            _logger.LogError("Error fetching the order details by order Id: {error}", ex.Message);
+            return StatusCode(500, $"Error fetching the order details by order id of {orderId}.");
         }
     }
 
@@ -79,7 +83,7 @@ public class OrderController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error fetching the order: {error}", ex.Message);
+            _logger.LogError("Error fetching the order by Id: {error}", ex.Message);
             return StatusCode(500, $"Error fetching the order by id of {id}.");
         }
     }

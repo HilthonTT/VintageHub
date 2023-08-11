@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using Server.Library.Models;
 
 namespace VintageHub.Server.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+[RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
 public class EraController : ControllerBase
 {
     private readonly IEraData _eraData;
