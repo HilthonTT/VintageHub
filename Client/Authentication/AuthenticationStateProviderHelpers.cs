@@ -11,7 +11,7 @@ public static class AuthenticationStateProviderHelpers
         IUserEndpoint userEndpoint)
     {
         var authState = await provider.GetAuthenticationStateAsync();
-        string oid = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("objectidentifier"))?.Value;
+        string oid = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("oid"))?.Value;
         return await userEndpoint.GetUserByOidAsync(oid);
     }
 }
