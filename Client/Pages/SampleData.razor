@@ -1,0 +1,17 @@
+﻿@page "/SampleData"
+@attribute [Authorize(Policy = "Admin")]
+@inject ICategoryEndpoint CategoryEndpoint
+@inject IEraEndpoint EraEndpoint
+@inject IArtifactEndpoint ArtifactEndpoint
+@inject IVendorEndpoint VendorEndpoint
+
+@code {
+    private bool categoriesCreated = false;
+    private bool erasCreated = false;
+    private bool sampleDataGenerated = false;
+
+    private async Task GenerateSampleData()
+    {
+        
+    }
+}

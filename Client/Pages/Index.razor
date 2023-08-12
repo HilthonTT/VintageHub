@@ -1,39 +1,117 @@
 ﻿@page "/"
 @inject IArtifactEndpoint ArtifactEndpoint
-@attribute [Authorize]
+@inject ICategoryEndpoint CategoryEndpoint
+@inject IUserDataVerifier UserVerifier
+@inject NavigationManager Navigation
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (string.IsNullOrWhiteSpace(errorMessage) is false)
+{
+    <div class="alert alert-danger">
+        @errorMessage
+    </div>
+}
 
-<div>
-    @if (string.IsNullOrWhiteSpace(errorMessage) is false)
-    {
-        <div>
-            @errorMessage
+@if (loggedInUser is not null)
+{
+    @loggedInUser.ObjectIdentifier
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+               <img src="/egyptian-walls.jpg" alt="egyptian-walls" width="900"/>
+            </div>
+            <div class="row mt-2">
+                <div class="col-4 d-flex justify-content-center align-items-center">
+                    <img src="/snow_statue.jpg" alt="Snow Statue" class=" img-fluid rounded w-75" />
+                </div>
+                <div class="col-4 d-flex justify-content-center align-items-center">
+                    <img src="/buddha-picture.jpg" alt="Buddha Statue" class="img-fluid rounded fluid w-75" />
+                </div>
+                <div class="col-4 d-flex justify-content-center align-items-center">
+                    <img src="/weird-head-picture.jpg" alt="Weird Head Picture" class="img-fluid rounded w-75" />
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h3>Our best sellers!</h3>
+                    @if (artifacts is not null)
+                    {
+                        <Virtualize Items="artifacts" OverscanCount="10" Context="a">
+                            <div @onclick="() => OnArtifactClick(a)">
+                                @a.Name
+                            </div>
+                        </Virtualize>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h3>Choose a category</h3>
+                    @if (categories is not null)
+                    {
+                        <Virtualize Items="categories" OverscanCount="10" Context="c">
+                            <div @onclick="() => OnCategoryClick(c)">
+                                @c.Name
+                            </div>
+                        </Virtualize>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h3>Choose an era</h3>
+                    @if (eras is not null)
+                    {
+                        <Virtualize Items="eras" OverscanCount="10" Context="e">
+                            <div @onclick="() => OnEraClick(e)">
+                                @e.Name
+                            </div>
+                        </Virtualize>
+                    }
+                </div>
+            </div>
         </div>
-    }
+    </div>
 </div>
 
-
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
 @code {
-    private string errorMessage = "";
+    private UserModel loggedInUser;
     private List<ArtifactModel> artifacts;
+    private List<CategoryModel> categories;
+    private List<EraModel> eras;
+    private string errorMessage = "";
+    private string oid = "";
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             artifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
+            categories = await CategoryEndpoint.GetAllCategoriesAsync();
+            loggedInUser = await UserVerifier.LoadAndVerifyUserAsync();
         }
         catch (Exception ex)
         {
             errorMessage = ex.Message;
         }
+    }
+
+    private void OnArtifactClick(ArtifactModel artifact)
+    {
+        Navigation.NavigateTo($"/Artifact/{artifact.Id}");
+    }
+
+    private void OnCategoryClick(CategoryModel category)
+    {
+        Navigation.NavigateTo($"/Category/{category.Id}");
+    }
+
+    private void OnEraClick(EraModel era)
+    {
+        Navigation.NavigateTo($"/Era/{era.Id}");
     }
 }
