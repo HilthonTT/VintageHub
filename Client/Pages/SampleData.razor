@@ -4,6 +4,7 @@
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject IVendorEndpoint VendorEndpoint
 @inject IUserEndpoint UserEndpoint
+@inject IVendorEndpoint VendorEndpoint
 @inject AuthenticationStateProvider AuthProvider
 @attribute [Authorize(Policy = "Admin")]
 
@@ -45,12 +46,28 @@
             }
         </div>
         <div class="mt-2">
-            @if (sampleDataGenerated is false)
+            <h3>
+                Created Vendors: @vendorsCreated
+            </h3>
+            @if (vendorsCreated is false)
             {
-                <button @onclick="GenerateSampleDataAsync"
+                <button @onclick="GenerateVendorsAsync"
+                        class="btn btn-primary"
+                        disabled="@GetButtonClass()">
+                    Generate Vendors
+                </button>
+            }
+        </div>
+        <div class="mt-2">
+            <h3>
+                Created Artifacts: @artifactsCreated
+            </h3>
+            @if (artifactsCreated is false)
+            {
+                <button @onclick="GenerateArtifactAsync"
                         class="btn btn-secondary"
                         disabled="@GetButtonClass()">
-                    Generate Sample Data
+                    Generate Artifacts
                 </button>
             }
         </div>
@@ -64,18 +81,21 @@
     private bool isBusy = false;
     private bool categoriesCreated = false;
     private bool erasCreated = false;
-    private bool sampleDataGenerated = false;
+    private bool artifactsCreated = false;
+    private bool vendorsCreated = false;
 
     private int createdCategoriesCount = 0;
     private int createdErasCount = 0;
+    private int createdArtifactsCount = 0;
+    private int createdVendorsCount = 0;
 
     private List<CategoryModel> categories = new()
     {
         new CategoryModel
-            {
-                Name = "Jewelry and Accessories",
-                Description = "Explore a stunning collection of vintage jewelry and accessories that never go out of style.",
-            },
+        {
+            Name = "Jewelry and Accessories",
+            Description = "Explore a stunning collection of vintage jewelry and accessories that never go out of style.",
+        },
         new CategoryModel
         {
             Name = "Home Decor",
@@ -208,7 +228,9 @@
             return;
         }
 
+        errorMessage = "";
         isBusy = true;
+
         foreach (var era in eras)
         {
             await EraEndpoint.InsertEraAsync(era);
@@ -219,52 +241,117 @@
         isBusy = false;
     }
 
-    private async Task GenerateSampleDataAsync()
+    private async Task GenerateVendorsAsync()
     {
         if (isBusy)
         {
             return;
         }
 
-        isBusy = true;
+        try
+        {
+            var vendors = new List<VendorModel>()
+            {
+                new VendorModel
+                {
+                    OwnerUserId = 1,
+                    Name = "Vintage Treasures Emporium",
+                    Description = "A haven for vintage enthusiasts, offering a wide range of artifacts from various eras.",
+                    DateFounded = new DateTime(2005, 7, 15),
+                },
+                new VendorModel
+                {
+                    OwnerUserId = 1,
+                    Name = "Nostalgia Collectibles Co.",
+                    Description = "Curating collectible artifacts that capture the essence of times gone by.",
+                    DateFounded = new DateTime(2010, 3, 22),
+                },
+            };
 
-        var artifactData = new List<ArtifactModel>
-        {
-            new ArtifactModel
-        {
-            Name = "Vintage Pearl Necklace",
-            Description = "Elegant and timeless pearl necklace from the early 20th century.",
-            ImageUrl = "",
-            Quantity = 5,
-            Rating = 4.8,
-            Price = 250.99m,
-            VendorId = 1,
-            CategoryId = 1, // Category ID for Jewelry and Accessories
-            EraId = 1, // Era ID for Victorian Era
-            Availability = true,
-        },
-        new ArtifactModel
-        {
-            Name = "Antique Wall Clock",
-            Description = "Charming wall clock with intricate woodwork and brass details.",
-            ImageUrl = "",
-            Quantity = 1,
-            Rating = 4.5,
-            Price = 120.50m,
-            VendorId = 2,
-            CategoryId = 2, // Category ID for Home Decor
-            EraId = 3, // Era ID for Art Deco Period
-            Availability = true,
-        },
-        };
+            errorMessage = "";
+            isBusy = true;
 
-        foreach (var a in artifactData)
-        {
-            await ArtifactEndpoint.InsertArtifactAsync(a);
+            foreach (var v in vendors)
+            {
+                await VendorEndpoint.InsertVendorAsync(v);
+                createdVendorsCount++;
+            }
+
+            vendorsCreated = true;
+            isBusy = false;
         }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isBusy = false;
+        }
+    }
 
-        sampleDataGenerated = true;
-        isBusy = false;
+    private async Task GenerateArtifactAsync()
+    {
+        if (isBusy)
+        {
+            return;
+        }
+        try
+        {
+
+            var vendors = await VendorEndpoint.GetAllVendorsAsync();
+            var eras = await EraEndpoint.GetAllErasAsync();
+            var categories = await CategoryEndpoint.GetAllCategoriesAsync();
+
+            var artifacts = new List<ArtifactModel>()
+            {
+                new ArtifactModel
+                {
+                    Name = "Vintage Pearl Necklace",
+                    Description = "Elegant and timeless pearl necklace from the early 20th century.",
+                    ImageUrl = "",
+                    Quantity = 5,
+                    Rating = 4.8,
+                    Price = 250.99m,
+                    VendorId = vendors[0].Id,
+                    CategoryId = categories[0].Id,
+                    EraId = eras[0].Id,
+                    Availability = true,
+                },
+                new ArtifactModel
+                {
+                    Name = "Antique Wall Clock",
+                    Description = "Charming wall clock with intricate woodwork and brass details.",
+                    ImageUrl = "",
+                    Quantity = 1,
+                    Rating = 4.5,
+                    Price = 120.50m,
+                    VendorId = vendors[1].Id,
+                    CategoryId = categories[1].Id,
+                    EraId = eras[4].Id, 
+                    Availability = true,
+                },
+            };
+
+            errorMessage = "";
+            isBusy = true;
+
+            foreach (var a in artifacts)
+            {
+                await ArtifactEndpoint.InsertArtifactAsync(a);
+                createdArtifactsCount++;
+            }
+
+            artifactsCreated = true;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isBusy = false;
+        }
     }
 
     private bool GetButtonClass()
