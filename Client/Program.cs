@@ -7,6 +7,8 @@ using Client.Library.Endpoints.Interfaces;
 using Client.Library.Endpoints;
 using Client.Library.LocalStorage.Interfaces;
 using Client.Library.LocalStorage;
+using VintageHub.Client.Authentication.Interfaces;
+using VintageHub.Client.Authentication;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -22,7 +24,20 @@ builder.Services.AddMsalAuthentication(options =>
 {
     builder.Configuration.Bind("AzureAdB2C", options.ProviderOptions.Authentication);
     options.ProviderOptions.DefaultAccessTokenScopes.Add("https://TimTanAuth.onmicrosoft.com/f278b08e-7802-46cc-971e-a89fd6a8dd64/api_access");
+
+    options.ProviderOptions.DefaultAccessTokenScopes.Add("openid profile");
+    options.ProviderOptions.DefaultAccessTokenScopes.Add("offline_access");
 });
+
+builder.Services.AddAuthorizationCore(options =>
+{
+    options.AddPolicy("Admin", policy =>
+    {
+        policy.RequireClaim("jobTitle", "Admin");
+    });
+});
+
+builder.Services.AddTransient<IUserDataVerifier, UserDataVerifier>();
 
 builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddSingleton<ILocalStorage, LocalStorage>();
