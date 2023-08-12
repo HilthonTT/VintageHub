@@ -93,9 +93,10 @@ public class OrderController : ControllerBase
 
         try
         {
-            int createdOrder = await _orderData.InsertOrderAsync(request.Order, request.OrderDetails);
+            int createdOrderId = await _orderData.InsertOrderAsync(request.Order, request.OrderDetails);
+            var createdOrder = await _orderData.GetOrderByIdAsync(createdOrderId);
 
-            return CreatedAtAction(nameof(GetOrderByIdAsync), new { id = request.Order.Id }, request.Order);
+            return Ok(createdOrder);
         }
         catch (Exception ex)
         {

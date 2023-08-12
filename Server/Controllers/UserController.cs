@@ -80,8 +80,9 @@ public class UserController : ControllerBase
         try
         {
             int createdUserId = await _userData.InsertUserAsync(user);
+            var createdUser = await _userData.GetUserByIdAsync(createdUserId);
 
-            return CreatedAtAction(nameof(GetUserByIdAsync), new { id = createdUserId }, user);
+            return Ok(createdUser);
         }
         catch (Exception ex)
         {

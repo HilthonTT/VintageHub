@@ -79,8 +79,9 @@ public class ArtifactController : ControllerBase
         try
         {
             int createdArtifactId = await _artifactData.InsertArtifactAsync(artifact);
+            var createdArtifact = await _artifactData.GetArtifactByIdAsync(createdArtifactId);
 
-            return CreatedAtAction(nameof(GetArtifactByIdAsync), new { id = createdArtifactId }, artifact);
+            return Ok(createdArtifact);
         }
         catch (Exception ex)
         {

@@ -63,8 +63,9 @@ public class EraController : ControllerBase
         try
         {
             int createdEraId = await _eraData.InsertEraAsync(era);
-
-            return CreatedAtAction(nameof(GetEraByIdAsync), new { id = createdEraId }, era);
+            var createdEra = await _eraData.GetEraByIdAsync(createdEraId);
+            
+            return Ok(createdEra);
         }
         catch (Exception ex)
         {

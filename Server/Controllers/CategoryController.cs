@@ -55,11 +55,17 @@ public class CategoryController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CategoryModel>> InsertCategoryAsync([FromBody] CategoryModel category)
     {
+        if (ModelState.IsValid is false)
+        {
+            return BadRequest(ModelState);
+        }
+
         try
         {
             int createdCategoryId = await _categoryData.InsertCategoryAsync(category);
 
-            return CreatedAtAction(nameof(GetCategoryByIdAsync), new { id = createdCategoryId }, category);
+            var createdCategory = await _categoryData.GetCategoryByIdAsync(createdCategoryId);
+            return Ok(createdCategory);
         }
         catch (Exception ex)
         {

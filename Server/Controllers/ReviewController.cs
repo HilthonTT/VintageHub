@@ -63,7 +63,9 @@ public class ReviewController : ControllerBase
         try
         {
             int createdReviewId = await _reviewData.InsertReviewAsync(review);
-            return CreatedAtAction(nameof(GetReviewByIdAsync), new { id = createdReviewId }, review);
+            var createdReview = await _reviewData.GetReviewByIdAsync(createdReviewId);
+
+            return Ok(createdReview);
         }
         catch (Exception ex)
         {

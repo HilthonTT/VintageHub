@@ -63,8 +63,9 @@ public class VendorController : ControllerBase
         try
         {
             int createdVendorId = await _vendorData.InsertVendorAsync(vendor);
+            var createdVendor = await _vendorData.GetVendorByIdAsync(createdVendorId);
 
-            return CreatedAtAction(nameof(GetVendorByIdAsync), new { id = createdVendorId }, vendor);
+            return Ok(createdVendor);
         }
         catch (Exception ex)
         {
