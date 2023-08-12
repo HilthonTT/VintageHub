@@ -87,16 +87,19 @@ public class ArtifactEndpoint : IArtifactEndpoint
         }
     }
 
-    public async Task InsertArtifactAsync(ArtifactModel artifact)
+    public async Task<ArtifactModel> InsertArtifactAsync(ArtifactModel artifact)
     {
         try
         {
             using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, artifact);
             response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<ArtifactModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+            return null;
         }
     }
 

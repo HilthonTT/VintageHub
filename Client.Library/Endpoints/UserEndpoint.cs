@@ -72,8 +72,7 @@ public class UserEndpoint : IUserEndpoint
             using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, user);
             response.EnsureSuccessStatusCode();
 
-            var createdUser = await response.Content.ReadFromJsonAsync<UserModel>();
-            return createdUser;
+            return await response.Content.ReadFromJsonAsync<UserModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {

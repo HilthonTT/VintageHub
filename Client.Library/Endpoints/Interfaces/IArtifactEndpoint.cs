@@ -7,6 +7,6 @@ public interface IArtifactEndpoint
     Task<List<ArtifactModel>> GetAllArtifactsAsync();
     Task<ArtifactModel> GetArtifactByIdAsync(int id);
     Task<List<ArtifactModel>> GetArtifactByVendorIdAsync(int vendorId);
-    Task InsertArtifactAsync(ArtifactModel artifact);
+    Task<ArtifactModel> InsertArtifactAsync(ArtifactModel artifact);
     Task UpdateArtifactAsync(ArtifactModel artifact);
 }

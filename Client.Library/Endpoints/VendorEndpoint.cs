@@ -9,6 +9,7 @@ public class VendorEndpoint : IVendorEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(VendorEndpoint);
+    private const string ApiEndpointUrl = "api/Vendor";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
@@ -27,7 +28,7 @@ public class VendorEndpoint : IVendorEndpoint
             var output = await _localStorage.GetAsync<List<VendorModel>>(CacheName);
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync("Vendor");
+                using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
                 output = await response.Content.ReadFromJsonAsync<List<VendorModel>>();
@@ -47,7 +48,7 @@ public class VendorEndpoint : IVendorEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Vendor/{id}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<VendorModel>();
@@ -63,7 +64,13 @@ public class VendorEndpoint : IVendorEndpoint
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync("Vendor", vendor);
+            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, vendor);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                string a = await response.Content.ReadAsStringAsync();
+            }
+
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<VendorModel>();
@@ -79,7 +86,7 @@ public class VendorEndpoint : IVendorEndpoint
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync("Vendor", vendor);
+            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, vendor);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -92,7 +99,7 @@ public class VendorEndpoint : IVendorEndpoint
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"Vendor/{vendor.Id}");
+            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{vendor.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
