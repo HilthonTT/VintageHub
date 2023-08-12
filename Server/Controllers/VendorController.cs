@@ -43,11 +43,6 @@ public class VendorController : ControllerBase
         {
             var vendor = await _vendorData.GetVendorByIdAsync(id);
 
-            if (vendor is null)
-            {
-                return NotFound("Vendor not found.");
-            }
-
             return Ok(vendor);
         }
         catch (Exception ex)

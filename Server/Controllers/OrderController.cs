@@ -74,11 +74,6 @@ public class OrderController : ControllerBase
         {
             var order = await _orderData.GetOrderByIdAsync(id);
 
-            if (order is null)
-            {
-                return NotFound("Order not found.");
-            }
-
             return Ok(order);
         }
         catch (Exception ex)

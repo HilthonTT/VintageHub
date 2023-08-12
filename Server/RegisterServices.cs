@@ -9,8 +9,14 @@ public static class RegisterServices
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
-
         builder.Services.AddMemoryCache();
+
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            options.JsonSerializerOptions.WriteIndented = true;
+        });
 
         builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
         builder.Services.AddTransient<IArtifactData, ArtifactData>();

@@ -59,11 +59,6 @@ public class ArtifactController : ControllerBase
         {
             var artifact = await _artifactData.GetArtifactByIdAsync(id);
 
-            if (artifact is null)
-            {
-                return NotFound("Artifact not found.");
-            }
-
             return Ok(artifact);
         }
         catch (Exception ex)

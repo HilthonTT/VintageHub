@@ -43,11 +43,6 @@ public class CategoryController : ControllerBase
         {
             var artifact = await _categoryData.GetCategoryByIdAsync(id);
 
-            if (artifact is null)
-            {
-                return NotFound("Category not found.");
-            }
-
             return Ok(artifact);
         }
         catch (Exception ex)

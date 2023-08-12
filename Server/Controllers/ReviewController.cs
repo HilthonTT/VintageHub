@@ -28,11 +28,6 @@ public class ReviewController : ControllerBase
         {
             var review = await _reviewData.GetReviewByIdAsync(id);
 
-            if (review is null)
-            {
-                return NotFound("Review Not Found.");
-            }
-
             return Ok(review);
         }
         catch (Exception ex)

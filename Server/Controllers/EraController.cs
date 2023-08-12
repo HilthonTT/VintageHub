@@ -43,11 +43,6 @@ public class EraController : ControllerBase
         {
             var era = await _eraData.GetEraByIdAsync(id);
 
-            if (era is null)
-            {
-                return NotFound("Era not found.");
-            }
-
             return Ok(era);
         }
         catch (Exception ex)
