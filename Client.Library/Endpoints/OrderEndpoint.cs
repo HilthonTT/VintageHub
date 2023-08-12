@@ -9,6 +9,7 @@ public class OrderEndpoint : IOrderEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(OrderEndpoint);
+    private const string ApiEndpointUrl = "api/Order";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
@@ -27,7 +28,7 @@ public class OrderEndpoint : IOrderEndpoint
             var output = await _localStorage.GetAsync<List<OrderModel>>(CacheName);
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync("Order");
+                using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
                 output = await response.Content.ReadFromJsonAsync<List<OrderModel>>();
@@ -47,7 +48,7 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Order/user/{userId}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/user/{userId}");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<List<OrderModel>>();
@@ -63,7 +64,7 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Order/orderDetails/{orderId}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/orderDetails/{orderId}");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<List<OrderDetailsModel>>();
@@ -79,7 +80,7 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Order/{id}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<OrderModel>();
@@ -95,7 +96,7 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync("Order", request);
+            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, request);
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<OrderModel>();
@@ -111,7 +112,7 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync("Order", request);
+            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, request);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -124,7 +125,7 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"Order/{order.Id}");
+            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{order.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)

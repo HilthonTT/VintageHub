@@ -10,7 +10,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(ArtifactEndpoint);
     private const string CacheNameVendorPrefix = $"{CacheName}_Vendor_";
-
+    private const string ApiEndpointUrl = "api/Artifact";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
@@ -30,7 +30,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
 
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync("Artifact");
+                using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
                 output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
@@ -50,7 +50,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Artifact/{id}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<ArtifactModel>();
@@ -71,7 +71,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
 
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync($"Artifact/vendor/{vendorId}");
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/vendor/{vendorId}");
                 response.EnsureSuccessStatusCode();
 
                 output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
@@ -91,7 +91,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync("Artifact", artifact);
+            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, artifact);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -104,7 +104,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync("Artifact", artifact);
+            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, artifact);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -117,7 +117,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"Artifact/{artifact.Id}");
+            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{artifact.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)

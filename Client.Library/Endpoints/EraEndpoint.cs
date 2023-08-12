@@ -9,6 +9,7 @@ public class EraEndpoint : IEraEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(EraEndpoint);
+    private const string ApiEndpointUrl = "api/Era";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
@@ -27,7 +28,7 @@ public class EraEndpoint : IEraEndpoint
             var output = await _localStorage.GetAsync<List<EraModel>>(CacheName);
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync("Era");
+                using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
                 output = await response.Content.ReadFromJsonAsync<List<EraModel>>();
@@ -47,7 +48,7 @@ public class EraEndpoint : IEraEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Era/{id}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<EraModel>();
@@ -63,7 +64,7 @@ public class EraEndpoint : IEraEndpoint
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync("Era", era);
+            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, era);
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<EraModel>();
@@ -79,7 +80,7 @@ public class EraEndpoint : IEraEndpoint
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync("Era", era);
+            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, era);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -92,7 +93,7 @@ public class EraEndpoint : IEraEndpoint
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"Era/{era.Id}");
+            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{era.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)

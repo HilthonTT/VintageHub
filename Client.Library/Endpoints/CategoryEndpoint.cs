@@ -9,6 +9,7 @@ public class CategoryEndpoint : ICategoryEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(CategoryEndpoint);
+    private const string ApiEndpointUrl = "api/Category";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
@@ -28,7 +29,7 @@ public class CategoryEndpoint : ICategoryEndpoint
 
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync("Category");
+                using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
                 output = await response.Content.ReadFromJsonAsync<List<CategoryModel>>();
@@ -48,7 +49,7 @@ public class CategoryEndpoint : ICategoryEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"Category/{id}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<CategoryModel>();
@@ -64,7 +65,7 @@ public class CategoryEndpoint : ICategoryEndpoint
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync("Category", category);
+            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, category);
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<CategoryModel>();
@@ -80,7 +81,7 @@ public class CategoryEndpoint : ICategoryEndpoint
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync("Category", category);
+            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, category);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -93,7 +94,7 @@ public class CategoryEndpoint : ICategoryEndpoint
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"Category/{category.Id}");
+            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{category.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)

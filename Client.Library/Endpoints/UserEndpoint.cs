@@ -6,6 +6,7 @@ using System.Net.Http.Json;
 namespace Client.Library.Endpoints;
 public class UserEndpoint : IUserEndpoint
 {
+    private const string ApiEndpointUrl = "api/User";
     private readonly HttpClient _httpClient;
 
     public UserEndpoint(HttpClient httpClient)
@@ -17,7 +18,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync("User");
+            using var response = await _httpClient.GetAsync(ApiEndpointUrl);
             response.EnsureSuccessStatusCode();
 
             var users = await response.Content.ReadFromJsonAsync<List<UserModel>>();
@@ -34,7 +35,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"User/{id}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
             response.EnsureSuccessStatusCode();
 
             var user = await response.Content.ReadFromJsonAsync<UserModel>();
@@ -51,7 +52,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"User/auth/{oid}");
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/auth/{oid}");
             response.EnsureSuccessStatusCode();
 
             var user = await response.Content.ReadFromJsonAsync<UserModel>();
@@ -68,7 +69,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync("User", user);
+            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, user);
             response.EnsureSuccessStatusCode();
 
             var createdUser = await response.Content.ReadFromJsonAsync<UserModel>();
@@ -85,7 +86,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync("User", user);
+            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, user);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -98,7 +99,7 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"User/{user.Id}");
+            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{user.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
