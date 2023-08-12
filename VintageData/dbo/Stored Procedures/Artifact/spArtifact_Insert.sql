@@ -3,7 +3,9 @@
 	@Description NVARCHAR(500),
 	@ImageUrl NVARCHAR(MAX),
 	@Quantity INT,
+	@Rating DECIMAL,
 	@Price MONEY,
+	@VendorId INT,
 	@CategoryId INT,
 	@EraId INT,
 	@Availability BIT
@@ -13,8 +15,8 @@ BEGIN
 
 	DECLARE @InsertedId INT;
 
-	INSERT INTO [dbo].[Artifact]([Name], [Description], [ImageUrl], [Quantity], [Price], [CategoryId], [EraId], [Availability])
-	VALUES (@Name, @Description, @ImageUrl, @Quantity, @Price, @CategoryId, @EraId, @Availability);
+	INSERT INTO [dbo].[Artifact]([Name], [Description], [ImageUrl], [Quantity], [Rating], [Price], [VendorId], [CategoryId], [EraId], [Availability])
+	VALUES (@Name, @Description, @ImageUrl, @Quantity, @Rating, @Price, @VendorId, @CategoryId, @EraId, @Availability);
 
 	SET @InsertedId = SCOPE_IDENTITY();
 

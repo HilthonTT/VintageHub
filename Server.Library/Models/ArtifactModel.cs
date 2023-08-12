@@ -11,8 +11,7 @@ public class ArtifactModel
     [StringLength(256)]
     public string Description { get; set; }
 
-    [Required]
-    public string ImageUrl { get; set; }
+    public string ImageUrl { get; set; } = "";
 
     [Required]
     public int Quantity { get; set; }
