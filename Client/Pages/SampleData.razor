@@ -1,17 +1,281 @@
 ﻿@page "/SampleData"
-@attribute [Authorize(Policy = "Admin")]
 @inject ICategoryEndpoint CategoryEndpoint
 @inject IEraEndpoint EraEndpoint
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject IVendorEndpoint VendorEndpoint
+@inject IUserEndpoint UserEndpoint
+@inject AuthenticationStateProvider AuthProvider
+@attribute [Authorize(Policy = "Admin")]
+
+<div class="container">
+
+    @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+    {
+        <div class="alert alert-danger">
+            @errorMessage
+        </div>
+    }
+
+    <div class="row">
+        <div class="mt-2">
+            <h3>
+                Created @createdCategoriesCount categories out of @categories?.Count categories.
+            </h3>
+            @if (categoriesCreated is false)
+            {
+                <button @onclick="GenerateCategoriesAsync"
+                        class="btn btn-primary"
+                        disabled="@GetButtonClass()">
+                    Generate Categories
+                </button>
+            }
+        </div>
+        <div class="mt-2">
+            <h3>
+                Created @createdErasCount eras out of @eras?.Count eras.
+            </h3>
+            @if (erasCreated is false)
+            {
+                <button @onclick="GenerateErasAsync"
+                        class="btn btn-primary"
+                        disabled="@GetButtonClass()">
+                    Generate Eras
+                </button>
+
+            }
+        </div>
+        <div class="mt-2">
+            @if (sampleDataGenerated is false)
+            {
+                <button @onclick="GenerateSampleDataAsync"
+                        class="btn btn-secondary"
+                        disabled="@GetButtonClass()">
+                    Generate Sample Data
+                </button>
+            }
+        </div>
+    </div>
+</div>
 
 @code {
+    private UserModel loggedInUser;
+
+    private string errorMessage = "";
+    private bool isBusy = false;
     private bool categoriesCreated = false;
     private bool erasCreated = false;
     private bool sampleDataGenerated = false;
 
-    private async Task GenerateSampleData()
+    private int createdCategoriesCount = 0;
+    private int createdErasCount = 0;
+
+    private List<CategoryModel> categories = new()
     {
-        
+        new CategoryModel
+            {
+                Name = "Jewelry and Accessories",
+                Description = "Explore a stunning collection of vintage jewelry and accessories that never go out of style.",
+            },
+        new CategoryModel
+        {
+            Name = "Home Decor",
+            Description = "Transform your living space with exquisite vintage home decor items that bring a touch of nostalgia.",
+        },
+        new CategoryModel
+        {
+            Name = "Collectibles",
+            Description = "Discover unique vintage collectibles that tell stories of the past and enrich your collection.",
+        },
+        new CategoryModel
+        {
+            Name = "Fashion and Apparel",
+            Description = "Step into the past with our curated selection of vintage fashion and apparel items.",
+        },
+        new CategoryModel
+        {
+            Name = "Art and Paintings",
+            Description = "Experience the beauty of vintage art and paintings that capture the essence of different eras.",
+        },
+        new CategoryModel
+        {
+            Name = "Ceramics and Glassware",
+            Description = "Enhance your living space with timeless ceramics and glassware pieces from bygone days.",
+        },
+        new CategoryModel
+        {
+            Name = "Watches and Clocks",
+            Description = "Explore vintage timepieces that stand as a testament to the craftsmanship of yesteryears.",
+        },
+        new CategoryModel
+        {
+            Name = "Technology and Gadgets",
+            Description = "Revisit the innovations of the past with our collection of vintage technology and gadgets.",
+        },
+        new CategoryModel
+        {
+            Name = "Automobile and Transportation",
+            Description = "Experience the elegance of vintage automobiles and transportation modes that shaped history.",
+        },
+        new CategoryModel
+        {
+            Name = "Sports and Recreation",
+            Description = "Rediscover the joy of classic sports and recreational activities through our vintage offerings.",
+        },
+    };
+
+    private List<EraModel> eras = new()
+    {
+        new EraModel
+        {
+            Name = "Victorian Era",
+            Description = "Experience the opulence and intricacy of the Victorian era artifacts.",
+        },
+        new EraModel
+        {
+            Name = "Roaring Twenties",
+            Description = "Step back into the vibrant and glamorous Roaring Twenties with our curated artifacts.",
+        },
+        new EraModel
+        {
+            Name = "Art Deco Period",
+            Description = "Discover the sleek and stylish artifacts from the iconic Art Deco period.",
+        },
+        new EraModel
+        {
+            Name = "Renaissance Era",
+            Description = "Immerse yourself in the cultural revival of the Renaissance era with our collection.",
+        },
+        new EraModel
+        {
+            Name = "Ancient Civilizations",
+            Description = "Explore artifacts from ancient civilizations that laid the foundation for our world.",
+        },
+        new EraModel
+        {
+            Name = "Industrial Revolution",
+            Description = "Witness the transformative impact of the Industrial Revolution through our artifacts.",
+        },
+        new EraModel
+        {
+            Name = "Space Age",
+            Description = "Journey through the Space Age with artifacts that capture the spirit of exploration.",
+        },
+        new EraModel
+        {
+            Name = "Medieval Period",
+            Description = "Discover artifacts that evoke the essence of the medieval times and chivalry.",
+        },
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+    }
+
+    private async Task GenerateCategoriesAsync()
+    {
+        if (isBusy)
+        {
+            return;
+        }
+
+        try
+        {
+            isBusy = true;
+
+            foreach (var cat in categories)
+            {
+                await CategoryEndpoint.InsertCategoryAsync(cat);
+                createdCategoriesCount++;
+            }
+
+            categoriesCreated = true;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isBusy = false;
+        }
+    }
+
+    private async Task GenerateErasAsync()
+    {
+        if (isBusy)
+        {
+            return;
+        }
+
+        isBusy = true;
+        foreach (var era in eras)
+        {
+            await EraEndpoint.InsertEraAsync(era);
+            createdErasCount++;
+        }
+
+        erasCreated = true;
+        isBusy = false;
+    }
+
+    private async Task GenerateSampleDataAsync()
+    {
+        if (isBusy)
+        {
+            return;
+        }
+
+        isBusy = true;
+
+        var artifactData = new List<ArtifactModel>
+        {
+            new ArtifactModel
+        {
+            Name = "Vintage Pearl Necklace",
+            Description = "Elegant and timeless pearl necklace from the early 20th century.",
+            ImageUrl = "",
+            Quantity = 5,
+            Rating = 4.8,
+            Price = 250.99m,
+            VendorId = 1,
+            CategoryId = 1, // Category ID for Jewelry and Accessories
+            EraId = 1, // Era ID for Victorian Era
+            Availability = true,
+        },
+        new ArtifactModel
+        {
+            Name = "Antique Wall Clock",
+            Description = "Charming wall clock with intricate woodwork and brass details.",
+            ImageUrl = "",
+            Quantity = 1,
+            Rating = 4.5,
+            Price = 120.50m,
+            VendorId = 2,
+            CategoryId = 2, // Category ID for Home Decor
+            EraId = 3, // Era ID for Art Deco Period
+            Availability = true,
+        },
+        };
+
+        foreach (var a in artifactData)
+        {
+            await ArtifactEndpoint.InsertArtifactAsync(a);
+        }
+
+        sampleDataGenerated = true;
+        isBusy = false;
+    }
+
+    private bool GetButtonClass()
+    {
+        if (isBusy)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
