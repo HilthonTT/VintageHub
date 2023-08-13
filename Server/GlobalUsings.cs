@@ -6,3 +6,5 @@ global using Server.Library.DataAccess.Internal.Interfaces;
 global using Server.Library.DataAccess.Internal;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.ResponseCompression;
+global using Server.Library.DataAccess.MongoDb;
+global using Server.Library.DataAccess.MongoDb.Interfaces;

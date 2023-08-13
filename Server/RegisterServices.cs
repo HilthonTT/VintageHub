@@ -18,6 +18,14 @@ public static class RegisterServices
             options.JsonSerializerOptions.WriteIndented = true;
         });
 
+        builder.Services.Configure<IISServerOptions>(options =>
+        {
+            options.MaxRequestBodySize = int.MaxValue;
+        });
+
+        builder.Services.AddTransient<IMongoDbConnection, MongoDbConnection>();
+        builder.Services.AddTransient<IImageData, ImageData>();
+
         builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
         builder.Services.AddTransient<IArtifactData, ArtifactData>();
         builder.Services.AddTransient<ICategoryData, CategoryData>();
