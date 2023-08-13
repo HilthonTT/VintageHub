@@ -38,4 +38,9 @@ public class ImageData : IImageData
 
         return output;
     }
+
+    public async Task DeleteImageAsync(string objectId)
+    {
+        await _connection.Bucket.DeleteAsync(objectId);
+    }
 }

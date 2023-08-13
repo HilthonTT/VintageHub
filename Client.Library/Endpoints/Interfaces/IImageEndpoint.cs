@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Server.Library.DataAccess.MongoDb.Interfaces;
-public interface IImageData
+namespace Client.Library.Endpoints.Interfaces;
+public interface IImageEndpoint
 {
     Task DeleteImageAsync(string objectId);
     Task<byte[]> GetImageAsync(string objectId);

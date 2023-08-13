@@ -14,7 +14,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "VintageData", "VintageData\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Library", "Server.Library\Server.Library.csproj", "{0A134A0E-7587-43F8-B7B8-F652065E7383}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Library", "Client.Library\Client.Library.csproj", "{CE590C62-E14C-470C-9ECC-B8C13B07DBF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.Library", "Client.Library\Client.Library.csproj", "{CE590C62-E14C-470C-9ECC-B8C13B07DBF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

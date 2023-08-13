@@ -41,7 +41,7 @@ public class ImageController : ControllerBase
         }
     }
 
-    [HttpGet]
+    [HttpGet("{objectId}")]
     public async Task<ActionResult<byte[]>> GetImageAsync(string objectId)
     {
         try
@@ -57,6 +57,27 @@ public class ImageController : ControllerBase
         {
             _logger.LogError("Error fetching the image: {error}", ex.Message);
             return StatusCode(500, "Error fetching the image.");
+        }
+    }
+
+    [HttpDelete("{objectId}")]
+    public async Task<ActionResult> DeleteImageAsync(string objectId)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(objectId))
+            {
+                return BadRequest("The Object Identifier must be provided.");
+            }
+
+            await _imageData.DeleteImageAsync(objectId);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error deleting the image: {error}", ex.Message);
+            return StatusCode(500, "Error deleting the image.");
         }
     }
 }
