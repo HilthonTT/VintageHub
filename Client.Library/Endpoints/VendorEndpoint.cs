@@ -60,17 +60,27 @@ public class VendorEndpoint : IVendorEndpoint
         }
     }
 
+    public async Task<List<VendorModel>> GetAllVendorsByOwnerUserIdAsync(int ownerUserId)
+    {
+        try
+        {
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/owner/{ownerUserId}");
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<List<VendorModel>>();
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+            return null;
+        }
+    }
+
     public async Task<VendorModel> InsertVendorAsync(VendorModel vendor)
     {
         try
         {
             using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, vendor);
-
-            if (response.IsSuccessStatusCode is false)
-            {
-                string a = await response.Content.ReadAsStringAsync();
-            }
-
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<VendorModel>();

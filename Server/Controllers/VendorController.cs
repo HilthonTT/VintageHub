@@ -52,6 +52,22 @@ public class VendorController : ControllerBase
         }
     }
 
+    [HttpGet("owner/{ownerUserId}")]
+    public async Task<ActionResult<List<VendorModel>>> GetAllVendorsByOwnerUserIdAsync(int ownerUserId)
+    {
+        try
+        {
+            var vendors = await _vendorData.GetAllVendorByOwnerUserIdAsync(ownerUserId);
+
+            return Ok(vendors);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error fetching the vendor by owner user Id: {error}", ex.Message);
+            return StatusCode(500, $"Error fetching vendor by if of {ownerUserId}");
+        }
+    }
+
     [HttpPost]
     public async Task<ActionResult<VendorModel>> InsertVendorAsync([FromBody] VendorModel vendor)
     {

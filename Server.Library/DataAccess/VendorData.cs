@@ -4,6 +4,7 @@ public class VendorData : IVendorData
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(VendorData);
     private const string CacheNamePrefix = $"{CacheName}_";
+    private const string CacheNameUserPrefix = $"{CacheName}_User_";
     private readonly ISqlDataAccess _sql;
     private readonly IMemoryCache _cache;
 
@@ -31,10 +32,16 @@ public class VendorData : IVendorData
         };
     }
 
-    private void RemoveVendorCache(int id)
+    private void RemoveVendorCache(int id, VendorModel vendor = null)
     {
         string idKey = CacheNamePrefix + id;
         _cache.Remove(idKey);
+
+        if (vendor is not null)
+        {
+            string ownerKey = CacheNameUserPrefix + vendor.OwnerUserId;
+            _cache.Remove(ownerKey);
+        }
     }
 
     public async Task<List<VendorModel>> GetAllVendorsAsync()
@@ -72,6 +79,24 @@ public class VendorData : IVendorData
         return output;
     }
 
+    public async Task<List<VendorModel>> GetAllVendorByOwnerUserIdAsync(int ownerUserId)
+    {
+        string key = CacheNameUserPrefix + ownerUserId;
+        var output = _cache.Get<List<VendorModel>>(key);
+        if (output is null)
+        {
+            string storedProcedure = GetStoredProcedure("GetByOwnerId");
+            object parameters = new { OwnerUserId = ownerUserId };
+
+            output = await _sql.LoadDataAsync<VendorModel, dynamic>(
+                storedProcedure, parameters);
+
+            _cache.Set(key, output, CacheTimeSpan);
+        }
+
+        return output;
+    }
+
     public async Task<int> InsertVendorAsync(VendorModel vendor)
     {
         string storedProcedure = GetStoredProcedure("Insert");
@@ -82,7 +107,7 @@ public class VendorData : IVendorData
 
     public async Task<int> UpdateVendorAsync(VendorModel vendor)
     {
-        RemoveVendorCache(vendor.Id);
+        RemoveVendorCache(vendor.Id, vendor);
 
         string storedProcedure = GetStoredProcedure("Update");
 
