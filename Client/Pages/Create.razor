@@ -1,0 +1,67 @@
+﻿@page "/Create"
+@inject IArtifactEndpoint ArtifactEndpoint
+@inject ICategoryEndpoint CategoryEndpoint
+@inject IEraEndpoint EraEndpoint
+@inject IVendorEndpoint VendorEndpoint
+@inject IUserEndpoint UserEndpoint
+@inject IImageEndpoint ImageEndpoint
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Navigation
+@attribute [Authorize(Policy = "Admin")]
+
+<InputFile OnChange="HandleImageSelected" accept="*/image"/>
+
+@code {
+    private CreateArtifactModel artifact = new();
+    private UserModel loggedInUser;
+    private List<CategoryModel> categories;
+    private List<EraModel> eras;
+    private List<VendorModel> vendors;
+
+    private IFormFile selectedImageFile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+        vendors = await VendorEndpoint.GetAllVendorsByOwnerUserIdAsync(loggedInUser.Id);
+
+        categories = await CategoryEndpoint.GetAllCategoriesAsync();
+        eras = await EraEndpoint.GetAllErasAsync();
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void HandleImageSelected(InputFileChangeEventArgs e)
+    {
+        selectedImageFile = FileConverter.ToIFormFile(e.File);
+    }
+
+    private async Task CreateArtifactAsync()
+    {
+        var newArtifact = new ArtifactModel
+        {
+            Name = artifact.Name,
+            Description = artifact.Description,
+            Quantity = artifact.Quantity,
+            Price = artifact.Price,
+            CategoryId = artifact.CategoryId,
+            VendorId = artifact.VendorId,
+            EraId = artifact.EraId,
+            Availability = artifact.Availability,
+        };
+
+        if (selectedImageFile is not null)
+        {
+            string objectId = await ImageEndpoint.UploadImageAsync(selectedImageFile);
+            newArtifact.ImageUrl = objectId;
+        }
+
+        await ArtifactEndpoint.InsertArtifactAsync(newArtifact);
+
+        artifact = new();
+        ClosePage();
+    }
+}
