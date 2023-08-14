@@ -42,7 +42,7 @@ public class ImageController : ControllerBase
     }
 
     [HttpGet("{objectId}")]
-    public async Task<ActionResult<byte[]>> GetImageAsync(string objectId)
+    public async Task<ActionResult<string>> GetImageAsync(string objectId)
     {
         try
         {

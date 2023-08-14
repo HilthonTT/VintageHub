@@ -42,7 +42,7 @@ public class ImageEndpoint : IImageEndpoint
         }
     }
 
-    public async Task<byte[]> GetImageAsync(string objectId)
+    public async Task<string> GetImageAsync(string objectId)
     {
         try
         {
@@ -56,14 +56,14 @@ public class ImageEndpoint : IImageEndpoint
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{objectId}");
                 response.EnsureSuccessStatusCode();
 
-                var imageBytes = await response.Content.ReadAsByteArrayAsync();
+                var imageBytes = await response.Content.ReadAsStringAsync();
 
                 cachedImage = new ImageModel(objectId, imageBytes);
                 cachedImages.Add(cachedImage);
                 await _localStorage.SetAsync(CacheName, cachedImages, CacheTimeSpan);
             }
 
-            return cachedImage.Data;
+            return cachedImage.Url;
         }
         catch (AccessTokenNotAvailableException ex)
         {

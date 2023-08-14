@@ -2,12 +2,12 @@
 public class ImageModel
 {
     public string ObjectIdentifier { get; set; }
-    public byte[] Data { get; set; }
+    public string Url { get; set; }
 
-    public ImageModel(string objectId, byte[] data)
+    public ImageModel(string objectId, string data)
     {
         ObjectIdentifier = objectId;
-        Data = data;
+        Url = data;
     }
 
     public ImageModel()

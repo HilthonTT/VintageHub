@@ -105,8 +105,7 @@
 
         if (artifact is not null)
         {
-            byte[] imageBytes = await ImageEndpoint.GetImageAsync(artifact.ImageId);
-            artifactImageSource = GetImageSource(imageBytes);
+            artifactImageSource = await ImageEndpoint.GetImageAsync(artifact.ImageId);
 
             category = await CategoryEndpoint.GetCategoryByIdAsync(artifact.CategoryId);
             era = await EraEndpoint.GetEraByIdAsync(artifact.EraId);
@@ -119,8 +118,7 @@
     {
         vendor = await VendorEndpoint.GetVendorByIdAsync(artifact.VendorId);
 
-        byte[] imageBytes = await ImageEndpoint.GetImageAsync(vendor.ImageId);
-        vendorImageSource = GetImageSource(imageBytes);
+        artifactImageSource = await ImageEndpoint.GetImageAsync(vendor.ImageId);
     }
 
     private async Task LoadRandomArtifactsAsync()
@@ -164,10 +162,5 @@
         ShoppingCart.CartItems.Add(newCartItem);
 
         LoadCartPage();
-    }
-
-    private string GetImageSource(byte[] imageBytes)
-    {
-        return $"data:image/jpg;base64,{Convert.ToBase64String(imageBytes)}";
     }
 }
