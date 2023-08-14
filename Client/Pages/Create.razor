@@ -155,6 +155,8 @@ else
 }
 
 @code {
+    private const long MaxFileSize = 1024 * 1024 * 5;
+
     private CreateArtifactModel artifact = new();
     private UserModel loggedInUser;
     private List<CategoryModel> categories;
@@ -209,6 +211,13 @@ else
         if (selectedEra is null || selectedCategory is null)
         {
             errorMessage = "The category you or era you've provided is currently unavailable.";
+            return;
+        }
+
+        if (selectedImageFile?.Size > MaxFileSize)
+        {
+            errorMessage = "Your image is above 5mb.";
+            selectedImageFile = null;
             return;
         }
 

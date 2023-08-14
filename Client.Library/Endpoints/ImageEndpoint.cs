@@ -11,7 +11,6 @@ public class ImageEndpoint : IImageEndpoint
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(ImageEndpoint);
     private const string ApiEndpointUrl = "api/Image";
-    private const int MaxAllowedSize = int.MaxValue;
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
@@ -23,35 +22,14 @@ public class ImageEndpoint : IImageEndpoint
         _localStorage = localStorage;
     }
 
-    private static async Task<MultipartFormDataContent> CompressFileAsync(IBrowserFile imageFile)
-    {
-        using var imageStream = imageFile.OpenReadStream(MaxAllowedSize);
-
-        using var image = await Image.LoadAsync(imageStream);
-
-        var encoder = new JpegEncoder
-        {
-            Quality = 80,
-        };
-
-        using var compressedStream = new MemoryStream();
-        await image.SaveAsync(compressedStream, encoder);
-
-        compressedStream.Seek(0, SeekOrigin.Begin);
-
-        var content = new MultipartFormDataContent
-        {
-            { new StreamContent(imageFile.OpenReadStream(MaxAllowedSize)), "imageFile", imageFile.Name }
-        };
-
-        return content;
-    }
-
     public async Task<string> UploadImageAsync(IBrowserFile imageFile)
     {
         try
         {
-            using var content = await CompressFileAsync(imageFile);
+            using var content = new MultipartFormDataContent
+            {
+                { new StreamContent(imageFile.OpenReadStream(imageFile.Size)), "imageFile", imageFile.Name }
+            };
 
             using var response = await _httpClient.PostAsync(ApiEndpointUrl, content);
             response.EnsureSuccessStatusCode();

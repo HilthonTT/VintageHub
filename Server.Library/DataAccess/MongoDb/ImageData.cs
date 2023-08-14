@@ -18,11 +18,10 @@ public class ImageData : IImageData
 
     public async Task<string> UploadImageAsync(IFormFile imageFile)
     {
-        using var memoryStream = new MemoryStream();
-        await imageFile.CopyToAsync(memoryStream);
+        var imageStream = imageFile.OpenReadStream();
 
         string uniqueFileName = $"{Guid.NewGuid():N}_{DateTime.UtcNow:yyyyMMddHHmmss}.jpg";
-        var objectId = await _connection.Bucket.UploadFromStreamAsync(uniqueFileName, memoryStream);
+        var objectId = await _connection.Bucket.UploadFromStreamAsync(uniqueFileName, imageStream);
 
         return objectId.ToString();
     }
