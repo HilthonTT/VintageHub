@@ -1,6 +1,7 @@
 ﻿@page "/"
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject ICategoryEndpoint CategoryEndpoint
+@inject IEraEndpoint EraEndpoint
 @inject IUserDataVerifier UserVerifier
 @inject NavigationManager Navigation
 
@@ -87,6 +88,7 @@
         {
             artifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
             categories = await CategoryEndpoint.GetAllCategoriesAsync();
+            eras = await EraEndpoint.GetAllErasAsync();
             loggedInUser = await UserVerifier.LoadAndVerifyUserAsync();
         }
         catch (Exception ex)
