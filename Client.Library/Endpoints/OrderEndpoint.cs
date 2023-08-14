@@ -48,10 +48,19 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/user/{userId}");
-            response.EnsureSuccessStatusCode();
+            var orders = await GetAllOrdersAsync();
 
-            return await response.Content.ReadFromJsonAsync<List<OrderModel>>();
+            var cachedOrder = orders.Where(o => o.UserId == userId).ToList();
+
+            if (cachedOrder?.Count <= 0)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/user/{userId}");
+                response.EnsureSuccessStatusCode();
+
+                cachedOrder = await response.Content.ReadFromJsonAsync<List<OrderModel>>();
+            }
+
+            return cachedOrder;
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -60,7 +69,7 @@ public class OrderEndpoint : IOrderEndpoint
         }
     }
 
-    public async Task<List<OrderDetailsModel>> GetOrderDetailsByOrderIAsync(int orderId)
+    public async Task<List<OrderDetailsModel>> GetOrderDetailsByOrderIdAsync(int orderId)
     {
         try
         {
@@ -80,10 +89,18 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
-            response.EnsureSuccessStatusCode();
+            var orders = await GetAllOrdersAsync();
 
-            return await response.Content.ReadFromJsonAsync<OrderModel>();
+            var cachedOrder = orders.FirstOrDefault(o => o.Id == id);
+            if (cachedOrder is null)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
+                response.EnsureSuccessStatusCode();
+
+                cachedOrder = await response.Content.ReadFromJsonAsync<OrderModel>();
+            }
+
+            return cachedOrder;
         }
         catch (AccessTokenNotAvailableException ex)
         {

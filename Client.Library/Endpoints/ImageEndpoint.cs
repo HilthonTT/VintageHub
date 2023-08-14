@@ -3,7 +3,6 @@ using Client.Library.LocalStorage.Interfaces;
 using Client.Library.Models.Cache;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace Client.Library.Endpoints;
 public class ImageEndpoint : IImageEndpoint

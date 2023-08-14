@@ -48,10 +48,18 @@ public class EraEndpoint : IEraEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
-            response.EnsureSuccessStatusCode();
+            var eras = await GetAllErasAsync();
 
-            return await response.Content.ReadFromJsonAsync<EraModel>();
+            var cachedEra = eras.FirstOrDefault(e => e.Id == id);
+            if (cachedEra is null)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
+                response.EnsureSuccessStatusCode();
+
+                cachedEra = await response.Content.ReadFromJsonAsync<EraModel>();
+            }
+
+            return cachedEra;
         }
         catch (AccessTokenNotAvailableException ex)
         {

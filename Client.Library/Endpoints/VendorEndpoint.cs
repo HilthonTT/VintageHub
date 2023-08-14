@@ -48,10 +48,18 @@ public class VendorEndpoint : IVendorEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
-            response.EnsureSuccessStatusCode();
+            var vendors = await GetAllVendorsAsync();
 
-            return await response.Content.ReadFromJsonAsync<VendorModel>();
+            var cachedVendor = vendors.FirstOrDefault(v => v.Id == id);
+            if (cachedVendor is null)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
+                response.EnsureSuccessStatusCode();
+
+                cachedVendor = await response.Content.ReadFromJsonAsync<VendorModel>();
+            }
+
+            return cachedVendor;
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -64,10 +72,19 @@ public class VendorEndpoint : IVendorEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/owner/{ownerUserId}");
-            response.EnsureSuccessStatusCode();
+            var vendors = await GetAllVendorsAsync();
 
-            return await response.Content.ReadFromJsonAsync<List<VendorModel>>();
+            var cachedVendors = vendors.Where(v => v.OwnerUserId == ownerUserId).ToList();
+
+            if (cachedVendors?.Count <= 0)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/owner/{ownerUserId}");
+                response.EnsureSuccessStatusCode();
+
+                cachedVendors = await response.Content.ReadFromJsonAsync<List<VendorModel>>();
+            }
+
+            return cachedVendors;
         }
         catch (AccessTokenNotAvailableException ex)
         {

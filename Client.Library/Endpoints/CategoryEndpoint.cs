@@ -49,10 +49,18 @@ public class CategoryEndpoint : ICategoryEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
-            response.EnsureSuccessStatusCode();
+            var categories = await GetAllCategoriesAsync();
 
-            return await response.Content.ReadFromJsonAsync<CategoryModel>();
+            var cachedCategory = categories.FirstOrDefault(c => c.Id == id);
+            if (cachedCategory is null)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
+                response.EnsureSuccessStatusCode();
+
+                cachedCategory = await response.Content.ReadFromJsonAsync<CategoryModel>();
+            }
+
+            return cachedCategory;
         }
         catch (AccessTokenNotAvailableException ex)
         {

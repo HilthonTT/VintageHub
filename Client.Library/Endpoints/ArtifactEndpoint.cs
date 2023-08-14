@@ -50,10 +50,18 @@ public class ArtifactEndpoint : IArtifactEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
-            response.EnsureSuccessStatusCode();
+            var artifacts = await GetAllArtifactsAsync();
 
-            return await response.Content.ReadFromJsonAsync<ArtifactModel>();
+            var cachedArtifact = artifacts.FirstOrDefault(a => a.Id == id);
+            if (cachedArtifact is null)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
+                response.EnsureSuccessStatusCode();
+
+                cachedArtifact = await response.Content.ReadFromJsonAsync<ArtifactModel>();
+            }
+
+            return cachedArtifact;
         }
         catch (AccessTokenNotAvailableException ex)
         {

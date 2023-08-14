@@ -84,8 +84,6 @@
     private string vendorImageSource = "";
 
     private List<ArtifactModel> randomArtifacts;
-    private List<CategoryModel> categories;
-    private List<EraModel> eras;
 
     private VendorModel vendor;
     private ArtifactModel artifact;
@@ -96,8 +94,6 @@
     protected override async Task OnInitializedAsync()
     {
         loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
-        categories = await CategoryEndpoint.GetAllCategoriesAsync();
-        eras = await EraEndpoint.GetAllErasAsync();
 
         await LoadArtifactAsync();
         await LoadRandomArtifactsAsync();
@@ -112,8 +108,8 @@
             byte[] imageBytes = await ImageEndpoint.GetImageAsync(artifact.ImageId);
             artifactImageSource = GetImageSource(imageBytes);
 
-            category = categories.FirstOrDefault(c => c.Id == artifact.CategoryId);
-            era = eras.FirstOrDefault(e => e.Id == artifact.EraId);
+            category = await CategoryEndpoint.GetCategoryByIdAsync(artifact.CategoryId);
+            era = await EraEndpoint.GetEraByIdAsync(artifact.EraId);
 
             await LoadVendorAsync();
         }
