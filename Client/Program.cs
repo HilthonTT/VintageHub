@@ -42,6 +42,7 @@ builder.Services.AddTransient<IUserDataVerifier, UserDataVerifier>();
 builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddSingleton<ILocalStorage, LocalStorage>();
 
+builder.Services.AddTransient<IImageEndpoint, ImageEndpoint>();
 builder.Services.AddTransient<IArtifactEndpoint, ArtifactEndpoint>();
 builder.Services.AddTransient<ICategoryEndpoint, CategoryEndpoint>();
 builder.Services.AddTransient<IEraEndpoint, EraEndpoint>();
