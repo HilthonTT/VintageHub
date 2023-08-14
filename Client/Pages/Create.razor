@@ -9,113 +9,150 @@
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
-<div class="container">
-    <h1 class="text-center fw-bold">Create your artifact</h1>
-    <div class="row">
-        <div class="col-12 justify-content-center">
-            <div class="row">
-                <div class="col-11">
-                    <EditForm Model="artifact" OnValidSubmit="CreateArtifactAsync">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-name">Artifact Name</label>
-                                    <div id="artifact-name">Enter the artifact's name.</div>
-                                    <InputText @bind-Value="artifact.Name" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-description">Artifact Description</label>
-                                    <div id="artifact-name">Describe your artifact in 256 characters.</div>
-                                    <InputTextArea @bind-Value="artifact.Description" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-image">Artifact's image</label>
-                                    <div id="artifact-image">Select an image of your artifact.</div>
-                                    <InputFile OnChange="HandleImageSelected" accept="image/*" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-quantity">Quantity</label>
-                                    <div id="artifact-quantity">
-                                        Please enter the quantity of artifacts you have available.
-                                    </div>
-                                    <InputNumber @bind-Value="artifact.Quantity" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row mt-2">
-                            <div class="col-6">
-                                <label class="form-label">Select a category.</label>
-                                <InputSelect @bind-Value="artifact.CategoryId"
-                                             class="form-select"
-                                             aria-label="Select the suited category for the artifact.">
-                                    @if (categories is not null)
-                                    {
-                                        @foreach (var cat in categories)
-                                        {
-                                            <option value="@cat.Id">@cat.Name</option>
-                                        }
-                                    }
-                                </InputSelect>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Select an era.</label>
-                                <InputSelect @bind-Value="artifact.EraId"
-                                             class="form-select"
-                                             aria-label="Select the correct era of the artifact.">
-                                    @if (eras is not null)
-                                    {
-                                        @foreach (var e in eras)
-                                        {
-                                            <option value="@e.Id">@e.Name</option>
-                                        }
-                                    }
-                                </InputSelect>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <InputSelect @bind-Value="artifact.VendorId"
-                                             class="form-select"
-                                             aria-label="Select the vendor you are portraying.">
-                                    @if (vendors is not null)
-                                    {
-                                        @foreach (var v in vendors)
-                                        {
-                                            <option value="@v.Id">@v.Name</option>
-                                        }
-                                    }
-                                </InputSelect>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row mt-2">
-                            <div class="form-check">
-                                <InputCheckbox @bind-Value="artifact.Availability"
-                                               class="form-check-input"
-                                               id="artifact-availability-check-box" />
-                                <label class="form-check-label" for="artifact-availability-check-box">
-                                    Artifact is available
-                                </label>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row text-center">
-                            <button type="submit" class="btn btn-primary text-uppercase">
-                                Create
-                            </button>
-                        </div>
-                    </EditForm>
+@if (isCreatingArtifact)
+{
+    <div class="modal modal-dialog-centered" id="loadingModal" aria-labelledby="loadingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loadingModalLabel">
+                        Please remain patient, we are currently creating your artifact.
+                    </h5>
                 </div>
-                <div class="col-1">
-                    <button @onclick="ClosePage" class="btn btn-close"></button>
+                <div class="modal-body text-center">
+                    <div class="spinner-border text-primary text-center" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="container">
+        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+        {
+            <div class="alert alert-danger">
+                @errorMessage
+            </div>
+        }
+        <h1 class="text-center fw-bold">Create your artifact</h1>
+        <div class="row">
+            <div class="col-12 justify-content-center">
+                <div class="row mb-4">
+                    <div class="col-11">
+                        <EditForm Model="artifact" OnValidSubmit="CreateArtifactAsync">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mt-2">
+                                        <label class="form-label" for="artifact-name">Artifact Name</label>
+                                        <div id="artifact-name">Enter the artifact's name.</div>
+                                        <InputText @bind-Value="artifact.Name" class="form-control" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" for="artifact-description">Artifact Description</label>
+                                        <div id="artifact-name">Describe your artifact in 256 characters.</div>
+                                        <InputTextArea @bind-Value="artifact.Description" class="form-control" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" for="artifact-image">Artifact's image</label>
+                                        <div id="artifact-image">Select an image of your artifact.</div>
+                                        <InputFile OnChange="HandleImageSelected" accept="image/*" class="form-control" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" for="artifact-quantity">Quantity</label>
+                                        <div id="artifact-quantity">
+                                            Please enter the quantity of artifacts you have available.
+                                        </div>
+                                        <InputNumber @bind-Value="artifact.Quantity" class="form-control" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" for="artifact-price">Price</label>
+                                        <div id="artifact-price">
+                                            Please enter the price of the artifact in Euros.
+                                        </div>
+                                        <InputNumber @bind-Value="artifact.Price" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <label class="form-label">Select a category.</label>
+                                    <InputSelect @bind-Value="artifact.CategoryId"
+                                                 class="form-select"
+                                                 aria-label="Select the suited category for the artifact.">
+                                        @if (categories is not null)
+                                        {
+                                            @foreach (var cat in categories)
+                                            {
+                                                <option @key="@cat.Id" value="@cat.Id">@cat.Name</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Select an era.</label>
+                                    <InputSelect @bind-Value="artifact.EraId"
+                                                 class="form-select"
+                                                 aria-label="Select the correct era of the artifact.">
+                                        @if (eras is not null)
+                                        {
+                                            @foreach (var e in eras)
+                                            {
+                                                <option @key="@e.Id" value="@e.Id">@e.Name</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <label class="form-label">Select the vendor you're portraying</label>
+                                    <InputSelect @bind-Value="artifact.VendorId"
+                                                 class="form-select"
+                                                 aria-label="Select the vendor you're portraying.">
+                                        @if (vendors is not null)
+                                        {
+                                            @foreach (var v in vendors)
+                                            {
+                                                <option @key="@v.Id" value="@v.Id">@v.Name</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row mt-2">
+                                <div class="form-check">
+                                    <InputCheckbox @bind-Value="artifact.Availability"
+                                                   class="form-check-input"
+                                                   id="artifact-availability-check-box" />
+                                    <label class="form-check-label" for="artifact-availability-check-box">
+                                        Artifact is available
+                                    </label>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row text-center">
+                                <button type="submit"
+                                        class="btn btn-primary text-uppercase">
+                                    Create
+                                </button>
+                            </div>
+                        </EditForm>
+                    </div>
+                    <div class="col-1">
+                        <button @onclick="ClosePage" class="btn btn-close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
     private CreateArtifactModel artifact = new();
@@ -125,6 +162,8 @@
     private List<VendorModel> vendors;
 
     private IBrowserFile selectedImageFile;
+    private string errorMessage = "";
+    private bool isCreatingArtifact = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -133,6 +172,10 @@
         vendors = await VendorEndpoint.GetAllVendorsByOwnerUserIdAsync(loggedInUser.Id);
         categories = await CategoryEndpoint.GetAllCategoriesAsync();
         eras = await EraEndpoint.GetAllErasAsync();
+
+        artifact.CategoryId = categories.FirstOrDefault().Id;
+        artifact.EraId = eras.FirstOrDefault().Id;
+        artifact.VendorId = vendors.FirstOrDefault().Id;
     }
 
     private void ClosePage()
@@ -147,6 +190,7 @@
 
     private async Task CreateArtifactAsync()
     {
+        errorMessage = "";
         var newArtifact = new ArtifactModel
             {
                 Name = artifact.Name,
@@ -159,6 +203,16 @@
                 Availability = artifact.Availability,
             };
 
+        var selectedEra = eras.Where(e => e.Id == newArtifact.EraId).FirstOrDefault();
+        var selectedCategory = categories.Where(c => c.Id == newArtifact.CategoryId).FirstOrDefault();
+
+        if (selectedEra is null || selectedCategory is null)
+        {
+            errorMessage = "The category you or era you've provided is currently unavailable.";
+            return;
+        }
+
+        isCreatingArtifact = true;
         if (selectedImageFile is not null)
         {
             string objectId = await ImageEndpoint.UploadImageAsync(selectedImageFile);
@@ -168,6 +222,7 @@
         await ArtifactEndpoint.InsertArtifactAsync(newArtifact);
 
         artifact = new();
+        isCreatingArtifact = false;
         ClosePage();
     }
 }
