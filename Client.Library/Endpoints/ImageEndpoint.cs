@@ -1,8 +1,8 @@
 ﻿using Client.Library.Endpoints.Interfaces;
 using Client.Library.LocalStorage.Interfaces;
 using Client.Library.Models.Cache;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Microsoft.AspNetCore.Http;
 
 namespace Client.Library.Endpoints;
 public class ImageEndpoint : IImageEndpoint
@@ -21,13 +21,13 @@ public class ImageEndpoint : IImageEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<string> UploadImageAsync(IFormFile imageFile)
+    public async Task<string> UploadImageAsync(IBrowserFile imageFile)
     {
         try
         {
             using var content = new MultipartFormDataContent
             {
-                { new StreamContent(imageFile.OpenReadStream()), "image", imageFile.FileName }
+                { new StreamContent(imageFile.OpenReadStream()), "image", imageFile.Name }
             };
 
             using var response = await _httpClient.PostAsync(ApiEndpointUrl, content);
