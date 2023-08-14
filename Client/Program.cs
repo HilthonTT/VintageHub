@@ -9,6 +9,8 @@ using Client.Library.LocalStorage.Interfaces;
 using Client.Library.LocalStorage;
 using VintageHub.Client.Authentication.Interfaces;
 using VintageHub.Client.Authentication;
+using Client.Library.Models.Interfaces;
+using Client.Library.Models;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -41,6 +43,8 @@ builder.Services.AddTransient<IUserDataVerifier, UserDataVerifier>();
 
 builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddSingleton<ILocalStorage, LocalStorage>();
+
+builder.Services.AddScoped<IShoppingCartModel, ShoppingCartModel>();
 
 builder.Services.AddTransient<IImageEndpoint, ImageEndpoint>();
 builder.Services.AddTransient<IArtifactEndpoint, ArtifactEndpoint>();

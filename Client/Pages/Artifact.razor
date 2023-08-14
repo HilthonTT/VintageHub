@@ -1,0 +1,177 @@
+﻿@page "/Artifact/{Id:int}"
+@inject IUserEndpoint UserEndpoint
+@inject IArtifactEndpoint ArtifactEndpoint
+@inject ICategoryEndpoint CategoryEndpoint
+@inject IImageEndpoint ImageEndpoint
+@inject IEraEndpoint EraEndpoint
+@inject IVendorEndpoint VendorEndpoint
+@inject IShoppingCartModel ShoppingCart
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Navigation
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-8">
+                    <div>
+                        <div>
+                            @if (string.IsNullOrWhiteSpace(artifactImageSource) is false)
+                            {
+                                <img src="@artifactImageSource"
+                                     class="img-thumbnail rounded"
+                                     alt="@artifact?.Name" />
+                            }
+                            else
+                            {
+                                <img src="https://dummyimage.com/600x400/000/fff"
+                                     class="img-thumbnail rounded"
+                                     alt="Placeholder text" />
+                            }
+                        </div>
+                        <div>
+                            <h2>@artifact?.Name</h2>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <p>@artifact?.Description</p>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <p>Quantity available: @artifact?.Quantity</p>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="d-flex justify-content-between">
+                                <p>Vendor: @vendor?.Name</p>
+                                <div class="d-flex align-items-center">
+                                    <InputNumber @bind-Value="selectedQuantity" class="form-control" style="flex: 1;" />
+                                    <button @onclick="AddToCart" class="btn btn-success mx-1">
+                                        Add To Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 text-end">
+                    <div class="text-end">
+                        <button @onclick="LoadAllArtifactsPage" class="btn btn-outline-primary">
+                            See More
+                        </button>
+                    </div>
+                    @if (randomArtifacts is not null)
+                    {
+                        <Virtualize Items="randomArtifacts" Context="a" OverscanCount="10">
+                            <div @key="a.Id">
+                                @a.Name
+                            </div>
+                        </Virtualize>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private int selectedQuantity = 1;
+
+    private string artifactImageSource = "";
+    private string vendorImageSource = "";
+
+    private List<ArtifactModel> randomArtifacts;
+    private List<CategoryModel> categories;
+    private List<EraModel> eras;
+
+    private VendorModel vendor;
+    private ArtifactModel artifact;
+    private UserModel loggedInUser;
+    private CategoryModel category;
+    private EraModel era;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+        categories = await CategoryEndpoint.GetAllCategoriesAsync();
+        eras = await EraEndpoint.GetAllErasAsync();
+
+        await LoadArtifactAsync();
+        await LoadRandomArtifactsAsync();
+    }
+
+    private async Task LoadArtifactAsync()
+    {
+        artifact = await ArtifactEndpoint.GetArtifactByIdAsync(Id);
+
+        if (artifact is not null)
+        {
+            byte[] imageBytes = await ImageEndpoint.GetImageAsync(artifact.ImageId);
+            artifactImageSource = GetImageSource(imageBytes);
+
+            category = categories.FirstOrDefault(c => c.Id == artifact.CategoryId);
+            era = eras.FirstOrDefault(e => e.Id == artifact.EraId);
+
+            await LoadVendorAsync();
+        }
+    }
+
+    private async Task LoadVendorAsync()
+    {
+        vendor = await VendorEndpoint.GetVendorByIdAsync(artifact.VendorId);
+
+        byte[] imageBytes = await ImageEndpoint.GetImageAsync(vendor.ImageId);
+        vendorImageSource = GetImageSource(imageBytes);
+    }
+
+    private async Task LoadRandomArtifactsAsync()
+    {
+        var random = new Random();
+
+        var artifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
+        randomArtifacts = artifacts.OrderBy(x => random.Next()).Take(25).ToList();
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void LoadAllArtifactsPage()
+    {
+        Navigation.NavigateTo("Artifacts");
+    }
+
+    private void LoadCartPage()
+    {
+        Navigation.NavigateTo("/Cart");
+    }
+
+    private void AddToCart()
+    {
+        if (loggedInUser is null)
+        {
+            Navigation.NavigateToLogin("authentication/login");
+        }
+
+        artifact.Quantity -= selectedQuantity;
+
+        var newCartItem = new CartItemModel
+        {
+            Artifact = artifact,
+            Quantity = selectedQuantity,
+        };
+
+        ShoppingCart.CartItems.Add(newCartItem);
+
+        LoadCartPage();
+    }
+
+    private string GetImageSource(byte[] imageBytes)
+    {
+        return $"data:image/jpg;base64,{Convert.ToBase64String(imageBytes)}";
+    }
+}

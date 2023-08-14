@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MongoDB.Bson;
 using Server.Library.DataAccess.MongoDb.Interfaces;
 
 namespace Server.Library.DataAccess.MongoDb;
@@ -31,7 +32,7 @@ public class ImageData : IImageData
         var output = _cache.Get<byte[]>(objectId);
         if (output is null)
         {
-            output = await _connection.Bucket.DownloadAsBytesAsync(objectId);
+            output = await _connection.Bucket.DownloadAsBytesAsync(new ObjectId(objectId));
             _cache.Set(objectId, output, CacheTimeSpan);
         }
 
