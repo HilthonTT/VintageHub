@@ -13,6 +13,7 @@ public class VendorModel
     [Required]
     [StringLength(256)]
     public string Description { get; set; }
+    public string ImageId { get; set; }
 
     [Required]
     public DateTime DateFounded { get; set; }

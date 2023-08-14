@@ -2,7 +2,7 @@
 	@Id INT,
 	@Name NVARCHAR(50),
 	@Description NVARCHAR(500),
-	@ImageUrl NVARCHAR(MAX),
+	@ImageId NVARCHAR(MAX),
 	@Quantity INT,
 	@Price MONEY,
 	@CategoryId INT,
@@ -15,7 +15,7 @@ BEGIN
 	UPDATE [dbo].[Artifact]
 	SET [Name] = @Name,
 		[Description] = @Description,
-		[ImageUrl] = @ImageUrl,
+		[ImageId] = @ImageId,
 		[Quantity] = @Quantity,
 		[Price] = @Price,
 		[CategoryId] = @CategoryId,

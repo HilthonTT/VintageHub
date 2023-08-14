@@ -4,7 +4,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT [Id], [Name], [Description], [ImageUrl], [Quantity], [Rating], [Price], [VendorId], [CategoryId], [EraId], [Availability]
+	SELECT [Id], [Name], [Description], [ImageId], [Quantity], [Rating], [Price], [VendorId], [CategoryId], [EraId], [Availability]
 	FROM [dbo].[Artifact]
 	WHERE VendorId = @VendorId;
 

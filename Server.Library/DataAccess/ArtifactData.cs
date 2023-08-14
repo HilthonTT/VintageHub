@@ -27,7 +27,7 @@ public class ArtifactData : IArtifactData
         {
             artifact.Name,
             artifact.Description,
-            artifact.ImageUrl,
+            artifact.ImageId,
             artifact.Quantity,
             artifact.Rating,
             artifact.Price,

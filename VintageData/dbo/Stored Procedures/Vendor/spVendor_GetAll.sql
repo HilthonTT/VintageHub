@@ -3,7 +3,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT [Id], [OwnerUserId], [Name], [Description], [DateFounded]
+	SELECT [Id], [OwnerUserId], [Name], [Description], [ImageId], [DateFounded]
 	FROM [dbo].[Vendor]
 
 	RETURN 0;

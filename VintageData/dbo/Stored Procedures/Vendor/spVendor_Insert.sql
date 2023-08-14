@@ -2,6 +2,7 @@
 	@OwnerUserId INT,
 	@Name NVARCHAR(50),
 	@Description NVARCHAR(256),
+	@ImageId NVARCHAR(MAX),
 	@DateFounded DATETIME2
 AS
 BEGIN
@@ -9,8 +10,8 @@ BEGIN
 
 	DECLARE @InsertedId INT;
 
-	INSERT INTO [dbo].[Vendor] ([OwnerUserId], [Name], [Description], [DateFounded])
-	VALUES (@OwnerUserId, @Name, @Description, @DateFounded);
+	INSERT INTO [dbo].[Vendor] ([OwnerUserId], [Name], [Description], [ImageId], [DateFounded])
+	VALUES (@OwnerUserId, @Name, @Description, @ImageId, @DateFounded);
 
 	SET @InsertedId = SCOPE_IDENTITY();
 

@@ -28,6 +28,7 @@ public class VendorData : IVendorData
             vendor.OwnerUserId,
             vendor.Name,
             vendor.Description,
+            vendor.ImageId,
             vendor.DateFounded,
         };
     }

@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[spArtifact_Insert]
 	@Name NVARCHAR(50),
 	@Description NVARCHAR(500),
-	@ImageUrl NVARCHAR(MAX),
+	@ImageId NVARCHAR(MAX),
 	@Quantity INT,
 	@Rating DECIMAL,
 	@Price MONEY,
@@ -15,8 +15,8 @@ BEGIN
 
 	DECLARE @InsertedId INT;
 
-	INSERT INTO [dbo].[Artifact]([Name], [Description], [ImageUrl], [Quantity], [Rating], [Price], [VendorId], [CategoryId], [EraId], [Availability])
-	VALUES (@Name, @Description, @ImageUrl, @Quantity, @Rating, @Price, @VendorId, @CategoryId, @EraId, @Availability);
+	INSERT INTO [dbo].[Artifact]([Name], [Description], [ImageId], [Quantity], [Rating], [Price], [VendorId], [CategoryId], [EraId], [Availability])
+	VALUES (@Name, @Description, @ImageId, @Quantity, @Rating, @Price, @VendorId, @CategoryId, @EraId, @Availability);
 
 	SET @InsertedId = SCOPE_IDENTITY();
 

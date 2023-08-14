@@ -11,6 +11,29 @@
 
 <InputFile OnChange="HandleImageSelected" accept="*/image"/>
 
+<div class="row">
+    <div class="col-12 justify-content-center">
+        <div class="row">
+            <div class="col-12">
+                <EditForm Model="artifact" OnValidSubmit="CreateArtifactAsync">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="mt-2">
+                        <label class="form-label" for="artifact-name">Artifact Name</label>
+                        <div id="artifact-name">Enter the artifact's name.</div>
+                        <InputText @bind-Value="artifact.Name" class="form-control"/>
+                    </div>
+                    <div class="mt-2">
+                        <label class="form-label" for="artifact-description">Artifact Description</label>
+                        <div id="artifact-name">Describe your artifact in 256 characters.</div>
+                        <InputText @bind-Value="artifact.Description" class="form-control" />
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
 @code {
     private CreateArtifactModel artifact = new();
     private UserModel loggedInUser;
@@ -23,8 +46,8 @@
     protected override async Task OnInitializedAsync()
     {
         loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
-        vendors = await VendorEndpoint.GetAllVendorsByOwnerUserIdAsync(loggedInUser.Id);
 
+        vendors = await VendorEndpoint.GetAllVendorsByOwnerUserIdAsync(loggedInUser.Id);
         categories = await CategoryEndpoint.GetAllCategoriesAsync();
         eras = await EraEndpoint.GetAllErasAsync();
     }
@@ -56,7 +79,7 @@
         if (selectedImageFile is not null)
         {
             string objectId = await ImageEndpoint.UploadImageAsync(selectedImageFile);
-            newArtifact.ImageUrl = objectId;
+            newArtifact.ImageId = objectId;
         }
 
         await ArtifactEndpoint.InsertArtifactAsync(newArtifact);
