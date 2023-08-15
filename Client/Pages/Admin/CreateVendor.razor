@@ -1,0 +1,86 @@
+﻿@page "/Admin/Vendor"
+@inject IVendorEndpoint VendorEndpoint
+@inject IUserEndpoint UserEndpoint
+@inject IImageEndpoint ImageEndpoint
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Navigation
+@attribute [Authorize(Policy = "Admin")]
+
+@code {
+    private const long MaxFileSize = 1024 * 1024 * 5; // represents 5MB
+
+    private CreateVendorModel vendor = new();
+    private List<UserModel> users;
+    private IBrowserFile selectedImageFile;
+    private string errorMessage = "";
+    private bool isCreatingVendor = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UserEndpoint.GetAllUsersAsync();
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void HandleImageSelected(InputFileChangeEventArgs e)
+    {
+        selectedImageFile = e.File;
+    }
+
+    private bool IsVendorInvalid(VendorModel vendor)
+    {
+        var selectedUser = users.Where(u => u.Id == vendor.OwnerUserId).FirstOrDefault();
+
+        if (selectedUser is null)
+        {
+            errorMessage = "The user you've provided is currently unavailable.";
+            return true;
+        }
+
+        if (selectedImageFile?.Size > MaxFileSize)
+        {
+            errorMessage = "Your image is above 5MB.";
+            selectedImageFile = null;
+            return true;
+        }
+
+        return false;
+    }
+
+    private async Task CreateVendorAsync()
+    {
+        errorMessage = "";
+
+        var newVendor = new VendorModel
+        {
+            OwnerUserId = vendor.OwnerUserId,
+            Name = vendor.Name,
+            ImageId = "",
+            Description = vendor.Description,
+            DateFounded = vendor.DateFounded,
+        };
+
+        var selectedUser = users.Where(u => u.Id == newVendor.OwnerUserId).FirstOrDefault();
+
+        if (IsVendorInvalid(newVendor))
+        {
+            return;
+        }
+
+        isCreatingVendor = true;
+        if (selectedImageFile is not null)
+        {
+            string objectId = await ImageEndpoint.UploadImageAsync(selectedImageFile);
+            newVendor.ImageId = objectId;
+        }
+
+        await VendorEndpoint.InsertVendorAsync(newVendor);
+
+        vendor = new();
+        isCreatingVendor = false;
+        ClosePage();
+    }
+}

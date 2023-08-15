@@ -1,4 +1,4 @@
-﻿@page "/Create"
+﻿@page "/Admin/Create"
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject ICategoryEndpoint CategoryEndpoint
 @inject IEraEndpoint EraEndpoint
@@ -155,10 +155,9 @@ else
 }
 
 @code {
-    private const long MaxFileSize = 1024 * 1024 * 5;
+    private const long MaxFileSize = 1024 * 1024 * 5; // represents 5MB
 
     private CreateArtifactModel artifact = new();
-    private UserModel loggedInUser;
     private List<CategoryModel> categories;
     private List<EraModel> eras;
     private List<VendorModel> vendors;
@@ -169,9 +168,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
-
-        vendors = await VendorEndpoint.GetAllVendorsByOwnerUserIdAsync(loggedInUser.Id);
+        vendors = await VendorEndpoint.GetAllVendorsAsync();
         categories = await CategoryEndpoint.GetAllCategoriesAsync();
         eras = await EraEndpoint.GetAllErasAsync();
 
@@ -190,35 +187,51 @@ else
         selectedImageFile = e.File;
     }
 
-    private async Task CreateArtifactAsync()
+    private bool IsArtifactInvalid(ArtifactModel artifact)
     {
-        errorMessage = "";
-        var newArtifact = new ArtifactModel
-            {
-                Name = artifact.Name,
-                Description = artifact.Description,
-                Quantity = artifact.Quantity,
-                Price = artifact.Price,
-                CategoryId = artifact.CategoryId,
-                VendorId = artifact.VendorId,
-                ImageId = "",
-                EraId = artifact.EraId,
-                Availability = artifact.Availability,
-            };
-
-        var selectedEra = eras.Where(e => e.Id == newArtifact.EraId).FirstOrDefault();
-        var selectedCategory = categories.Where(c => c.Id == newArtifact.CategoryId).FirstOrDefault();
+        var selectedEra = eras.Where(e => e.Id == artifact.EraId).FirstOrDefault();
+        var selectedCategory = categories.Where(c => c.Id == artifact.CategoryId).FirstOrDefault();
 
         if (selectedEra is null || selectedCategory is null)
         {
-            errorMessage = "The category you or era you've provided is currently unavailable.";
-            return;
+            errorMessage = "The era you've provided is currently unavailable.";
+            return true;
+        }
+
+        if (selectedCategory is null)
+        {
+            errorMessage = "The category you've provided is currently unavailable.";
+            return true;
         }
 
         if (selectedImageFile?.Size > MaxFileSize)
         {
-            errorMessage = "Your image is above 5mb.";
+            errorMessage = "Your image is above 5MB.";
             selectedImageFile = null;
+            return true;
+        }
+
+        return false;
+    }
+
+    private async Task CreateArtifactAsync()
+    {
+        errorMessage = "";
+        var newArtifact = new ArtifactModel
+        {
+            Name = artifact.Name,
+            Description = artifact.Description,
+            Quantity = artifact.Quantity,
+            Price = artifact.Price,
+            CategoryId = artifact.CategoryId,
+            VendorId = artifact.VendorId,
+            ImageId = "",
+            EraId = artifact.EraId,
+            Availability = artifact.Availability,
+        };
+
+        if (IsArtifactInvalid(newArtifact))
+        {
             return;
         }
 
