@@ -31,7 +31,8 @@ public class ImageController : ControllerBase
                 return BadRequest("Image file is required.");
             }
 
-            string objectId = await _imageData.UploadImageAsync(imageFile);
+            using var imageStream = imageFile.OpenReadStream();
+            string objectId = await _imageData.UploadImageAsync(imageStream);
 
             return Ok(objectId);
         }

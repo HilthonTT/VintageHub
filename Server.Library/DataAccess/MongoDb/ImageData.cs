@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using Server.Library.DataAccess.MongoDb.Interfaces;
 
 namespace Server.Library.DataAccess.MongoDb;
@@ -17,10 +16,8 @@ public class ImageData : IImageData
         _cache = cache;
     }
 
-    public async Task<string> UploadImageAsync(IFormFile imageFile)
+    public async Task<string> UploadImageAsync(Stream imageStream)
     {
-        var imageStream = imageFile.OpenReadStream();
-
         string uniqueFileName = $"{Guid.NewGuid():N}_{DateTime.UtcNow:yyyyMMddHHmmss}.jpg";
         var objectId = await _connection.Bucket.UploadFromStreamAsync(uniqueFileName, imageStream);
 
