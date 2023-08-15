@@ -69,6 +69,7 @@ public class ArtifactController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult<ArtifactModel>> InsertArtifactAsync([FromBody] ArtifactModel artifact)
     {
         if (ModelState.IsValid is false)
@@ -91,6 +92,7 @@ public class ArtifactController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> UpdateArtifactAsync([FromBody] ArtifactModel artifact)
     {
         if (ModelState.IsValid is false)
@@ -111,6 +113,7 @@ public class ArtifactController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> DeleteArtifactAsync(int id)
     {
         if (ModelState.IsValid is false)

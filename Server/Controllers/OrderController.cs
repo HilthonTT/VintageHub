@@ -23,6 +23,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult<List<OrderModel>>> GetAllOrdersAsync()
     {
         try

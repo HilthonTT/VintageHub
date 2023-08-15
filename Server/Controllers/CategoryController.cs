@@ -53,6 +53,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult<CategoryModel>> InsertCategoryAsync([FromBody] CategoryModel category)
     {
         if (ModelState.IsValid is false)
@@ -75,6 +76,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> UpdateCategoryAsync([FromBody] CategoryModel category)
     {
         try
@@ -91,6 +93,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> DeleteCategoryAsync(int id)
     {
         try

@@ -53,6 +53,7 @@ public class EraController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult<EraModel>> InsertEraAsync([FromBody] EraModel era)
     {
         if (ModelState.IsValid is false)
@@ -75,6 +76,7 @@ public class EraController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> UpdateEraAsync([FromBody] EraModel era)
     {
         if (ModelState.IsValid is false)
@@ -95,6 +97,7 @@ public class EraController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> DeleteEraAsync(int id)
     {
         try

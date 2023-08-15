@@ -21,6 +21,7 @@ public class ImageController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult<string>> UploadImageAsync(IFormFile imageFile)
     {
         try
@@ -61,6 +62,7 @@ public class ImageController : ControllerBase
     }
 
     [HttpDelete("{objectId}")]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> DeleteImageAsync(string objectId)
     {
         try
