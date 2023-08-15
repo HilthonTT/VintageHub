@@ -9,6 +9,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(ArtifactEndpoint);
+    private const string CacheNameSingle = $"{CacheName}_Single";
     private const string CacheNameVendorPrefix = $"{CacheName}_Vendor_";
     private const string ApiEndpointUrl = "api/Artifact";
     private readonly HttpClient _httpClient;
@@ -50,15 +51,19 @@ public class ArtifactEndpoint : IArtifactEndpoint
     {
         try
         {
-            var artifacts = await GetAllArtifactsAsync();
+            var cachedArtifacts = await _localStorage.GetAsync<List<ArtifactModel>>(CacheNameSingle);
+            cachedArtifacts ??= new();
 
-            var cachedArtifact = artifacts.FirstOrDefault(a => a.Id == id);
+            var cachedArtifact = cachedArtifacts.FirstOrDefault(a => a.Id == id);
             if (cachedArtifact is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
                 cachedArtifact = await response.Content.ReadFromJsonAsync<ArtifactModel>();
+
+                cachedArtifacts.Add(cachedArtifact);
+                await _localStorage.SetAsync(CacheNameSingle, cachedArtifacts, CacheTimeSpan);
             }
 
             return cachedArtifact;

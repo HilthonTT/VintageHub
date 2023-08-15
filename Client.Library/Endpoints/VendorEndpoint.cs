@@ -9,6 +9,8 @@ public class VendorEndpoint : IVendorEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(VendorEndpoint);
+    private const string CacheNamePrefix = $"{CacheName}_";
+    private const string CacheNameSingle = $"{CacheName}_Single";
     private const string ApiEndpointUrl = "api/Vendor";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
@@ -48,15 +50,18 @@ public class VendorEndpoint : IVendorEndpoint
     {
         try
         {
-            var vendors = await GetAllVendorsAsync();
+            var cachedVendors = await _localStorage.GetAsync<List<VendorModel>>(CacheNameSingle);
+            cachedVendors ??= new();
 
-            var cachedVendor = vendors.FirstOrDefault(v => v.Id == id);
+            var cachedVendor = cachedVendors.FirstOrDefault(v => v.Id == id);
             if (cachedVendor is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
                 cachedVendor = await response.Content.ReadFromJsonAsync<VendorModel>();
+                cachedVendors.Add(cachedVendor);
+                await _localStorage.SetAsync(CacheNameSingle, cachedVendors, CacheTimeSpan);
             }
 
             return cachedVendor;
@@ -72,19 +77,19 @@ public class VendorEndpoint : IVendorEndpoint
     {
         try
         {
-            var vendors = await GetAllVendorsAsync();
+            string key = CacheNamePrefix + ownerUserId;
+            var vendors = await _localStorage.GetAsync<List<VendorModel>>(key);
 
-            var cachedVendors = vendors.Where(v => v.OwnerUserId == ownerUserId).ToList();
-
-            if (cachedVendors?.Count <= 0)
+            if (vendors?.Count <= 0)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/owner/{ownerUserId}");
                 response.EnsureSuccessStatusCode();
 
-                cachedVendors = await response.Content.ReadFromJsonAsync<List<VendorModel>>();
+                vendors = await response.Content.ReadFromJsonAsync<List<VendorModel>>();
+                await _localStorage.SetAsync(key, vendors, CacheTimeSpan);
             }
 
-            return cachedVendors;
+            return vendors;
         }
         catch (AccessTokenNotAvailableException ex)
         {

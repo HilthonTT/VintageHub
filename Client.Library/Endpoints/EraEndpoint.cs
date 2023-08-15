@@ -9,6 +9,7 @@ public class EraEndpoint : IEraEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(EraEndpoint);
+    private const string CacheNameSingle = $"{CacheName}_Single";
     private const string ApiEndpointUrl = "api/Era";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
@@ -48,15 +49,17 @@ public class EraEndpoint : IEraEndpoint
     {
         try
         {
-            var eras = await GetAllErasAsync();
+            var cachedEras = await _localStorage.GetAsync<List<EraModel>>(CacheNameSingle);
 
-            var cachedEra = eras.FirstOrDefault(e => e.Id == id);
+            var cachedEra = cachedEras.FirstOrDefault(e => e.Id == id);
             if (cachedEra is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
                 cachedEra = await response.Content.ReadFromJsonAsync<EraModel>();
+                cachedEras.Add(cachedEra);
+                await _localStorage.SetAsync(CacheName, cachedEra, CacheTimeSpan);
             }
 
             return cachedEra;

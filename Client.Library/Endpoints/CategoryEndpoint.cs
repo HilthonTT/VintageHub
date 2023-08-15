@@ -9,6 +9,7 @@ public class CategoryEndpoint : ICategoryEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(CategoryEndpoint);
+    private const string CacheNameSingle = $"{CacheName}_Single";
     private const string ApiEndpointUrl = "api/Category";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
@@ -49,15 +50,18 @@ public class CategoryEndpoint : ICategoryEndpoint
     {
         try
         {
-            var categories = await GetAllCategoriesAsync();
+            var cachedCategories = await _localStorage.GetAsync<List<CategoryModel>>(CacheNameSingle);
+            cachedCategories ??= new();
 
-            var cachedCategory = categories.FirstOrDefault(c => c.Id == id);
+            var cachedCategory = cachedCategories.FirstOrDefault(c => c.Id == id);
             if (cachedCategory is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
                 cachedCategory = await response.Content.ReadFromJsonAsync<CategoryModel>();
+                cachedCategories.Add(cachedCategory);
+                await _localStorage.SetAsync(CacheNameSingle, cachedCategory, CacheTimeSpan);
             }
 
             return cachedCategory;

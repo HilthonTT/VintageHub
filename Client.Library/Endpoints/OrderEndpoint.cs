@@ -9,6 +9,8 @@ public class OrderEndpoint : IOrderEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(OrderEndpoint);
+    private const string CacheNamePrefix = $"{CacheName}_";
+    private const string CacheNameSingle = $"{CacheName}_Single";
     private const string ApiEndpointUrl = "api/Order";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
@@ -48,19 +50,19 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            var orders = await GetAllOrdersAsync();
+            string key = CacheNamePrefix + userId;
+            var output = await _localStorage.GetAsync<List<OrderModel>>(key);
 
-            var cachedOrder = orders.Where(o => o.UserId == userId).ToList();
-
-            if (cachedOrder?.Count <= 0)
+            if (output?.Count <= 0)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/user/{userId}");
                 response.EnsureSuccessStatusCode();
 
-                cachedOrder = await response.Content.ReadFromJsonAsync<List<OrderModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<OrderModel>>();
+                await _localStorage.SetAsync(key, output, CacheTimeSpan);
             }
 
-            return cachedOrder;
+            return output;
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -89,15 +91,17 @@ public class OrderEndpoint : IOrderEndpoint
     {
         try
         {
-            var orders = await GetAllOrdersAsync();
+            var cachedOrders = await _localStorage.GetAsync<List<OrderModel>>(CacheNameSingle);
 
-            var cachedOrder = orders.FirstOrDefault(o => o.Id == id);
+            var cachedOrder = cachedOrders.FirstOrDefault(o => o.Id == id);
             if (cachedOrder is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
                 cachedOrder = await response.Content.ReadFromJsonAsync<OrderModel>();
+                cachedOrders.Add(cachedOrder);
+                await _localStorage.SetAsync(CacheNameSingle, cachedOrders, CacheTimeSpan);
             }
 
             return cachedOrder;
