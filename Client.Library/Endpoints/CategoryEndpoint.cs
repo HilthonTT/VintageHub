@@ -61,7 +61,7 @@ public class CategoryEndpoint : ICategoryEndpoint
 
                 cachedCategory = await response.Content.ReadFromJsonAsync<CategoryModel>();
                 cachedCategories.Add(cachedCategory);
-                await _localStorage.SetAsync(CacheNameSingle, cachedCategory, CacheTimeSpan);
+                await _localStorage.SetAsync(CacheNameSingle, cachedCategories, CacheTimeSpan);
             }
 
             return cachedCategory;

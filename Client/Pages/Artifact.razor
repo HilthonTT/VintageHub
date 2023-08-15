@@ -5,7 +5,7 @@
 @inject IImageEndpoint ImageEndpoint
 @inject IEraEndpoint EraEndpoint
 @inject IVendorEndpoint VendorEndpoint
-@inject IShoppingCartModel ShoppingCart
+@inject IShoppingCartStorage ShoppingCartStorage
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 
@@ -35,6 +35,10 @@
                         <hr />
                         <div class="row">
                             <p>@artifact?.Description</p>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <p>@artifact?.Price &euro;</p>
                         </div>
                         <hr />
                         <div class="row">
@@ -105,7 +109,7 @@
 
         if (artifact is not null)
         {
-            artifactImageSource = await ImageEndpoint.GetImageAsync(artifact.ImageId);
+            artifactImageSource = await ImageEndpoint.GetImageAsync(artifact.ImageId) ?? "";
 
             category = await CategoryEndpoint.GetCategoryByIdAsync(artifact.CategoryId);
             era = await EraEndpoint.GetEraByIdAsync(artifact.EraId);
@@ -118,7 +122,7 @@
     {
         vendor = await VendorEndpoint.GetVendorByIdAsync(artifact.VendorId);
 
-        vendorImageSource = await ImageEndpoint.GetImageAsync(vendor.ImageId);
+        vendorImageSource = await ImageEndpoint.GetImageAsync(vendor.ImageId) ?? "";
     }
 
     private async Task LoadRandomArtifactsAsync()
@@ -144,7 +148,7 @@
         Navigation.NavigateTo("/Cart");
     }
 
-    private void AddToCart()
+    private async Task AddToCart()
     {
         if (loggedInUser is null)
         {
@@ -159,7 +163,10 @@
             Quantity = selectedQuantity,
         };
 
-        ShoppingCart.CartItems.Add(newCartItem);
+        var shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
+        shoppingCart.CartItems.Add(newCartItem);
+
+        await ShoppingCartStorage.SaveShoppingCartAsync(shoppingCart);
 
         LoadCartPage();
     }

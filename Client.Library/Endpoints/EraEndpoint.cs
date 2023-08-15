@@ -50,6 +50,7 @@ public class EraEndpoint : IEraEndpoint
         try
         {
             var cachedEras = await _localStorage.GetAsync<List<EraModel>>(CacheNameSingle);
+            cachedEras ??= new();
 
             var cachedEra = cachedEras.FirstOrDefault(e => e.Id == id);
             if (cachedEra is null)
@@ -59,7 +60,7 @@ public class EraEndpoint : IEraEndpoint
 
                 cachedEra = await response.Content.ReadFromJsonAsync<EraModel>();
                 cachedEras.Add(cachedEra);
-                await _localStorage.SetAsync(CacheName, cachedEra, CacheTimeSpan);
+                await _localStorage.SetAsync(CacheNameSingle, cachedEras, CacheTimeSpan);
             }
 
             return cachedEra;

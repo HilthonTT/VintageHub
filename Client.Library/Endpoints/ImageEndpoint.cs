@@ -56,9 +56,14 @@ public class ImageEndpoint : IImageEndpoint
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{objectId}");
                 response.EnsureSuccessStatusCode();
 
-                var imageBytes = await response.Content.ReadAsStringAsync();
+                string imageUrl = await response.Content.ReadAsStringAsync();
 
-                cachedImage = new ImageModel(objectId, imageBytes);
+                if (imageUrl.Contains("<!DOCTYPE html>"))
+                {
+                    imageUrl = "";
+                }
+
+                cachedImage = new ImageModel(objectId, imageUrl);
                 cachedImages.Add(cachedImage);
                 await _localStorage.SetAsync(CacheName, cachedImages, CacheTimeSpan);
             }
