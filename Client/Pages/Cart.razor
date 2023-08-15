@@ -1,0 +1,182 @@
+﻿@page "/Cart"
+@inject IShoppingCartStorage ShoppingCartStorage
+@inject IUserEndpoint UserEndpoint
+@inject IOrderEndpoint OrderEndpoint
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+<div class="container">
+    @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+    <h1 class="text-center fw-bold">Your Cart</h1>
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-8">
+                    @if (shoppingCart?.CartItems?.Count <= 0)
+                    {
+                        <div class="alert alert-warning">
+                            You have no items in your cart.
+                        </div>
+                    }
+                    else
+                    {
+                        <Virtualize Items="GetCombinedCartItems()" Context="c" OverscanCount="10">
+                            <div @onclick="() => OnArtifactClick(c.Artifact)">
+                                @c.Artifact.Name - @c.Quantity
+                            </div>
+                        </Virtualize>
+                    }
+                </div>
+                <div class="col-4">
+                    <h2 class="text-center fw-bold">Summary</h2>
+                    <hr />
+                    <p>
+                        You have a total of @totalItems items in your cart.
+                    </p>
+                    <p >
+                        The total price is 
+                        <span class="text-danger">@totalPrice &euro;</span>
+                    </p>
+                    <hr />
+                    <button @onclick="CheckoutAsync" class="btn btn-primary text-center">
+                        Check out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private UserModel loggedInUser = new();
+    private ShoppingCartModel shoppingCart = new();
+
+    private decimal totalPrice = 0;
+    private int totalItems = 0;
+    private string errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
+
+        CalculatePriceAndItems();
+
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+    }
+
+    private void CalculatePriceAndItems()
+    {
+        decimal price = 0;
+        int itemCounts = 0;
+
+        var uniqueArtifacts = new Dictionary<int, int>();
+
+        foreach (var item in shoppingCart.CartItems)
+        {
+            if (uniqueArtifacts.ContainsKey(item.Artifact.Id) is false)
+            {
+                uniqueArtifacts[item.Artifact.Id] = 0;
+            }
+
+            uniqueArtifacts[item.Artifact.Id] += item.Quantity;
+        }
+
+        foreach (var kvp in uniqueArtifacts)
+        {
+            price += (decimal)shoppingCart.CartItems.First(i => i.Artifact.Id == kvp.Key).Artifact.Price * kvp.Value;
+            itemCounts += kvp.Value;
+        }
+
+        totalPrice = price;
+        totalItems = itemCounts;
+    }
+
+    private void OnArtifactClick(ArtifactModel artifact)
+    {
+        Navigation.NavigateTo($"/Artifact/{artifact.Id}");
+    }
+
+    private List<CartItemModel> GetCombinedCartItems()
+    {
+        var combinedCartItems = new List<CartItemModel>();
+
+        foreach (var groupedItem in shoppingCart.CartItems.GroupBy(item => item.Artifact.Name))
+        {
+            var artifact = groupedItem.First().Artifact;
+            var totalQuantity = groupedItem.Sum(item => item.Quantity);
+
+            combinedCartItems.Add(new CartItemModel
+                {
+                    Artifact = artifact,
+                    Quantity = totalQuantity
+                });
+        }
+
+        return combinedCartItems;
+    }
+
+    private OrderModel GetOrder()
+    {
+        return new OrderModel()
+        {
+            UserId = loggedInUser.Id,
+            TotalPrice = totalPrice,
+            IsCanceled = false,
+            IsComplete = false,
+            DateOrdered = DateTime.UtcNow,
+        };
+    }
+
+    private List<OrderDetailsModel> GetOrderDetails()
+    {
+        var orderDetails = new List<OrderDetailsModel>();
+
+        foreach (var item in shoppingCart.CartItems)
+        {
+            var details = new OrderDetailsModel
+                {
+                    ArtifactId = item.Artifact.Id,
+                    Quantity = item.Quantity,
+                };
+
+            orderDetails.Add(details);
+        }
+
+        return orderDetails;
+    }
+
+    private async Task CheckoutAsync()
+    {
+        if (shoppingCart?.CartItems?.Count <= 0 || loggedInUser is null)
+        {
+            return;
+        }
+
+        try
+        {
+            errorMessage = "";
+
+            var newOrder = GetOrder();
+            var orderDetails = GetOrderDetails();
+
+            var request = new OrderRequestModel()
+                {
+                    Order = newOrder,
+                    OrderDetails = orderDetails,
+                };
+
+            shoppingCart.CartItems.Clear();
+            await ShoppingCartStorage.SaveShoppingCartAsync(shoppingCart);
+
+            await OrderEndpoint.InsertOrderAsync(request);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+}
