@@ -118,7 +118,7 @@
     {
         vendor = await VendorEndpoint.GetVendorByIdAsync(artifact.VendorId);
 
-        artifactImageSource = await ImageEndpoint.GetImageAsync(vendor.ImageId);
+        vendorImageSource = await ImageEndpoint.GetImageAsync(vendor.ImageId);
     }
 
     private async Task LoadRandomArtifactsAsync()
