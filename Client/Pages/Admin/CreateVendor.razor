@@ -23,7 +23,10 @@ else
         <div class="row">
             <div class="col-12 justify-content-center">
                 <div class="row mb-4">
-                    <div class="col-11">
+                    <div class="d-flex justify-content-end">
+                        <button @onclick="ClosePage" class="btn btn-close"></button>
+                    </div>
+                    <div class="col-12">
                         <EditForm Model="vendor" OnValidSubmit="CreateVendorAsync">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
@@ -62,6 +65,8 @@ else
                                     <div class="mt-2">
                                         <label class="form-label" for="vendor-owner">Owner</label>
                                         <div id="vendor-owner" class="form-text">Select the owner of the vendor.</div>
+                                        <input @oninput="(e) => FilterUsersAsync((string)e.Value)"
+                                               type="text" class="form-control" placeholder="Search" />
                                         <hr />
                                         <div class="text-center">
                                             @if (users is not null)
@@ -83,11 +88,6 @@ else
                             </div>
                         </EditForm>
                     </div>
-                    <div class="col-1">
-                        <div class="d-flex justify-content-end">
-                            <button @onclick="ClosePage" class="btn btn-close"></button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -100,7 +100,7 @@ else
     private CreateVendorModel vendor = new();
     private List<UserModel> users;
     private IBrowserFile selectedImageFile;
-    private string errorMessage = "";
+    private string errorMessage = ""; 
     private bool isCreatingVendor = false;
 
     protected override async Task OnInitializedAsync()
@@ -136,6 +136,20 @@ else
         }
 
         return false;
+    }
+
+    private async Task FilterUsersAsync(string searchInput)
+    {
+        var output = await UserEndpoint.GetAllUsersAsync();
+
+        if (string.IsNullOrWhiteSpace(searchInput) is false)
+        {
+            output = output.Where(
+                u => u.FirstName.Contains(searchInput, StringComparison.InvariantCultureIgnoreCase) || 
+                u.LastName.Contains(searchInput, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        users = output;
     }
 
     private async Task CreateVendorAsync()
