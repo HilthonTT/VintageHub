@@ -4,7 +4,9 @@
 	@Description NVARCHAR(500),
 	@ImageId NVARCHAR(MAX),
 	@Quantity INT,
+	@Rating DECIMAL,
 	@Price MONEY,
+	@VendorId INT,
 	@CategoryId INT,
 	@EraId INT,
 	@Availability BIT
@@ -17,7 +19,9 @@ BEGIN
 		[Description] = @Description,
 		[ImageId] = @ImageId,
 		[Quantity] = @Quantity,
+		[Rating] = @Rating,
 		[Price] = @Price,
+		[VendorId] = @VendorId,
 		[CategoryId] = @CategoryId,
 		[EraId] = @EraId,
 		[Availability] = @Availability

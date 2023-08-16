@@ -91,7 +91,7 @@ public class SqlDataAccess : ISqlDataAccess
     public async Task<int> SaveDataInTransactionAsync<T>(string storedProcedure, T parameters)
     {
         using var multi = await _connection.QueryMultipleAsync(storedProcedure, parameters,
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure, transaction: _transaction);
 
         int insertedId = await multi.ReadSingleAsync<int>();
         return insertedId;

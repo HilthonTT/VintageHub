@@ -78,6 +78,27 @@ public class OrderData : IOrderData
         _cache.Remove(idkey);
     }
 
+    private async Task UpdateArtifactQuantitiesAsync(List<OrderDetailsModel> orderDetails)
+    {
+        foreach (var item in orderDetails)
+        {
+            var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>(
+                "dbo.spArtifact_GetById", new { Id = item.ArtifactId });
+
+            if (artifact is not null)
+            {
+                artifact.Quantity -= item.Quantity;
+
+                if (artifact.Quantity < 0)
+                {
+                    artifact.Quantity = 0;
+                }
+
+                await _sql.SaveDataInTransactionAsync("dbo.spArtifact_Update", artifact);
+            }
+        }
+    }
+
     public async Task<List<OrderModel>> GetAllOrdersAsync()
     {
         var output = _cache.Get<List<OrderModel>>(CacheName);
@@ -168,6 +189,8 @@ public class OrderData : IOrderData
 
                 await _sql.SaveDataInTransactionAsync(orderDetailsSp, parameters);
             }
+
+            await UpdateArtifactQuantitiesAsync(orderDetails);
 
             _sql.CommitTransaction();
 
