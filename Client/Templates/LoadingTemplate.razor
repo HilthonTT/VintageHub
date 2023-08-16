@@ -1,0 +1,33 @@
+﻿<div class="modal modal-dialog-centered" id="loadingModal" aria-labelledby="loadingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loadingModalLabel">
+                    @GetTitle()
+                </h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary text-center" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Loading Object { get; set; }
+
+    private string GetTitle()
+    {
+        return (Object) switch
+        {
+            Loading.Artifact => "Please remain patient, we are currently creating your artifact.",
+            Loading.Vendor => "Please remain patient, we are currently creating your vendor.",
+            Loading.Order => "Please remain patient, we are currently submitting your order.",
+            _ => "Please remain patient, this might take a while.",
+        };
+    }
+}

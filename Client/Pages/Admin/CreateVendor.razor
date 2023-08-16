@@ -1,10 +1,98 @@
-﻿@page "/Admin/Vendor"
+﻿@page "/Admin/Vendor/Create"
 @inject IVendorEndpoint VendorEndpoint
 @inject IUserEndpoint UserEndpoint
 @inject IImageEndpoint ImageEndpoint
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
+
+@if (isCreatingVendor)
+{
+    <LoadingTemplate Object="Loading.Vendor" />
+}
+else
+{
+    <div class="container">
+        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+        {
+            <div class="alert alert-danger">
+                @errorMessage
+            </div>
+        }
+        <h1 class="text-center fw-bold">Create the vendor</h1>
+        <div class="row">
+            <div class="col-12 justify-content-center">
+                <div class="row mb-4">
+                    <div class="col-11">
+                        <EditForm Model="vendor" OnValidSubmit="CreateVendorAsync">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="mt-2">
+                                        <label class="form-label" for="vendor-name">Vendor Name</label>
+                                        <div id="vendor-name" class="form-text">Enter the vendor's name.</div>
+                                        <InputText @bind-Value="vendor.Name" class="form-control" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" for="vendor-description">Vendor Description</label>
+                                        <div id="vendor-description" class="form-text">Describe the vendor. Who are they, etc...</div>
+                                        <InputTextArea @bind-Value="vendor.Description" class="form-control"/>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" for="vendor-logo">Logo</label>
+                                        <div id="vendor-logo" class="form-text">
+                                            <span>Select the logo for the vendor.</span>
+                                            <span class="text-danger">This is not required.</span>
+                                        </div>
+                                        <InputFile OnChange="HandleImageSelected" class="form-control" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" for="vendor-date-founded">Date Founded</label>
+                                        <div id="vendor-date-founded" class="form-text">Provide the date the vendor was founded.</div>
+                                        <InputDate @bind-Value="vendor.DateFounded" class="form-control"/>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <button type="submit" class="btn btn-primary text-uppercase">
+                                            Create
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mt-2">
+                                        <label class="form-label" for="vendor-owner">Owner</label>
+                                        <div id="vendor-owner" class="form-text">Select the owner of the vendor.</div>
+                                        <hr />
+                                        <div class="text-center">
+                                            @if (users is not null)
+                                            {
+                                                <InputRadioGroup @bind-Value="vendor.OwnerUserId" class="form-check">
+                                                    <Virtualize Items="users" Context="u" OverscanCount="10">
+                                                        <div @key="@u.Id">
+                                                            <InputRadio Value="@u.Id" id="@u.Id" class="form-check-input" />
+                                                            <label for="@u.Id" class="form-check-label">
+                                                                @u.FirstName @u.LastName - @u.Id
+                                                            </label>
+                                                        </div>
+                                                    </Virtualize>
+                                                </InputRadioGroup>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+                    <div class="col-1">
+                        <div class="d-flex justify-content-end">
+                            <button @onclick="ClosePage" class="btn btn-close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
     private const long MaxFileSize = 1024 * 1024 * 5; // represents 5MB
