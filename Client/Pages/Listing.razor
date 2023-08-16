@@ -139,12 +139,12 @@
     private bool showAllCategories = false;
     private bool showAllEras = false;
     private bool sortByPrice = false;
-    private bool isArtifactLoading = false;
+    private bool isArtifactLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
-        isArtifactLoading = true;
         artifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
+
 
         await LoadCategoriesAsync();
         await LoadErasAsync();
@@ -168,9 +168,30 @@
     private async Task LoadFilterStateAsync()
     {
         searchText = await SessionStorage.GetItemAsStringAsync(nameof(searchText)) ?? "";
-        selectedEra = await SessionStorage.GetItemAsync<EraModel>(nameof(selectedEra)) ?? null;
-        selectedCategory = await SessionStorage.GetItemAsync<CategoryModel>(nameof(selectedCategory)) ?? null;
         selectedRating = await SessionStorage.GetItemAsync<Rating>(nameof(selectedRating));
+
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var queryParameters = HttpUtility.ParseQueryString(uri.Query);
+
+        if (queryParameters["eraId"] is not null)
+        {
+            int eraId = int.Parse(queryParameters["eraId"]);
+            selectedEra = await EraEndpoint.GetEraByIdAsync(eraId);
+        }
+        else
+        {
+            selectedEra = await SessionStorage.GetItemAsync<EraModel>(nameof(selectedEra)) ?? null;
+        }
+
+        if (queryParameters["categoryId"] is not null)
+        {
+            int categoryId = int.Parse(queryParameters["categoryId"]);
+            selectedCategory = await CategoryEndpoint.GetCategoryByIdAsync(categoryId);
+        }
+        else
+        {
+            selectedCategory = await SessionStorage.GetItemAsync<CategoryModel>(nameof(selectedCategory)) ?? null;
+        }
     }
 
     private async Task SaveFilterStateAsync()

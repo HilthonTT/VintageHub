@@ -104,11 +104,31 @@
 
     private void OnCategoryClick(CategoryModel category)
     {
-        Navigation.NavigateTo($"/Category/{category.Id}");
+        var uriBuilder = new UriBuilder(Navigation.ToAbsoluteUri("/Listing"));
+
+        var queryParameters = new Dictionary<string, string>
+            {
+                ["categoryId"] = category.Id.ToString()
+            };
+
+        string queryString = string.Join("&", queryParameters.Select(kv => $"{kv.Key}={kv.Value}"));
+        uriBuilder.Query = queryString;
+
+        Navigation.NavigateTo(uriBuilder.Uri.ToString());
     }
 
     private void OnEraClick(EraModel era)
     {
-        Navigation.NavigateTo($"/Era/{era.Id}");
+        var uriBuilder = new UriBuilder(Navigation.ToAbsoluteUri("/Listing"));
+
+        var queryParameters = new Dictionary<string, string>
+            {
+                ["eraId"] = era.Id.ToString()
+            };
+
+        string queryString = string.Join("&", queryParameters.Select(kv => $"{kv.Key}={kv.Value}"));
+        uriBuilder.Query = queryString;
+
+        Navigation.NavigateTo(uriBuilder.Uri.ToString());
     }
 }
