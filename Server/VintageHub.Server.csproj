@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>VintageHub.Server-e49a682b-15e8-4cf5-94ee-294c84d0b5ec</UserSecretsId>
   </PropertyGroup>
