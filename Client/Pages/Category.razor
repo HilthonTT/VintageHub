@@ -1,0 +1,82 @@
+﻿@page "/Category/{Id:int}"
+@inject IArtifactEndpoint ArtifactEndpoint
+@inject IEraEndpoint EraEndpoint
+@inject ICategoryEndpoint CategoryEndpoint
+@inject ISessionStorageService SessionStorage
+@inject NavigationManager Navigation
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private CategoryModel category;
+    private EraModel selectedEra;
+    private List<CategoryModel> categories;
+    private List<ArtifactModel> artifacts;
+    private List<EraModel> eras;
+
+    private string searchText = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id is 0)
+        {
+            return;
+        }
+
+        category = await CategoryEndpoint.GetCategoryByIdAsync(Id);
+        categories = await CategoryEndpoint.GetAllCategoriesAsync();
+        eras = await EraEndpoint.GetAllErasAsync();
+
+        var allArtifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
+        artifacts = allArtifacts.Where(a => a.CategoryId == Id).ToList();
+    }
+
+    private async Task SaveFilterStateAsync()
+    {
+        searchText = await SessionStorage.GetItemAsStringAsync(nameof(searchText)) ?? "";
+        selectedEra = await SessionStorage.GetItemAsync<EraModel>(nameof(selectedEra)) ?? null;
+    }
+
+    private async Task FilterArtifactsAsync()
+    {
+        var allArtifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
+        var output = allArtifacts.Where(a => a.CategoryId == Id).ToList();
+
+        if (string.IsNullOrWhiteSpace(searchText) is false)
+        {
+            output = output.Where(a => a.Name.Contains(
+                searchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        if (selectedEra is not null)
+        {
+            output = output.Where(a => a.EraId == selectedEra.Id).ToList();
+        }
+
+        artifacts = output;
+        await SaveFilterStateAsync();
+    }
+
+    private async Task OnSearchInputAsync(string searchInput)
+    {
+        searchText = searchInput;
+        await FilterArtifactsAsync();
+    }
+
+    private async Task OnEraClickAsync(EraModel era)
+    {
+        selectedEra = era;
+        await FilterArtifactsAsync();
+    }
+
+    private void OnCategoryClick(CategoryModel category)
+    {
+        Navigation.NavigateTo($"/Category/{category.Id}");
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+}
