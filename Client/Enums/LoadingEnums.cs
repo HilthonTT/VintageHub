@@ -2,9 +2,10 @@
 
 public enum Loading
 {
+    ArtifactCreate,
+    VendorCreate,
+    OrderCreate,
     Artifact,
-    Vendor,
-    Order,
 }
 
 public enum Rating

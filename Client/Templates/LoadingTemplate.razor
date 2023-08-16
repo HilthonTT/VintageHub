@@ -22,12 +22,15 @@
 
     private string GetTitle()
     {
-        return (Object) switch
+        string message = (Object) switch
         {
-            Loading.Artifact => "Please remain patient, we are currently creating your artifact.",
-            Loading.Vendor => "Please remain patient, we are currently creating your vendor.",
-            Loading.Order => "Please remain patient, we are currently submitting your order.",
-            _ => "Please remain patient, this might take a while.",
+            Loading.ArtifactCreate => "we are currently creating your artifact.",
+            Loading.VendorCreate => "we are currently creating your vendor.",
+            Loading.OrderCreate => "we are currently submitting your order.",
+            Loading.Artifact => "we are loading the artifacts for you.",
+            _ => "this might take a while.",
         };
+
+        return $"Please remain patient, {message}";
     }
 }

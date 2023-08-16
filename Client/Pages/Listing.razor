@@ -1,36 +1,42 @@
-﻿@page "/Category/{Id:int}"
+﻿@page "/Listing"
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject IEraEndpoint EraEndpoint
 @inject ICategoryEndpoint CategoryEndpoint
 @inject ISessionStorageService SessionStorage
 @inject NavigationManager Navigation
 
-<div class="container">
+<div class="container mb-5">
     <div class="row">
         <div class="col-12">
             <div class="row">
-                <div class="col-3">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-close" @onclick="ClosePage"></button>
+                </div>
+                <div class="col-2">
                     <div class="row">
-                        <label class="fw-bold">Categories</label>
+                        <div class="fw-bold">Categories</div>
                         <hr />
+                        <div @onclick="() => OnCategoryClickAsync(null)">
+                            <label class="@GetSelectedCategory()">All</label>
+                        </div>
                         @if (categories is not null)
                         {
                             <Virtualize Items="categories" Context="c" OverscanCount="10">
-                                <div @key="@c.Id" @onclick="() => OnCategoryClick(c)">
-                                    <label>@c.Name</label>
+                                <div @key="@c.Id" @onclick="() => OnCategoryClickAsync(c)">
+                                    <label class="@GetSelectedCategory(c)">@c.Name</label>
                                 </div>
                             </Virtualize>
                         }
                         <div>
                             @if (showAllCategories)
                             {
-                                <button @onclick="() => ToggleShowAllCategoriesAsync(true)" class="btn btn-primary">
+                                <button @onclick="() => ToggleShowAllCategoriesAsync(false)" class="btn btn-primary">
                                     See Less
                                 </button>
                             }
                             else
                             {
-                                <button @onclick="() => ToggleShowAllCategoriesAsync(false)" class="btn btn-primary">
+                                <button @onclick="() => ToggleShowAllCategoriesAsync(true)" class="btn btn-primary">
                                     See More
                                 </button>
                             }
@@ -39,6 +45,9 @@
                     <div class="row mt-2">
                         <label class="fw-bold">Eras</label>
                         <hr />
+                        <div @onclick="() => OnEraClickAsync(null)">
+                            <label class="@GetSelectedEraClass()">All</label>
+                        </div>
                         @if (eras is not null)
                         {
                             <Virtualize Items="eras" Context="e" OverscanCount="10">
@@ -50,13 +59,13 @@
                         <div>
                             @if (showAllEras)
                             {
-                                <button @onclick="() => ToggleShowAllErasAsync(true)" class="btn btn-primary">
+                                <button @onclick="() => ToggleShowAllErasAsync(false)" class="btn btn-primary">
                                     See Less
                                 </button>
                             }
                             else
                             {
-                                <button @onclick="() => ToggleShowAllErasAsync(false)" class="btn btn-primary">
+                                <button @onclick="() => ToggleShowAllErasAsync(true)" class="btn btn-primary">
                                     See More
                                 </button>
                             }
@@ -67,13 +76,42 @@
                         <hr />
                         <Virtualize Items="ratings" Context="r" OverscanCount="10">
                             <div @key="@r.ToString()" @onclick="() => OnRatingClickAsync(r)">
-                                <label>@GetRatingText(r)</label>
+                                <label class="@GetSelectedRating(r)">@GetRatingText(r)</label>
                             </div>
                         </Virtualize>
                     </div>
                 </div>
-                <div class="col-9">
-
+                <div class="col-10 px-5">
+                    <div class="row">
+                        <h1 class="fw-bold text-start">Artifacts</h1>
+                        <span class="form-text">Our artifacts come in a wide range of variety!</span>
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="d-flex justify-content-between">
+                                    <span>@(artifacts?.Count) results</span>
+                                    <select class="form-select w-25" aria-label="Select your filtering" @onchange="OnSelectChange">
+                                        <option value="price">Price &euro;</option>
+                                        <option value="rating">Rating</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row mt-2">
+                                @if (artifacts is not null && isArtifactLoading is false)
+                                {
+                                    <Virtualize Items="artifacts" Context="a" OverscanCount="10">
+                                        <div @key="a.Id" @onclick="() => LoadArtifactPage(a)">
+                                            @a.Name - @a.Price &euro;
+                                        </div>
+                                    </Virtualize>
+                                }
+                                else
+                                {
+                                    <LoadingTemplate Object="Loading.Artifact" />
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,10 +119,7 @@
 </div>
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
-
-    private CategoryModel category;
+    private CategoryModel selectedCategory;
     private EraModel selectedEra;
     private List<CategoryModel> categories;
     private List<ArtifactModel> artifacts;
@@ -104,17 +139,13 @@
     private bool showAllCategories = false;
     private bool showAllEras = false;
     private bool sortByPrice = false;
+    private bool isArtifactLoading = false;
 
     protected override async Task OnInitializedAsync()
     {
-        if (Id <= 0)
-        {
-            return;
-        }
+        isArtifactLoading = true;
+        artifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
 
-        category = await CategoryEndpoint.GetCategoryByIdAsync(Id);
-
-        await LoadArtifactsAsync();
         await LoadCategoriesAsync();
         await LoadErasAsync();
 
@@ -125,7 +156,7 @@
     private async Task LoadCategoriesAsync()
     {
         var allCategories = await CategoryEndpoint.GetAllCategoriesAsync();
-        categories = allCategories.Take(5).ToList();
+        categories = showAllCategories ? allCategories : allCategories.Take(5).ToList();
     }
 
     private async Task LoadErasAsync()
@@ -134,16 +165,11 @@
         eras = allEras.Take(5).ToList();
     }
 
-    private async Task LoadArtifactsAsync()
-    {
-        var allArtifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
-        artifacts = allArtifacts.Where(a => a.CategoryId == Id).Take(5).ToList();
-    }
-
     private async Task LoadFilterStateAsync()
     {
         searchText = await SessionStorage.GetItemAsStringAsync(nameof(searchText)) ?? "";
         selectedEra = await SessionStorage.GetItemAsync<EraModel>(nameof(selectedEra)) ?? null;
+        selectedCategory = await SessionStorage.GetItemAsync<CategoryModel>(nameof(selectedCategory)) ?? null;
         selectedRating = await SessionStorage.GetItemAsync<Rating>(nameof(selectedRating));
     }
 
@@ -151,13 +177,14 @@
     {
         await SessionStorage.SetItemAsStringAsync(nameof(searchText), searchText);
         await SessionStorage.SetItemAsync<EraModel>(nameof(selectedEra), selectedEra);
+        await SessionStorage.SetItemAsync<CategoryModel>(nameof(selectedCategory), selectedCategory);
         await SessionStorage.SetItemAsync<Rating>(nameof(selectedRating), selectedRating);
     }
 
     private async Task FilterArtifactsAsync()
     {
-        var allArtifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
-        var output = allArtifacts.Where(a => a.CategoryId == Id).ToList();
+        isArtifactLoading = true;
+        var output = await ArtifactEndpoint.GetAllArtifactsAsync();
 
         if (string.IsNullOrWhiteSpace(searchText) is false)
         {
@@ -167,6 +194,11 @@
         if (selectedEra is not null)
         {
             output = output.Where(a => a.EraId == selectedEra.Id).ToList();
+        }
+
+        if (selectedCategory is not null)
+        {
+            output = output.Where(a => a.CategoryId == selectedCategory.Id).ToList();
         }
 
         output = selectedRating switch
@@ -186,6 +218,8 @@
 
         artifacts = output;
         await SaveFilterStateAsync();
+
+        isArtifactLoading = false;
     }
 
     private async Task OnSearchInputAsync(string searchInput)
@@ -198,6 +232,26 @@
     {
         selectedEra = era;
         await FilterArtifactsAsync();
+    }
+
+    private async Task OnCategoryClickAsync(CategoryModel category)
+    {
+        selectedCategory = category;
+        await FilterArtifactsAsync();
+    }
+
+    private async Task OnSelectChange(ChangeEventArgs e)
+    {
+        string selectedValue = e.Value?.ToString();
+
+        if (selectedValue == "price")
+        {
+            await OnSortChangeAsync(true);
+        }
+        else if (selectedValue == "rating")
+        {
+            await OnSortChangeAsync(false);
+        }
     }
 
     private async Task OnSortChangeAsync(bool isPrice)
@@ -215,15 +269,8 @@
     private async Task ToggleShowAllCategoriesAsync(bool showAll)
     {
         showAllCategories = showAll;
-
-        if (showAllCategories)
-        {
-            categories = await CategoryEndpoint.GetAllCategoriesAsync();
-        }
-        else
-        {
-            await LoadCategoriesAsync();
-        }
+        await LoadCategoriesAsync();
+        StateHasChanged();
     }
 
     private async Task ToggleShowAllErasAsync(bool showAll)
@@ -240,19 +287,39 @@
         }
     }
 
-    private void OnCategoryClick(CategoryModel category)
-    {
-        Navigation.NavigateTo($"/Category/{category.Id}");
-    }
-
     private void ClosePage()
     {
         Navigation.NavigateTo("/");
     }
 
-    private string GetSelectedEraClass(EraModel era)
+    private void LoadArtifactPage(ArtifactModel artifact)
     {
-        if (selectedEra?.Id == era.Id)
+        Navigation.NavigateTo($"/Artifact/{artifact.Id}");
+    }
+
+    private string GetSelectedEraClass(EraModel era = null)
+    {
+        if (selectedEra?.Id == era?.Id)
+        {
+            return "text-success";
+        }
+
+        return "";
+    }
+
+    private string GetSelectedCategory(CategoryModel category = null)
+    {
+        if (selectedCategory?.Id == category?.Id)
+        {
+            return "text-success";
+        }
+
+        return "";
+    }
+
+    private string GetSelectedRating(Rating rating)
+    {
+        if (rating == selectedRating)
         {
             return "text-success";
         }
@@ -264,6 +331,7 @@
     {
         string text = rating switch
         {
+            Rating.ZeroStar => "Zero star",
             Rating.OneStar => "One star",
             Rating.TwoStar => "Two stars",
             Rating.ThreeStar => "Three stars",
