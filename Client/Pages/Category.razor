@@ -5,6 +5,81 @@
 @inject ISessionStorageService SessionStorage
 @inject NavigationManager Navigation
 
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-3">
+                    <div class="row">
+                        <label class="fw-bold">Categories</label>
+                        <hr />
+                        @if (categories is not null)
+                        {
+                            <Virtualize Items="categories" Context="c" OverscanCount="10">
+                                <div @key="@c.Id" @onclick="() => OnCategoryClick(c)">
+                                    <label>@c.Name</label>
+                                </div>
+                            </Virtualize>
+                        }
+                        <div>
+                            @if (showAllCategories)
+                            {
+                                <button @onclick="() => ToggleShowAllCategoriesAsync(true)" class="btn btn-primary">
+                                    See Less
+                                </button>
+                            }
+                            else
+                            {
+                                <button @onclick="() => ToggleShowAllCategoriesAsync(false)" class="btn btn-primary">
+                                    See More
+                                </button>
+                            }
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <label class="fw-bold">Eras</label>
+                        <hr />
+                        @if (eras is not null)
+                        {
+                            <Virtualize Items="eras" Context="e" OverscanCount="10">
+                                <div @key="@e.Id" @onclick="() => OnEraClickAsync(e)">
+                                    <label class="@GetSelectedEraClass(e)">@e.Name</label>
+                                </div>
+                            </Virtualize>
+                        }
+                        <div>
+                            @if (showAllEras)
+                            {
+                                <button @onclick="() => ToggleShowAllErasAsync(true)" class="btn btn-primary">
+                                    See Less
+                                </button>
+                            }
+                            else
+                            {
+                                <button @onclick="() => ToggleShowAllErasAsync(false)" class="btn btn-primary">
+                                    See More
+                                </button>
+                            }
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <label class="fw-bold">Rating</label>
+                        <hr />
+                        <Virtualize Items="ratings" Context="r" OverscanCount="10">
+                            <div @key="@r.ToString()" @onclick="() => OnRatingClickAsync(r)">
+                                <label>@GetRatingText(r)</label>
+                            </div>
+                        </Virtualize>
+                    </div>
+                </div>
+                <div class="col-9">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @code {
     [Parameter]
     public int Id { get; set; }
@@ -14,28 +89,69 @@
     private List<CategoryModel> categories;
     private List<ArtifactModel> artifacts;
     private List<EraModel> eras;
+    private Rating selectedRating = Rating.ZeroStar;
+    private List<Rating> ratings = new()
+    {
+        Rating.ZeroStar,
+        Rating.OneStar,
+        Rating.TwoStar,
+        Rating.ThreeStar,
+        Rating.FourStar,
+        Rating.FiveStar,
+    };
 
     private string searchText = "";
+    private bool showAllCategories = false;
+    private bool showAllEras = false;
+    private bool sortByPrice = false;
 
     protected override async Task OnInitializedAsync()
     {
-        if (Id is 0)
+        if (Id <= 0)
         {
             return;
         }
 
         category = await CategoryEndpoint.GetCategoryByIdAsync(Id);
-        categories = await CategoryEndpoint.GetAllCategoriesAsync();
-        eras = await EraEndpoint.GetAllErasAsync();
 
+        await LoadArtifactsAsync();
+        await LoadCategoriesAsync();
+        await LoadErasAsync();
+
+        await LoadFilterStateAsync();
+        await FilterArtifactsAsync();
+    }
+
+    private async Task LoadCategoriesAsync()
+    {
+        var allCategories = await CategoryEndpoint.GetAllCategoriesAsync();
+        categories = allCategories.Take(5).ToList();
+    }
+
+    private async Task LoadErasAsync()
+    {
+        var allEras = await EraEndpoint.GetAllErasAsync();
+        eras = allEras.Take(5).ToList();
+    }
+
+    private async Task LoadArtifactsAsync()
+    {
         var allArtifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
-        artifacts = allArtifacts.Where(a => a.CategoryId == Id).ToList();
+        artifacts = allArtifacts.Where(a => a.CategoryId == Id).Take(5).ToList();
+    }
+
+    private async Task LoadFilterStateAsync()
+    {
+        searchText = await SessionStorage.GetItemAsStringAsync(nameof(searchText)) ?? "";
+        selectedEra = await SessionStorage.GetItemAsync<EraModel>(nameof(selectedEra)) ?? null;
+        selectedRating = await SessionStorage.GetItemAsync<Rating>(nameof(selectedRating));
     }
 
     private async Task SaveFilterStateAsync()
     {
-        searchText = await SessionStorage.GetItemAsStringAsync(nameof(searchText)) ?? "";
-        selectedEra = await SessionStorage.GetItemAsync<EraModel>(nameof(selectedEra)) ?? null;
+        await SessionStorage.SetItemAsStringAsync(nameof(searchText), searchText);
+        await SessionStorage.SetItemAsync<EraModel>(nameof(selectedEra), selectedEra);
+        await SessionStorage.SetItemAsync<Rating>(nameof(selectedRating), selectedRating);
     }
 
     private async Task FilterArtifactsAsync()
@@ -45,14 +161,28 @@
 
         if (string.IsNullOrWhiteSpace(searchText) is false)
         {
-            output = output.Where(a => a.Name.Contains(
-                searchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            output = output.Where(a => a.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
 
         if (selectedEra is not null)
         {
             output = output.Where(a => a.EraId == selectedEra.Id).ToList();
         }
+
+        output = selectedRating switch
+        {
+            Rating.ZeroStar => output.Where(a => a.Rating >= 0).ToList(),
+            Rating.OneStar => output.Where(a => a.Rating >= 1).ToList(),
+            Rating.TwoStar => output.Where(a => a.Rating >= 2).ToList(),
+            Rating.ThreeStar => output.Where(a => a.Rating >= 3).ToList(),
+            Rating.FourStar => output.Where(a => a.Rating >= 4).ToList(),
+            Rating.FiveStar => output.Where(a => a.Rating >= 5).ToList(),
+            _ => output
+        };
+
+        output = sortByPrice
+            ? output.OrderByDescending(a => a.Price).ThenByDescending(a => a.Rating).ToList()
+            : output.OrderByDescending(a => a.Rating).ThenByDescending(a => a.Price).ToList();
 
         artifacts = output;
         await SaveFilterStateAsync();
@@ -70,6 +200,46 @@
         await FilterArtifactsAsync();
     }
 
+    private async Task OnSortChangeAsync(bool isPrice)
+    {
+        sortByPrice = isPrice;
+        await FilterArtifactsAsync();
+    }
+
+    private async Task OnRatingClickAsync(Rating rating)
+    {
+        selectedRating = rating;
+        await FilterArtifactsAsync();
+    }
+
+    private async Task ToggleShowAllCategoriesAsync(bool showAll)
+    {
+        showAllCategories = showAll;
+
+        if (showAllCategories)
+        {
+            categories = await CategoryEndpoint.GetAllCategoriesAsync();
+        }
+        else
+        {
+            await LoadCategoriesAsync();
+        }
+    }
+
+    private async Task ToggleShowAllErasAsync(bool showAll)
+    {
+        showAllEras = showAll;
+
+        if (showAllEras)
+        {
+            eras = await EraEndpoint.GetAllErasAsync();
+        }
+        else
+        {
+            await LoadErasAsync();
+        }
+    }
+
     private void OnCategoryClick(CategoryModel category)
     {
         Navigation.NavigateTo($"/Category/{category.Id}");
@@ -78,5 +248,30 @@
     private void ClosePage()
     {
         Navigation.NavigateTo("/");
+    }
+
+    private string GetSelectedEraClass(EraModel era)
+    {
+        if (selectedEra?.Id == era.Id)
+        {
+            return "text-success";
+        }
+
+        return "";
+    }
+
+    private string GetRatingText(Rating rating)
+    {
+        string text = rating switch
+        {
+            Rating.OneStar => "One star",
+            Rating.TwoStar => "Two stars",
+            Rating.ThreeStar => "Three stars",
+            Rating.FourStar => "Four stars",
+            Rating.FiveStar => "Five stars",
+            _ => "",
+        };
+
+        return $"{text} and above";
     }
 }
