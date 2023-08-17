@@ -10,6 +10,7 @@ using Client.Library.LocalStorage;
 using VintageHub.Client.Authentication.Interfaces;
 using VintageHub.Client.Authentication;
 using Blazored.SessionStorage;
+using System.Web;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -24,12 +25,26 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 builder.Services.AddMsalAuthentication(options =>
 {
     builder.Configuration.Bind("AzureAdB2C", options.ProviderOptions.Authentication);
+
     options.ProviderOptions.DefaultAccessTokenScopes.Add("https://TimTanAuth.onmicrosoft.com/f278b08e-7802-46cc-971e-a89fd6a8dd64/api_access");
 
     options.ProviderOptions.DefaultAccessTokenScopes.Add("openid profile");
     options.ProviderOptions.DefaultAccessTokenScopes.Add("offline_access");
 
     options.ProviderOptions.LoginMode = "redirect";
+
+    string clientId = builder.Configuration.GetValue<string>("AzureAdB2C:ClientId");
+    string callbackPath = builder.Configuration.GetValue<string>("AzureAdB2C:CallbackPath");
+    string instance = builder.Configuration.GetValue<string>("AzureAdB2C:Instance");
+    string editProfilePolicy = builder.Configuration.GetValue<string>("AzureAdB2C:EditProfilePolicyId");
+    string domain = builder.Configuration.GetValue<string>("AzureAdB2C:Domain");
+
+    options.AuthenticationPaths.RemoteProfilePath = $"{instance}" +
+        $"{domain}/oauth2/v2.0/authorize?p={editProfilePolicy}" +
+        $"&client_id={clientId}&nonce=defaultNonce" +
+        $"&redirect_uri={HttpUtility.UrlEncode(callbackPath)}" +
+        $"&scope=openid&response_type=code&prompt=login" +
+        $"&code_challenge_method=S256&code_challenge=codespecifictomyapp";
 });
 
 builder.Services.AddAuthorizationCore(options =>

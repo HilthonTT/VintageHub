@@ -53,7 +53,7 @@ public class OrderEndpoint : IOrderEndpoint
             string key = CacheNamePrefix + userId;
             var output = await _localStorage.GetAsync<List<OrderModel>>(key);
 
-            if (output?.Count <= 0)
+            if (output is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/user/{userId}");
                 response.EnsureSuccessStatusCode();
