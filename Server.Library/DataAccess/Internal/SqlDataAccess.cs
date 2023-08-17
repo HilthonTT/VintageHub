@@ -72,8 +72,7 @@ public class SqlDataAccess : ISqlDataAccess
         using var multi = await connection.QueryMultipleAsync(storedProcedure, parameters,
             commandType: CommandType.StoredProcedure);
 
-        int insertedId = await multi.ReadSingleAsync<int>();
-        return insertedId;
+        return await multi.ReadSingleAsync<int>();
     }
 
     public void StartTransaction()
@@ -93,8 +92,7 @@ public class SqlDataAccess : ISqlDataAccess
         using var multi = await _connection.QueryMultipleAsync(storedProcedure, parameters,
             commandType: CommandType.StoredProcedure, transaction: _transaction);
 
-        int insertedId = await multi.ReadSingleAsync<int>();
-        return insertedId;
+        return await multi.ReadSingleAsync<int>();
     }
 
     public async Task<List<T>> LoadDataInTransactionAsync<T, U>(string storedProcedure, U parameters)

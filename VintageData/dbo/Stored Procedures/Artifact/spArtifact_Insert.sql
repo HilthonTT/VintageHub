@@ -3,7 +3,7 @@
 	@Description NVARCHAR(500),
 	@ImageId NVARCHAR(MAX),
 	@Quantity INT,
-	@Rating DECIMAL,
+	@Rating DECIMAL(18,4),
 	@Price MONEY,
 	@VendorId INT,
 	@CategoryId INT,

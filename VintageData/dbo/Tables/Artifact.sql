@@ -5,7 +5,7 @@
     [Description] NVARCHAR(256) NOT NULL, 
     [ImageId] NVARCHAR(MAX) NOT NULL, 
     [Quantity] INT NOT NULL, 
-    [Rating] DECIMAL NOT NULL, 
+    [Rating] DECIMAL(18,4) NOT NULL, 
     [Price] MONEY NOT NULL, 
     [VendorId] INT NOT NULL, 
     [CategoryId] INT NOT NULL, 

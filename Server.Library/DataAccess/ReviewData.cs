@@ -121,7 +121,7 @@ public class ReviewData : IReviewData
 
             _sql.CommitTransaction();
 
-            return review.Id;
+            return reviewId;
         }
         catch (Exception ex)
         {
