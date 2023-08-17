@@ -1,117 +1,126 @@
-﻿@page "/Listing"
+﻿@page "/Vendor/{Id:int}"
+@inject IVendorEndpoint VendorEndpoint
 @inject IArtifactEndpoint ArtifactEndpoint
-@inject IEraEndpoint EraEndpoint
 @inject ICategoryEndpoint CategoryEndpoint
+@inject IEraEndpoint EraEndpoint
+@inject IImageEndpoint ImageEndpoint
 @inject ISessionStorageService SessionStorage
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
 <div class="container mb-5">
     <div class="row">
-        <div class="col-12">
+        <div class="col-xl-2 col-lg-4 col-md-6">
             <div class="row">
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-close" @onclick="ClosePage"></button>
+                <div class="fw-bold">Categories</div>
+                <hr />
+                <div @onclick="() => OnCategoryClickAsync(null)">
+                    <label class="@GetSelectedCategory()">All</label>
                 </div>
-                <div class="col-2">
-                    <div class="row">
-                        <div class="fw-bold">Categories</div>
-                        <hr />
-                        <div @onclick="() => OnCategoryClickAsync(null)">
-                            <label class="@GetSelectedCategory()">All</label>
+                @if (categories is not null)
+                {
+                    <Virtualize Items="categories" Context="c" OverscanCount="10">
+                        <div @key="@c.Id" @onclick="() => OnCategoryClickAsync(c)">
+                            <label class="@GetSelectedCategory(c)">@c.Name</label>
                         </div>
-                        @if (categories is not null)
+                    </Virtualize>
+                }
+                <div>
+                    <button @onclick="() => ToggleShowAllCategoriesAsync(!showAllCategories)" class="btn btn-primary">
+                        @((showAllCategories ? "See Less" : "See More"))
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <label class="fw-bold">Eras</label>
+                <hr />
+                <div @onclick="() => OnEraClickAsync(null)">
+                    <label class="@GetSelectedEraClass()">All</label>
+                </div>
+                @if (eras is not null)
+                {
+                    <Virtualize Items="eras" Context="e" OverscanCount="10">
+                        <div @key="@e.Id" @onclick="() => OnEraClickAsync(e)">
+                            <label class="@GetSelectedEraClass(e)">@e.Name</label>
+                        </div>
+                    </Virtualize>
+                }
+                <div>
+                    <button @onclick="() => ToggleShowAllErasAsync(!showAllEras)" class="btn btn-primary">
+                        @((showAllEras ? "See Less" : "See More"))
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <label class="fw-bold">Rating</label>
+                <hr />
+                <Virtualize Items="ratings" Context="r" OverscanCount="10">
+                    <div @key="@r.ToString()" @onclick="() => OnRatingClickAsync(r)">
+                        <label class="@GetSelectedRating(r)">@GetRatingText(r)</label>
+                    </div>
+                </Virtualize>
+            </div>
+        </div>
+        <div class="col-xl-10 col-lg-8 col-md-6">
+            <div class="d-flex justify-content-end">
+                <button @onclick="ClosePage" class="btn btn-close"></button>
+            </div>
+            <div class="text-center">
+                @if (string.IsNullOrWhiteSpace(imageSource) is false)
+                {
+                    <img src="@imageSource" class="img-fluid rounded"
+                         width="1100" height="250" alt="@vendor?.Name" />
+                }
+                else
+                {
+                    <img src="https://dummyimage.com/1100x250/000/fff" class="img-fluid rounded"
+                         width="@ImageEndpoint" height="@ImageEndpoint" alt="Placeholder Text" />
+                }
+            </div>
+            <hr />
+            <div>
+                <h1 class="h4 fw-bold">@vendor?.Name</h1>
+                <div class="text-muted">@vendor?.Description</div>
+            </div>
+            <hr />
+            <div class="row">
+                <h1 class="fw-bold text-start">Artifacts</h1>
+                <span class="form-text">Our artifacts come in a wide range of variety!</span>
+                <div class="mt-3">
+                    <div class="row">
+                        <div class="d-flex justify-content-between">
+                            <span>@(artifacts?.Count) results</span>
+                            <span @onclick="LoadListingPage" class="btn link-info">See More</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex justify-content-between">
+                            <div class="w-25">
+                                <input @oninput="((e) => OnSearchInputAsync((string)e.Value))"
+                                       type="text" class="form-control" placeholder="Search" />
+                            </div>
+                            <div class="w-25">
+                                <select class="form-select" aria-label="Select your filtering" @onchange="OnSelectChange">
+                                    <option value="price">Price &euro;</option>
+                                    <option value="rating">Rating</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mt-2">
+                        @if (artifacts is not null && isArtifactLoading is false)
                         {
-                            <Virtualize Items="categories" Context="c" OverscanCount="10">
-                                <div @key="@c.Id" @onclick="() => OnCategoryClickAsync(c)">
-                                    <label class="@GetSelectedCategory(c)">@c.Name</label>
+                            <Virtualize Items="artifacts" Context="a" OverscanCount="10">
+                                <div @key="a.Id" @onclick="() => LoadArtifactPage(a)">
+                                    @a.Name - @a.Price &euro;
                                 </div>
                             </Virtualize>
                         }
-                        <div>
-                            @if (showAllCategories)
-                            {
-                                <button @onclick="() => ToggleShowAllCategoriesAsync(false)" class="btn btn-primary">
-                                    See Less
-                                </button>
-                            }
-                            else
-                            {
-                                <button @onclick="() => ToggleShowAllCategoriesAsync(true)" class="btn btn-primary">
-                                    See More
-                                </button>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <label class="fw-bold">Eras</label>
-                        <hr />
-                        <div @onclick="() => OnEraClickAsync(null)">
-                            <label class="@GetSelectedEraClass()">All</label>
-                        </div>
-                        @if (eras is not null)
+                        else
                         {
-                            <Virtualize Items="eras" Context="e" OverscanCount="10">
-                                <div @key="@e.Id" @onclick="() => OnEraClickAsync(e)">
-                                    <label class="@GetSelectedEraClass(e)">@e.Name</label>
-                                </div>
-                            </Virtualize>
+                            <LoadingTemplate Object="Loading.Artifact" />
                         }
-                        <div>
-                            @if (showAllEras)
-                            {
-                                <button @onclick="() => ToggleShowAllErasAsync(false)" class="btn btn-primary">
-                                    See Less
-                                </button>
-                            }
-                            else
-                            {
-                                <button @onclick="() => ToggleShowAllErasAsync(true)" class="btn btn-primary">
-                                    See More
-                                </button>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <label class="fw-bold">Rating</label>
-                        <hr />
-                        <Virtualize Items="ratings" Context="r" OverscanCount="10">
-                            <div @key="@r.ToString()" @onclick="() => OnRatingClickAsync(r)">
-                                <label class="@GetSelectedRating(r)">@GetRatingText(r)</label>
-                            </div>
-                        </Virtualize>
-                    </div>
-                </div>
-                <div class="col-10 px-5">
-                    <div class="row">
-                        <h1 class="fw-bold text-start">Artifacts</h1>
-                        <span class="form-text">Our artifacts come in a wide range of variety!</span>
-                        <div class="mt-3">
-                            <div class="row">
-                                <div class="d-flex justify-content-between">
-                                    <span>@(artifacts?.Count) results</span>
-                                    <select class="form-select w-25" aria-label="Select your filtering" @onchange="OnSelectChange">
-                                        <option value="price">Price &euro;</option>
-                                        <option value="rating">Rating</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row mt-2">
-                                @if (artifacts is not null && isArtifactLoading is false)
-                                {
-                                    <Virtualize Items="artifacts" Context="a" OverscanCount="10">
-                                        <div @key="a.Id" @onclick="() => LoadArtifactPage(a)">
-                                            @a.Name - @a.Price &euro;
-                                        </div>
-                                    </Virtualize>
-                                }
-                                else
-                                {
-                                    <LoadingTemplate Object="Loading.Artifact" />
-                                }
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -119,13 +128,24 @@
     </div>
 </div>
 
+
 @code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private VendorModel vendor;
+    private List<ArtifactModel> artifacts;
+    private List<CategoryModel> categories;
+    private List<EraModel> eras;
     private CategoryModel selectedCategory;
     private EraModel selectedEra;
-    private List<CategoryModel> categories;
-    private List<ArtifactModel> artifacts;
-    private List<EraModel> eras;
     private Rating selectedRating = Rating.ZeroStar;
+    private string imageSource = "";
+    private string searchText = "";
+    private bool sortByPrice = false;
+    private bool showAllCategories = false;
+    private bool showAllEras = false;
+    private bool isArtifactLoading = true;
     private List<Rating> ratings = new()
     {
         Rating.ZeroStar,
@@ -136,14 +156,14 @@
         Rating.FiveStar,
     };
 
-    private string searchText = "";
-    private bool showAllCategories = false;
-    private bool showAllEras = false;
-    private bool sortByPrice = false;
-    private bool isArtifactLoading = true;
-
     protected override async Task OnInitializedAsync()
     {
+        vendor = await VendorEndpoint.GetVendorByIdAsync(Id);
+        if (vendor is not null)
+        {
+            imageSource = await ImageEndpoint.GetImageAsync(vendor.ImageId);
+        }
+
         await LoadFilterStateAsync();
         await FilterArtifactsAsync();
 
@@ -160,7 +180,7 @@
     private async Task LoadErasAsync()
     {
         var allEras = await EraEndpoint.GetAllErasAsync();
-        eras = showAllEras ? allEras : allEras.Take(5).ToList();
+        eras =  showAllEras ? allEras : allEras.Take(5).ToList();
     }
 
     private async Task LoadFilterStateAsync()
@@ -203,7 +223,7 @@
     private async Task FilterArtifactsAsync()
     {
         isArtifactLoading = true;
-        var output = await ArtifactEndpoint.GetAllArtifactsAsync();
+        var output = await ArtifactEndpoint.GetArtifactByVendorIdAsync(Id);
 
         if (string.IsNullOrWhiteSpace(searchText) is false)
         {
@@ -259,6 +279,12 @@
         await FilterArtifactsAsync();
     }
 
+    private async Task OnSortChangeAsync(bool isPrice)
+    {
+        sortByPrice = isPrice;
+        await FilterArtifactsAsync();
+    }
+
     private async Task OnSelectChange(ChangeEventArgs e)
     {
         string selectedValue = e.Value?.ToString();
@@ -271,12 +297,6 @@
         {
             await OnSortChangeAsync(false);
         }
-    }
-
-    private async Task OnSortChangeAsync(bool isPrice)
-    {
-        sortByPrice = isPrice;
-        await FilterArtifactsAsync();
     }
 
     private async Task OnRatingClickAsync(Rating rating)
@@ -294,12 +314,17 @@
     private async Task ToggleShowAllErasAsync(bool showAll)
     {
         showAllEras = showAll;
-        await LoadErasAsync();     
+        await LoadErasAsync();
     }
 
     private void ClosePage()
     {
         Navigation.NavigateTo("/");
+    }
+
+    private void LoadListingPage()
+    {
+        Navigation.NavigateTo("/Listing");
     }
 
     private void LoadArtifactPage(ArtifactModel artifact)

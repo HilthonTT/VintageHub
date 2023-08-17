@@ -9,6 +9,7 @@
 @inject IShoppingCartStorage ShoppingCartStorage
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
+@attribute [Authorize]
 
 <div class="container">
     <div class="row">
@@ -34,8 +35,19 @@
                                      height="@ImageSize" />
                             }
                         </div>
-                        <div>
+                        <div class="row">
                             <h2>@artifact?.Name</h2>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div>
+                                <span>
+                                    Designed by
+                                </span>
+                                <span @onclick="LoadVendorPage" class="fw-bold">
+                                    @vendor?.Name
+                                </span>
+                            </div>
                         </div>
                         <hr />
                         <div class="row">
@@ -187,6 +199,16 @@
     private void LoadCartPage()
     {
         Navigation.NavigateTo("/Cart");
+    }
+
+    private void LoadVendorPage()
+    {
+        if (vendor is null)
+        {
+            return;
+        }
+
+        Navigation.NavigateTo($"/Vendor/{vendor.Id}");
     }
 
     private async Task AddToCart()
