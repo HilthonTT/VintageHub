@@ -1,1 +1,0 @@
-﻿CREATE UNIQUE INDEX IX_Review_ArtifactId ON [dbo].[Review] ([ArtifactId]);

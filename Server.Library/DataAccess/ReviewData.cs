@@ -103,7 +103,7 @@ public class ReviewData : IReviewData
 
             // Load all reviews for the associated artifact
             var reviews = await _sql.LoadDataInTransactionAsync<ReviewModel, dynamic>(
-                getAllSp, new { ArtifactId = review.Id });
+                getAllSp, new { review.ArtifactId });
 
             // Calculate the new average rating based on all the reviews
             double newAverageRating = reviews.Average(r => r.Rating);
