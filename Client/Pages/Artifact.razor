@@ -5,6 +5,7 @@
 @inject IImageEndpoint ImageEndpoint
 @inject IEraEndpoint EraEndpoint
 @inject IVendorEndpoint VendorEndpoint
+@inject IReviewEndpoint ReviewEndpoint
 @inject IShoppingCartStorage ShoppingCartStorage
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
@@ -20,13 +21,17 @@
                             {
                                 <img src="@artifactImageSource"
                                      class="img-thumbnail rounded"
-                                     alt="@artifact?.Name" />
+                                     alt="@artifact?.Name"
+                                     width="@ImageSize"
+                                     height="@ImageSize" />
                             }
                             else
                             {
                                 <img src="https://dummyimage.com/600x400/000/fff"
                                      class="img-thumbnail rounded"
-                                     alt="Placeholder text" />
+                                     alt="Placeholder text"
+                                     width="@ImageSize"
+                                     height="@ImageSize" />
                             }
                         </div>
                         <div>
@@ -56,6 +61,31 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mt-2">
+                            <hr />
+                            <div class="d-flex justify-content-between">
+                                <h4 class="fw-bold text-uppercase">Reviews - @reviews?.Count</h4>
+                                <button @onclick="LoadReviewPage" class="btn btn-primary">
+                                    Make A Review
+                                </button>
+                            </div>
+                            @if (reviews is not null)
+                            {
+                                <Virtualize Items="reviews" Context="r" OverscanCount="10">
+                                    <div @key="r.Id">
+                                        <div>
+                                            @r.Title
+                                        </div>
+                                        <div>
+                                            @r.Description
+                                        </div>
+                                        <div>
+                                            Rating: @r.Rating
+                                        </div>
+                                    </div>
+                                </Virtualize>
+                            }
+                        </div>
                     </div>
                 </div>
                 <div class="col-4 text-end">
@@ -82,13 +112,13 @@
     [Parameter]
     public int Id { get; set; }
 
-    private int selectedQuantity = 1;
+    private const int ImageSize = 500;
 
+    private int selectedQuantity = 1;
     private string artifactImageSource = "";
     private string vendorImageSource = "";
-
     private List<ArtifactModel> randomArtifacts;
-
+    private List<ReviewModel> reviews;
     private VendorModel vendor;
     private ArtifactModel artifact;
     private UserModel loggedInUser;
@@ -113,6 +143,7 @@
 
             category = await CategoryEndpoint.GetCategoryByIdAsync(artifact.CategoryId);
             era = await EraEndpoint.GetEraByIdAsync(artifact.EraId);
+            reviews = await ReviewEndpoint.GetAllReviewsByArtifactId(artifact.Id);
 
             await LoadVendorAsync();
         }
@@ -133,6 +164,16 @@
         randomArtifacts = artifacts.OrderBy(x => random.Next()).Take(25).ToList();
     }
 
+    private void LoadReviewPage()
+    {
+        if (artifact is null)
+        {
+            return;
+        }
+
+        Navigation.NavigateTo($"/Artifact/{artifact?.Id}/Review");
+    }
+
     private void ClosePage()
     {
         Navigation.NavigateTo("/");
@@ -140,7 +181,7 @@
 
     private void LoadAllArtifactsPage()
     {
-        Navigation.NavigateTo("Artifacts");
+        Navigation.NavigateTo("Listing");
     }
 
     private void LoadCartPage()

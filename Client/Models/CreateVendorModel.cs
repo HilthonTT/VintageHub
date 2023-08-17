@@ -12,7 +12,7 @@ public class CreateVendorModel
     public string Name { get; set; }
 
     [Required(ErrorMessage = "Please provide the vendor's description.")]
-    [StringLength(256, ErrorMessage = "The vendor's descritpion must not be above 256 characters")]
+    [StringLength(256, ErrorMessage = "The vendor's description must not be above 256 characters.")]
     public string Description { get; set; }
 
     [Required]

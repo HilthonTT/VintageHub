@@ -1,0 +1,72 @@
+﻿@page "/Artifact/{Id:int}/Review"
+@inject IArtifactEndpoint ArtifactEndpoint
+@inject IReviewEndpoint ReviewEndpoint
+@inject IUserEndpoint UserEndpoint
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private CreateReviewModel review = new();
+    private UserModel loggedInUser;
+    private ArtifactModel artifact;
+    private string errorMessage = "";
+    private bool isCreatingReview = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+        artifact = await ArtifactEndpoint.GetArtifactByIdAsync(Id);
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo($"/Artifact/{Id}");
+    }
+
+    private bool IsReviewInvalid()
+    {
+        if (artifact is null)
+        {
+            errorMessage = "The artifact is currently unavailable.";
+            return true;
+        }
+
+        if (loggedInUser is null)
+        {
+            errorMessage = "It appears there has been an error identifying you. Try logging in again.";
+            return true;
+        }
+
+        return false;
+    }
+
+    private async Task CreateReviewAsync()
+    {
+        errorMessage = "";
+        var newReview = new ReviewModel
+        {
+            ArtifactId = artifact.Id,
+            UserId = loggedInUser.Id,
+            Title = review.Title,
+            Description = review.Description,
+            Rating = review.Rating,
+        };
+
+        if (IsReviewInvalid())
+        {
+            return;
+        }
+
+        isCreatingReview = true;
+
+        await ReviewEndpoint.InsertReviewAsync(newReview);
+
+        review = new();
+        isCreatingReview = false;
+        ClosePage();
+    }
+}
