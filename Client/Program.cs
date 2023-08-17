@@ -28,6 +28,8 @@ builder.Services.AddMsalAuthentication(options =>
 
     options.ProviderOptions.DefaultAccessTokenScopes.Add("openid profile");
     options.ProviderOptions.DefaultAccessTokenScopes.Add("offline_access");
+
+    options.ProviderOptions.LoginMode = "redirect";
 });
 
 builder.Services.AddAuthorizationCore(options =>
