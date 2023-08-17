@@ -5,6 +5,7 @@ public enum Loading
     ArtifactCreate,
     VendorCreate,
     OrderCreate,
+    ReviewCreate,
     Artifact,
 }
 

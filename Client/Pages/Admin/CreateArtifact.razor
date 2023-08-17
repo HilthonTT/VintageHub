@@ -26,41 +26,42 @@ else
         <div class="row">
             <div class="col-12 justify-content-center">
                 <div class="row mb-4">
-                    <div class="col-11">
+                    <div class="d-flex justify-content-end">
+                        <button @onclick="ClosePage" class="btn btn-close"></button>
+                    </div>
+                    <div class="col-12">
                         <EditForm Model="artifact" OnValidSubmit="CreateArtifactAsync">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
                             <div class="row">
-                                <div class="col-12">
-                                    <div class="mt-2">
-                                        <label class="form-label" for="artifact-name">Artifact Name</label>
-                                        <div id="artifact-name">Enter the artifact's name.</div>
-                                        <InputText @bind-Value="artifact.Name" class="form-control" />
+                                <div class="mt-2">
+                                    <label class="form-label" for="artifact-name">Artifact Name</label>
+                                    <div id="artifact-name">Enter the artifact's name.</div>
+                                    <InputText @bind-Value="artifact.Name" class="form-control" />
+                                </div>
+                                <div class="mt-2">
+                                    <label class="form-label" for="artifact-description">Artifact Description</label>
+                                    <div id="artifact-name">Describe your artifact in 256 characters.</div>
+                                    <InputTextArea @bind-Value="artifact.Description" class="form-control" />
+                                </div>
+                                <div class="mt-2">
+                                    <label class="form-label" for="artifact-image">Artifact's image</label>
+                                    <div id="artifact-image">Select an image of your artifact.</div>
+                                    <InputFile OnChange="HandleImageSelected" accept="image/*" class="form-control" />
+                                </div>
+                                <div class="mt-2">
+                                    <label class="form-label" for="artifact-quantity">Quantity</label>
+                                    <div id="artifact-quantity">
+                                        Please enter the quantity of artifacts you have available.
                                     </div>
-                                    <div class="mt-2">
-                                        <label class="form-label" for="artifact-description">Artifact Description</label>
-                                        <div id="artifact-name">Describe your artifact in 256 characters.</div>
-                                        <InputTextArea @bind-Value="artifact.Description" class="form-control" />
+                                    <InputNumber @bind-Value="artifact.Quantity" class="form-control" />
+                                </div>
+                                <div class="mt-2">
+                                    <label class="form-label" for="artifact-price">Price</label>
+                                    <div id="artifact-price">
+                                        Please enter the price of the artifact in Euros.
                                     </div>
-                                    <div class="mt-2">
-                                        <label class="form-label" for="artifact-image">Artifact's image</label>
-                                        <div id="artifact-image">Select an image of your artifact.</div>
-                                        <InputFile OnChange="HandleImageSelected" accept="image/*" class="form-control" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <label class="form-label" for="artifact-quantity">Quantity</label>
-                                        <div id="artifact-quantity">
-                                            Please enter the quantity of artifacts you have available.
-                                        </div>
-                                        <InputNumber @bind-Value="artifact.Quantity" class="form-control" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <label class="form-label" for="artifact-price">Price</label>
-                                        <div id="artifact-price">
-                                            Please enter the price of the artifact in Euros.
-                                        </div>
-                                        <InputNumber @bind-Value="artifact.Price" class="form-control" />
-                                    </div>
+                                    <InputNumber @bind-Value="artifact.Price" class="form-control" />
                                 </div>
                             </div>
                             <hr />
@@ -129,9 +130,6 @@ else
                                 </button>
                             </div>
                         </EditForm>
-                    </div>
-                    <div class="col-1">
-                        <button @onclick="ClosePage" class="btn btn-close"></button>
                     </div>
                 </div>
             </div>
