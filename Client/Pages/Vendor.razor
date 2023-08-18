@@ -100,7 +100,8 @@
                                        type="text" class="form-control" placeholder="Search" />
                             </div>
                             <div class="w-25">
-                                <select class="form-select" aria-label="Select your filtering" @onchange="OnSelectChange">
+                                <select @onchange="((e) => OnSelectChange((string)e.Value))" class="form-select"
+                                        aria-label="Select your filtering">
                                     <option value="price">Price &euro;</option>
                                     <option value="rating">Rating</option>
                                 </select>
@@ -279,24 +280,23 @@
         await FilterArtifactsAsync();
     }
 
-    private async Task OnSortChangeAsync(bool isPrice)
+    private async Task OnSelectChange(string value)
     {
-        sortByPrice = isPrice;
+        value = value.ToLower();
+
+        switch (value)
+        {
+            case "price":
+                sortByPrice = true;
+                break;
+            case "rating":
+                sortByPrice = false;
+                break;
+            default:
+                break;
+        }
+
         await FilterArtifactsAsync();
-    }
-
-    private async Task OnSelectChange(ChangeEventArgs e)
-    {
-        string selectedValue = e.Value?.ToString();
-
-        if (selectedValue == "price")
-        {
-            await OnSortChangeAsync(true);
-        }
-        else if (selectedValue == "rating")
-        {
-            await OnSortChangeAsync(false);
-        }
     }
 
     private async Task OnRatingClickAsync(Rating rating)
