@@ -90,7 +90,8 @@
                             <div class="row">
                                 <div class="d-flex justify-content-between">
                                     <span>@(artifacts?.Count) results</span>
-                                    <select class="form-select w-25" aria-label="Select your filtering" @onchange="OnSelectChange">
+                                    <select @onchange="((e) => OnSelectChange((string)e.Value))" class="form-select w-25"
+                                            aria-label="Select your filtering">
                                         <option value="price">Price &euro;</option>
                                         <option value="rating">Rating</option>
                                     </select>
@@ -259,23 +260,22 @@
         await FilterArtifactsAsync();
     }
 
-    private async Task OnSelectChange(ChangeEventArgs e)
+    private async Task OnSelectChange(string value)
     {
-        string selectedValue = e.Value?.ToString();
+        value = value.ToLower();
 
-        if (selectedValue == "price")
+        switch (value)
         {
-            await OnSortChangeAsync(true);
+            case "price":
+                sortByPrice = true;
+                break;
+            case "rating":
+                sortByPrice = false;
+                break;
+            default:
+                break;
         }
-        else if (selectedValue == "rating")
-        {
-            await OnSortChangeAsync(false);
-        }
-    }
 
-    private async Task OnSortChangeAsync(bool isPrice)
-    {
-        sortByPrice = isPrice;
         await FilterArtifactsAsync();
     }
 
