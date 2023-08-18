@@ -7,6 +7,7 @@ public enum Loading
     OrderCreate,
     ReviewCreate,
     Artifact,
+    Order,
 }
 
 public enum Rating

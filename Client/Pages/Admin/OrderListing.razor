@@ -1,15 +1,82 @@
-﻿@page "/OrderListing"
+﻿@page "/Admin/OrderListing"
 @inject IOrderEndpoint OrderEndpoint
 @inject IUserEndpoint UserEndpoint
 @inject ISessionStorageService SessionStorage
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
+<div class="container">
+    <div class="row">
+        <div class="col-xl-2 col-lg-4 col-md-6">
+            <div class="row">
+                <div class="fw-bold">Users</div>
+                <hr />
+                <div class="mb-2">
+                    <input @oninput="(e) => OnUserSearchInputAsync((string)e.Value)" class="form-control"
+                           type="text" placeholder="Search User" />
+                </div>
+                <hr />
+                <div>
+                    <div @onclick="() => OnUserClickAsync()">
+                        <label class="@GetSelectedUser()">All</label>
+                    </div>
+                    @if (users is not null)
+                    {
+                        <Virtualize Items="users" Context="u" OverscanCount="10">
+                            <div @key="@u.Id" @onclick="() => OnUserClickAsync(u)">
+                                <label class="@GetSelectedUser(u)">@u.FirstName - @u.LastName</label>
+                            </div>
+                        </Virtualize>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-10 col-lg-8 col-md-6">
+            <div class="d-flex justify-content-end">
+                <button @onclick="ClosePage" class="btn btn-close"></button>
+            </div>
+            <div class="row">
+                <h1 class="fw-bold text-start">Orders</h1>
+                <span class="form-text">All of the orders are in the below list.</span>
+                <div class="mt-3">
+                    <div class="row">
+                        <div class="d-flex justify-content-end">
+                            <div class="w-25">
+                                <select @onchange="((e) => OnSelectChange((string)e.Value))"
+                                        class="form-select" aria-label="Select your filtering">
+                                    <option value="price">Price &euro;</option>
+                                    <option value="date-ordered">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mt-2">
+                        @if (orders is not null && isOrderLoading is false)
+                        {
+                            <Virtualize Items="orders" Context="o" OverscanCount="10">
+                                <div @key="o.Id" @onclick="() => LoadOrderDetailsPage(o)">
+                                    @o.UserId - @o.DateOrdered
+                                </div>
+                            </Virtualize>
+                        }
+                        else
+                        {
+                            <LoadingTemplate Object="Loading.Order"/>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @code {
     private List<OrderModel> orders;
     private List<UserModel> users;
     private UserModel selectedUser;
     private bool sortByPrice = false;
+    private bool isOrderLoading = false;
     private string searchUserText = "";
 
     protected override async Task OnInitializedAsync()
@@ -56,7 +123,10 @@
 
     private async Task FilterOrdersAsync()
     {
+        isOrderLoading = true;
+
         var output = await OrderEndpoint.GetAllOrdersAsync();
+        output = output.Where(o => o.IsCanceled is false).ToList();
 
         if (selectedUser is not null)
         {
@@ -65,10 +135,12 @@
 
         output = sortByPrice
             ? output.OrderByDescending(o => o.TotalPrice).ThenByDescending(o => o.DateOrdered).ToList()
-            : output = output.OrderByDescending(o => o.DateOrdered).ThenByDescending(o => o.DateOrdered).ToList();
+            : output.OrderByDescending(o => o.DateOrdered).ThenByDescending(o => o.TotalPrice).ToList();
 
         orders = output;
         await SaveFilterStateAsync();
+
+        isOrderLoading = false;
     }
 
     private async Task FilterUsersAsync()
@@ -86,7 +158,7 @@
         await SaveFilterStateAsync();
     }
 
-    private async Task OnUserClickAsync(UserModel user)
+    private async Task OnUserClickAsync(UserModel user = null)
     {
         selectedUser = user;
         await FilterOrdersAsync();
@@ -96,6 +168,25 @@
     {
         searchUserText = searchInput;
         await FilterUsersAsync();
+    }
+
+    private async Task OnSelectChange(string value)
+    {
+        value = value.ToLower();
+
+        switch (value)
+        {
+            case "price":
+                sortByPrice = true;
+                break;
+            case "date-ordered":
+                sortByPrice = false;
+                break;
+            default:
+                break;
+        }
+
+        await FilterOrdersAsync();
     }
 
     private string GetSelectedUser(UserModel user = null)
