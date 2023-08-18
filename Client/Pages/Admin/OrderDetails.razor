@@ -1,0 +1,59 @@
+﻿@page "/Admin/OrderDetails/{Id:int}"
+@inject IOrderEndpoint OrderEndpoint
+@inject IUserEndpoint UserEndpoint
+@inject NavigationManager Navigation
+@attribute [Authorize(Policy = "Admin")]
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private UpdateOrderModel updatedOrder = new();
+    private OrderModel order;
+    private UserModel user;
+    private List<OrderDetailsModel> orderDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        order = await OrderEndpoint.GetOrderByIdAsync(Id);
+        updatedOrder = new(order);
+
+        orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(Id);
+        user = await UserEndpoint.GetUserByIdAsync(order.UserId);
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/Admin/OrderListing");
+    }
+
+    private void ToggleComplete()
+    {
+        updatedOrder.IsComplete = !updatedOrder.IsComplete;
+    }
+
+    private void ToggleCancel()
+    {
+        updatedOrder.IsCanceled = !updatedOrder.IsCanceled;
+    }
+
+    private async Task UpdateOrderAsync()
+    {
+        order.IsComplete = updatedOrder.IsComplete;
+        order.IsCanceled = updatedOrder.IsCanceled;
+
+        var request = new OrderRequestModel()
+            {
+                Order = order,
+                OrderDetails = orderDetails,
+            };
+
+        await OrderEndpoint.UpdateOrderAsync(request);
+    }
+
+    private async Task DeleteOrderAsync()
+    {
+        await OrderEndpoint.DeleteOrderAsync(order);
+        ClosePage();
+    }
+}
