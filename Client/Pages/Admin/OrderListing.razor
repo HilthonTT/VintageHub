@@ -31,9 +31,20 @@
 
     private async Task LoadFilterStateAsync()
     {
-        searchUserText = await SessionStorage.GetItemAsStringAsync(nameof(searchUserText)) ?? "";
-        selectedUser = await SessionStorage.GetItemAsync<UserModel>(nameof(selectedUser)) ?? null;
-        sortByPrice = await SessionStorage.GetItemAsync<bool>(nameof(sortByPrice));
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var queryParameters = HttpUtility.ParseQueryString(uri.Query);
+
+        searchUserText = queryParameters["searchText"] is not null
+            ? searchUserText = queryParameters["searchText"]
+            : searchUserText = await SessionStorage.GetItemAsStringAsync(nameof(searchUserText)) ?? "";
+
+        selectedUser = queryParameters["userId"] is not null
+            ? selectedUser = await UserEndpoint.GetUserByIdAsync(int.Parse(queryParameters["userId"]))
+            : selectedUser = await SessionStorage.GetItemAsync<UserModel>(nameof(selectedUser)) ?? null;
+
+        sortByPrice = queryParameters["sortByPrice"] is not null
+            ? sortByPrice = bool.Parse(queryParameters["sortByPrice"])
+            : sortByPrice = await SessionStorage.GetItemAsync<bool>(nameof(sortByPrice));
     }
 
     private async Task SaveFilterStateAsync()

@@ -165,31 +165,30 @@
 
     private async Task LoadFilterStateAsync()
     {
-        searchText = await SessionStorage.GetItemAsStringAsync(nameof(searchText)) ?? "";
-        selectedRating = await SessionStorage.GetItemAsync<Rating>(nameof(selectedRating));
-
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         var queryParameters = HttpUtility.ParseQueryString(uri.Query);
 
-        if (queryParameters["eraId"] is not null)
-        {
-            int eraId = int.Parse(queryParameters["eraId"]);
-            selectedEra = await EraEndpoint.GetEraByIdAsync(eraId);
-        }
-        else
-        {
-            selectedEra = await SessionStorage.GetItemAsync<EraModel>(nameof(selectedEra)) ?? null;
-        }
+        searchText = queryParameters["searchText"] is not null
+            ? searchText = queryParameters["searchText"]
+            : searchText = await SessionStorage.GetItemAsStringAsync(nameof(searchText)) ?? "";
 
-        if (queryParameters["categoryId"] is not null)
-        {
-            int categoryId = int.Parse(queryParameters["categoryId"]);
-            selectedCategory = await CategoryEndpoint.GetCategoryByIdAsync(categoryId);
-        }
-        else
-        {
-            selectedCategory = await SessionStorage.GetItemAsync<CategoryModel>(nameof(selectedCategory)) ?? null;
-        }
+        selectedRating = queryParameters["rating"] is not null
+           ? Enum.TryParse(queryParameters["rating"], out Rating parsedRating)
+               ? parsedRating
+               : Rating.ZeroStar
+           : await SessionStorage.GetItemAsync<Rating>(nameof(selectedRating));
+
+        selectedEra = queryParameters["eraId"] is not null
+            ? selectedEra = await EraEndpoint.GetEraByIdAsync(int.Parse(queryParameters["eraId"]))
+            : selectedEra = await SessionStorage.GetItemAsync<EraModel>(nameof(selectedEra)) ?? null;
+
+        selectedCategory = queryParameters["categoryId"] is not null
+            ? selectedCategory = await CategoryEndpoint.GetCategoryByIdAsync(int.Parse(queryParameters["categoryId"]))
+            : selectedCategory = await SessionStorage.GetItemAsync<CategoryModel>(nameof(selectedCategory)) ?? null;
+
+        sortByPrice = queryParameters["sortByPrice"] is not null
+            ? sortByPrice = bool.Parse(queryParameters["sortByPrice"])
+            : sortByPrice = await SessionStorage.GetItemAsync<bool>(nameof(sortByPrice));
     }
 
     private async Task SaveFilterStateAsync()
@@ -198,6 +197,7 @@
         await SessionStorage.SetItemAsync(nameof(selectedEra), selectedEra);
         await SessionStorage.SetItemAsync(nameof(selectedCategory), selectedCategory);
         await SessionStorage.SetItemAsync(nameof(selectedRating), selectedRating);
+        await SessionStorage.SetItemAsync(nameof(sortByPrice), sortByPrice);
     }
 
     private async Task FilterArtifactsAsync()
