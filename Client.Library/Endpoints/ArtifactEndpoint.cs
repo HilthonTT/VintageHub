@@ -43,8 +43,13 @@ public class ArtifactEndpoint : IArtifactEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<ArtifactModel> GetArtifactByIdAsync(int id)
@@ -70,9 +75,14 @@ public class ArtifactEndpoint : IArtifactEndpoint
         }
         catch (AccessTokenNotAvailableException ex)
         {
-            ex.Redirect();
-            return null;
+            ex.Redirect(); 
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<List<ArtifactModel>> GetArtifactByVendorIdAsync(int vendorId)
@@ -95,9 +105,14 @@ public class ArtifactEndpoint : IArtifactEndpoint
         }
         catch (AccessTokenNotAvailableException ex)
         {
-            ex.Redirect();
-            return null;
+            ex.Redirect(); 
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<ArtifactModel> InsertArtifactAsync(ArtifactModel artifact)
@@ -112,8 +127,13 @@ public class ArtifactEndpoint : IArtifactEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task UpdateArtifactAsync(ArtifactModel artifact)
@@ -127,6 +147,10 @@ public class ArtifactEndpoint : IArtifactEndpoint
         {
             ex.Redirect();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task DeleteArtifactAsync(ArtifactModel artifact)
@@ -139,6 +163,10 @@ public class ArtifactEndpoint : IArtifactEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

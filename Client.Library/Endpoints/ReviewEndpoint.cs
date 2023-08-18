@@ -42,8 +42,13 @@ public class ReviewEndpoint : IReviewEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<ReviewModel> GetReviewByIdAsync(int id)
@@ -58,8 +63,13 @@ public class ReviewEndpoint : IReviewEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<ReviewModel> InsertReviewAsync(ReviewModel review)
@@ -74,8 +84,13 @@ public class ReviewEndpoint : IReviewEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task UpdateReviewAsync(ReviewModel review)
@@ -89,6 +104,10 @@ public class ReviewEndpoint : IReviewEndpoint
         {
             ex.Redirect();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task DeleteReviewAsync(ReviewModel review)
@@ -101,6 +120,10 @@ public class ReviewEndpoint : IReviewEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

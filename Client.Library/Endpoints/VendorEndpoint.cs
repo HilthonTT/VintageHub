@@ -42,8 +42,13 @@ public class VendorEndpoint : IVendorEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<VendorModel> GetVendorByIdAsync(int id)
@@ -69,8 +74,13 @@ public class VendorEndpoint : IVendorEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<List<VendorModel>> GetAllVendorsByOwnerUserIdAsync(int ownerUserId)
@@ -94,8 +104,13 @@ public class VendorEndpoint : IVendorEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<VendorModel> InsertVendorAsync(VendorModel vendor)
@@ -110,8 +125,13 @@ public class VendorEndpoint : IVendorEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task UpdateVendorAsync(VendorModel vendor)
@@ -125,6 +145,10 @@ public class VendorEndpoint : IVendorEndpoint
         {
             ex.Redirect();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task DeleteVendorAsync(VendorModel vendor)
@@ -137,6 +161,10 @@ public class VendorEndpoint : IVendorEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

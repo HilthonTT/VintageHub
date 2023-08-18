@@ -41,8 +41,13 @@ public class EraEndpoint : IEraEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<EraModel> GetEraByIdAsync(int id)
@@ -68,8 +73,13 @@ public class EraEndpoint : IEraEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<EraModel> InsertEraAsync(EraModel era)
@@ -84,8 +94,13 @@ public class EraEndpoint : IEraEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task UpdateEraAsync(EraModel era)
@@ -99,6 +114,10 @@ public class EraEndpoint : IEraEndpoint
         {
             ex.Redirect();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task DeleteEraAsync(EraModel era)
@@ -111,6 +130,10 @@ public class EraEndpoint : IEraEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

@@ -38,8 +38,13 @@ public class ImageEndpoint : IImageEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return "";
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return "";
     }
 
     public async Task<string> GetImageAsync(string objectId)
@@ -73,8 +78,13 @@ public class ImageEndpoint : IImageEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task DeleteImageAsync(string objectId)
@@ -87,6 +97,10 @@ public class ImageEndpoint : IImageEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

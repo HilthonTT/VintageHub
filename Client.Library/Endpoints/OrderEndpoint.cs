@@ -42,8 +42,13 @@ public class OrderEndpoint : IOrderEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<List<OrderModel>> GetOrdersByUserIdAsync(int userId)
@@ -67,8 +72,13 @@ public class OrderEndpoint : IOrderEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<List<OrderDetailsModel>> GetOrderDetailsByOrderIdAsync(int orderId)
@@ -83,8 +93,13 @@ public class OrderEndpoint : IOrderEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<OrderModel> GetOrderByIdAsync(int id)
@@ -109,8 +124,13 @@ public class OrderEndpoint : IOrderEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<OrderModel> InsertOrderAsync(OrderRequestModel request)
@@ -125,8 +145,13 @@ public class OrderEndpoint : IOrderEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task UpdateOrderAsync(OrderRequestModel request)
@@ -140,6 +165,10 @@ public class OrderEndpoint : IOrderEndpoint
         {
             ex.Redirect();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task DeleteOrderAsync(OrderModel order)
@@ -152,6 +181,10 @@ public class OrderEndpoint : IOrderEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

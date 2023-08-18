@@ -42,8 +42,13 @@ public class CategoryEndpoint : ICategoryEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<CategoryModel> GetCategoryByIdAsync(int id)
@@ -69,8 +74,13 @@ public class CategoryEndpoint : ICategoryEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<CategoryModel> InsertCategoryAsync(CategoryModel category)
@@ -84,9 +94,14 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
         catch (AccessTokenNotAvailableException ex)
         {
-            ex.Redirect();
-            return null;
+            ex.Redirect();;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task UpdateCategoryAsync(CategoryModel category)
@@ -100,6 +115,10 @@ public class CategoryEndpoint : ICategoryEndpoint
         {
             ex.Redirect();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task DeleteCategoryAsync(CategoryModel category)
@@ -112,6 +131,10 @@ public class CategoryEndpoint : ICategoryEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

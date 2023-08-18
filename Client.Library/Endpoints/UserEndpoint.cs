@@ -27,8 +27,13 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<UserModel> GetUserByIdAsync(int id)
@@ -44,8 +49,13 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<UserModel> GetUserByOidAsync(string oid)
@@ -61,8 +71,13 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task<UserModel> InsertUserAsync(UserModel user)
@@ -77,8 +92,13 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
-            return null;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     public async Task UpdateUserAsync(UserModel user)
@@ -92,6 +112,10 @@ public class UserEndpoint : IUserEndpoint
         {
             ex.Redirect();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task DeleteUserAsync(UserModel user)
@@ -104,6 +128,10 @@ public class UserEndpoint : IUserEndpoint
         catch (AccessTokenNotAvailableException ex)
         {
             ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }
