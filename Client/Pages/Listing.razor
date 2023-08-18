@@ -195,9 +195,9 @@
     private async Task SaveFilterStateAsync()
     {
         await SessionStorage.SetItemAsStringAsync(nameof(searchText), searchText);
-        await SessionStorage.SetItemAsync<EraModel>(nameof(selectedEra), selectedEra);
-        await SessionStorage.SetItemAsync<CategoryModel>(nameof(selectedCategory), selectedCategory);
-        await SessionStorage.SetItemAsync<Rating>(nameof(selectedRating), selectedRating);
+        await SessionStorage.SetItemAsync(nameof(selectedEra), selectedEra);
+        await SessionStorage.SetItemAsync(nameof(selectedCategory), selectedCategory);
+        await SessionStorage.SetItemAsync(nameof(selectedRating), selectedRating);
     }
 
     private async Task FilterArtifactsAsync()

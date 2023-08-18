@@ -1,0 +1,99 @@
+﻿@page "/OrderListing"
+@inject IOrderEndpoint OrderEndpoint
+@inject IUserEndpoint UserEndpoint
+@inject ISessionStorageService SessionStorage
+@inject NavigationManager Navigation
+@attribute [Authorize(Policy = "Admin")]
+
+@code {
+    private List<OrderModel> orders;
+    private List<UserModel> users;
+    private UserModel selectedUser;
+    private bool sortByPrice = false;
+    private string searchUserText = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFilterStateAsync();
+        await FilterOrdersAsync();
+        await FilterUsersAsync();
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void LoadOrderDetailsPage(OrderModel order)
+    {
+        Navigation.NavigateTo($"/OrderDetails/{order.Id}");
+    }
+
+    private async Task LoadFilterStateAsync()
+    {
+        searchUserText = await SessionStorage.GetItemAsStringAsync(nameof(searchUserText)) ?? "";
+        selectedUser = await SessionStorage.GetItemAsync<UserModel>(nameof(selectedUser)) ?? null;
+        sortByPrice = await SessionStorage.GetItemAsync<bool>(nameof(sortByPrice));
+    }
+
+    private async Task SaveFilterStateAsync()
+    {
+        await SessionStorage.SetItemAsStringAsync(nameof(searchUserText), searchUserText);
+        await SessionStorage.SetItemAsync(nameof(selectedUser), selectedUser);
+        await SessionStorage.SetItemAsync(nameof(sortByPrice), sortByPrice);
+    }
+
+    private async Task FilterOrdersAsync()
+    {
+        var output = await OrderEndpoint.GetAllOrdersAsync();
+
+        if (selectedUser is not null)
+        {
+            output = output.Where(o => o.UserId == selectedUser.Id).ToList();
+        }
+
+        output = sortByPrice
+            ? output.OrderByDescending(o => o.TotalPrice).ThenByDescending(o => o.DateOrdered).ToList()
+            : output = output.OrderByDescending(o => o.DateOrdered).ThenByDescending(o => o.DateOrdered).ToList();
+
+        orders = output;
+        await SaveFilterStateAsync();
+    }
+
+    private async Task FilterUsersAsync()
+    {
+        var output = await UserEndpoint.GetAllUsersAsync();
+
+        if (string.IsNullOrWhiteSpace(searchUserText) is false)
+        {
+            output = output.Where(
+                u => u.FirstName.Contains(searchUserText, StringComparison.InvariantCultureIgnoreCase) ||
+                u.LastName.Contains(searchUserText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        users = output;
+        await SaveFilterStateAsync();
+    }
+
+    private async Task OnUserClickAsync(UserModel user)
+    {
+        selectedUser = user;
+        await FilterOrdersAsync();
+    }
+
+    private async Task OnUserSearchInputAsync(string searchInput)
+    {
+        searchUserText = searchInput;
+        await FilterUsersAsync();
+    }
+
+    private string GetSelectedUser(UserModel user = null)
+    {
+        if (user?.Id == selectedUser?.Id)
+        {
+            return "text-success";
+        }
+
+        return "";
+    }
+}

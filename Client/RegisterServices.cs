@@ -42,10 +42,9 @@ public static class RegisterServices
             builder.Configuration.Bind("AzureAdB2C", options.ProviderOptions.Authentication);
 
             options.ProviderOptions.DefaultAccessTokenScopes.Add(GetDefaultAccessTokenScope(builder));
-
             options.ProviderOptions.LoginMode = "redirect";
-            options.AuthenticationPaths.RemoteProfilePath = GetAuthenticationPath(builder, "AzureAdB2C:EditProfilePolicyId");
 
+            options.AuthenticationPaths.RemoteProfilePath = GetAuthenticationPath(builder, "AzureAdB2C:EditProfilePolicyId");
         });
 
         builder.Services.AddAuthorizationCore(options =>
