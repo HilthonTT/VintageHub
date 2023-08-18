@@ -1,8 +1,67 @@
 ﻿@page "/Admin/OrderDetails/{Id:int}"
 @inject IOrderEndpoint OrderEndpoint
 @inject IUserEndpoint UserEndpoint
+@inject IArtifactEndpoint ArtifactEndpoint
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
+
+<div class="container mb-5">
+    <div>
+        <h1>@userFullName's Order</h1>
+        <div class="text-muted">
+            You are currently looking at @userFullName's order with @totalItems total items.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-end">
+                <button @onclick="ClosePage" class="btn btn-close"></button>
+            </div>
+            <div class="row">
+                <div class="d-flex justify-content-between">
+                    <div class="w-25">
+                        <InputSelect @bind-Value="completeOption" @onchange="((e) => ToggleComplete((string)e.Value))"
+                                class="form-select" aria-label="Select if the order is complete or not.">
+                            <option value="complete">Complete the order</option>
+                            <option value="incomplete">Purse the order</option>
+                        </InputSelect>
+                    </div>
+                    <div class="w-25">
+                        <InputSelect @bind-Value="cancelOption" @onchange="((e) => ToggleCancel((string)e.Value))"
+                                     class="form-select" aria-label="Select if the order is canceled ot not.">
+                            <option value="cancel">Cancel the order</option>
+                            <option value="pursue">Pursue the order</option>
+                        </InputSelect>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-1">
+                    <button @onclick="UpdateOrderAsync" class="btn btn-primary" disabled="@IsUpdateAvailable()">
+                        Update Order
+                    </button>
+                </div>
+            </div>
+            <hr />
+            <div class="row mt-2">
+                <h2 class="h5 text-start fw-bold text-uppercase">
+                    Order Details
+                </h2>
+                <hr />
+                @if (orderDetails is not null)
+                {
+                    <Virtualize Items="orderDetails" Context="o" OverscanCount="10">
+                        <div @key="o.Id">
+                            @o.ArtifactId - @o.Quantity
+                        </div>
+                    </Virtualize>
+                }
+                else
+                {
+                    <LoadingTemplate Object="Loading.Order"/>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     [Parameter]
@@ -13,6 +72,13 @@
     private UserModel user;
     private List<OrderDetailsModel> orderDetails;
 
+    private string completeOption = "";
+    private string cancelOption = "";
+    private string userFullName = "";
+
+    private decimal totalPrice = 0;
+    private int totalItems = 0;
+
     protected override async Task OnInitializedAsync()
     {
         order = await OrderEndpoint.GetOrderByIdAsync(Id);
@@ -20,6 +86,9 @@
 
         orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(Id);
         user = await UserEndpoint.GetUserByIdAsync(order.UserId);
+        userFullName = $"{user?.FirstName} {user?.LastName}";
+
+        CalculatePriceAndItems();
     }
 
     private void ClosePage()
@@ -27,18 +96,65 @@
         Navigation.NavigateTo("/Admin/OrderListing");
     }
 
-    private void ToggleComplete()
+    private void ToggleComplete(string option)
     {
-        updatedOrder.IsComplete = !updatedOrder.IsComplete;
+        completeOption = option;
+
+        updatedOrder.IsComplete = completeOption switch
+        {
+            "complete" => true,
+            "incomplete" => false,
+            _ => false,
+        };
     }
 
-    private void ToggleCancel()
+    private void ToggleCancel(string option)
     {
-        updatedOrder.IsCanceled = !updatedOrder.IsCanceled;
+        cancelOption = option;
+
+        updatedOrder.IsCanceled = cancelOption switch
+        {
+            "cancel" => true,
+            "pursue" => false,
+            _ => false,
+        };
+    }
+
+    private async void CalculatePriceAndItems()
+    {
+        decimal price = 0;
+        int itemCounts = 0;
+
+        var uniqueArtifacts = new Dictionary<int, int>();
+
+        foreach (var item in orderDetails)
+        {
+            if (uniqueArtifacts.ContainsKey(item.ArtifactId) is false)
+            {
+                uniqueArtifacts[item.ArtifactId] = 0;
+            }
+
+            uniqueArtifacts[item.ArtifactId] += item.Quantity;
+        }
+
+        foreach (var kvp in uniqueArtifacts)
+        {
+            var artifact = await ArtifactEndpoint.GetArtifactByIdAsync(kvp.Key);
+            price += (decimal)artifact.Price * kvp.Value;
+            itemCounts += kvp.Value;
+        }
+
+        totalPrice = price;
+        totalItems = itemCounts;
     }
 
     private async Task UpdateOrderAsync()
     {
+        if (IsUpdateAvailable() is false)
+        {
+            return;
+        }
+
         order.IsComplete = updatedOrder.IsComplete;
         order.IsCanceled = updatedOrder.IsCanceled;
 
@@ -55,5 +171,16 @@
     {
         await OrderEndpoint.DeleteOrderAsync(order);
         ClosePage();
+    }
+
+    private bool IsUpdateAvailable()
+    {
+        if (updatedOrder.IsCanceled != order.IsCanceled ||
+            updatedOrder.IsComplete != order.IsComplete)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
