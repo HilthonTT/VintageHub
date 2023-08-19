@@ -6,119 +6,108 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<div class="container mb-5">
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-close" @onclick="ClosePage"></button>
-                </div>
-                <div class="col-2">
-                    <div class="row">
-                        <div class="fw-bold">Categories</div>
-                        <hr />
-                        <div @onclick="() => OnCategoryClickAsync(null)">
-                            <label class="@GetSelectedCategory()">All</label>
-                        </div>
-                        @if (categories is not null)
-                        {
-                            <Virtualize Items="categories" Context="c" OverscanCount="10">
-                                <div @key="@c.Id" @onclick="() => OnCategoryClickAsync(c)">
-                                    <label class="@GetSelectedCategory(c)">@c.Name</label>
-                                </div>
-                            </Virtualize>
-                        }
-                        <div>
-                            @if (showAllCategories)
-                            {
-                                <button @onclick="() => ToggleShowAllCategoriesAsync(false)" class="btn btn-primary">
-                                    See Less
-                                </button>
-                            }
-                            else
-                            {
-                                <button @onclick="() => ToggleShowAllCategoriesAsync(true)" class="btn btn-primary">
-                                    See More
-                                </button>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <label class="fw-bold">Eras</label>
-                        <hr />
-                        <div @onclick="() => OnEraClickAsync(null)">
-                            <label class="@GetSelectedEraClass()">All</label>
-                        </div>
-                        @if (eras is not null)
-                        {
-                            <Virtualize Items="eras" Context="e" OverscanCount="10">
-                                <div @key="@e.Id" @onclick="() => OnEraClickAsync(e)">
-                                    <label class="@GetSelectedEraClass(e)">@e.Name</label>
-                                </div>
-                            </Virtualize>
-                        }
-                        <div>
-                            @if (showAllEras)
-                            {
-                                <button @onclick="() => ToggleShowAllErasAsync(false)" class="btn btn-primary">
-                                    See Less
-                                </button>
-                            }
-                            else
-                            {
-                                <button @onclick="() => ToggleShowAllErasAsync(true)" class="btn btn-primary">
-                                    See More
-                                </button>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <label class="fw-bold">Rating</label>
-                        <hr />
-                        <Virtualize Items="ratings" Context="r" OverscanCount="10">
-                            <div @key="@r.ToString()" @onclick="() => OnRatingClickAsync(r)">
-                                <label class="@GetSelectedRating(r)">@GetRatingText(r)</label>
-                            </div>
-                        </Virtualize>
-                    </div>
-                </div>
-                <div class="col-10 px-5">
-                    <div class="row">
-                        <h1 class="fw-bold text-start">Artifacts</h1>
-                        <span class="form-text">Our artifacts come in a wide range of variety!</span>
-                        <div class="mt-3">
-                            <div class="row">
-                                <div class="d-flex justify-content-between">
-                                    <span>@(artifacts?.Count) results</span>
-                                    <select @onchange="((e) => OnSelectChange((string)e.Value))" class="form-select w-25"
-                                            aria-label="Select your filtering">
-                                        <option value="price">Price &euro;</option>
-                                        <option value="rating">Rating</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row mt-2">
-                                @if (artifacts is not null && isArtifactLoading is false)
-                                {
-                                    <Virtualize Items="artifacts" Context="a" OverscanCount="10">
-                                        <div @key="a.Id" @onclick="() => LoadArtifactPage(a)">
-                                            @a.Name - @a.Price &euro;
-                                        </div>
-                                    </Virtualize>
-                                }
-                                else
-                                {
-                                    <LoadingTemplate Object="Loading.Artifact" />
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<MudGrid>
+    <MudItem xs="3">
+        <MudItem xs="12">
+            <MudText Typo="Typo.h6">Categories</MudText>
+            <MudDivider Class="mt-3 mb-3" />
+            <MudItem xs="12">
+                <MudButton OnClick="() => OnCategoryClickAsync(null)" Color="@GetSelectedCategory()" Class="mt-1 mb-1">
+                    All
+                </MudButton>
+            </MudItem>
+            @if (categories is not null)
+            {
+                <MudVirtualize Items="categories" Context="c" OverscanCount="10">
+                    <MudItem xs="12">
+                        <MudButton @key="@c.Id" Class="mt-1 mb-1" Color="@GetSelectedCategory(c)"
+                                   OnClick="() => OnCategoryClickAsync(c)">
+                            @c.Name
+                        </MudButton>
+                    </MudItem>
+                </MudVirtualize>
+            }
+            <MudButton OnClick="() => ToggleShowAllCategoriesAsync(!showAllCategories)" Color="Color.Secondary"
+                       Size="Size.Small">
+                @((showAllCategories ? "See Less" : "Show More"))
+            </MudButton>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.h6">Eras</MudText>
+            <MudDivider Class="mt-3 mb-3" />
+            <MudItem xs="12">
+                <MudButton OnClick="() => OnEraClickAsync(null)" Color="@GetSelectedEraClass()" Class="mt-1 mb-1">
+                    All
+                </MudButton>
+            </MudItem>
+            @if (eras is not null)
+            {
+                <MudVirtualize Items="eras" Context="e" OverscanCount="10">
+                    <MudItem xs="12">
+                        <MudButton @key="@e.Id" Class="mt-1 mb-1" Color="@GetSelectedEraClass(e)"
+                                   OnClick="() => OnEraClickAsync(e)">
+                            @e.Name
+                        </MudButton>
+                    </MudItem>
+                </MudVirtualize>
+            }
+            <MudButton OnClick="() => ToggleShowAllErasAsync(!showAllEras)" Color="Color.Secondary"
+                       Size="Size.Small">
+                @((showAllEras ? "See Less" : "Show More"))
+            </MudButton>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.h6">Rating</MudText>
+            <MudDivider Class="mt-3 mb-3" />
+            <MudVirtualize Items="ratings" Context="r" OverscanCount="10">
+                <MudItem xs="12" @onclick="() => OnRatingClickAsync(r)">
+                    <MudRating SelectedValue="@GetRatingValue(r)" Color="@GetSelectedRating(r)" />
+                </MudItem>
+            </MudVirtualize>
+        </MudItem>
+    </MudItem>
+    <MudItem xs="9">
+        <MudItem>
+            <MudText Typo="Typo.h4" Class="fw-bold text-uppercase">
+                Artifacts
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Our Artifacts appear in a wide range of variety! You just have to choose wisely!
+            </MudText>
+            <MudDivider />
+        </MudItem>
+        <MudItem Class="mt-5">
+            <MudGrid>
+                <MudItem xs="10">
+                    <MudText>@artifacts?.Count results</MudText>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudSelect T="string" ValueChanged="((e) => OnSelectChange(e))"
+                               Label="Ordering" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem Value="@("rating")">Rating</MudSelectItem>
+                        <MudSelectItem Value="@("price")">Price &euro;</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem>
+            <MudAutocomplete T="string" Label="Search"
+                             SearchFunc="SearchArtifactsAsync" ResetValueOnEmptyText="true"
+                             ValueChanged="OnSearchInputAsync"/>
+        </MudItem>
+        <MudDivider Class="mb-3 mt-3"/>
+        <MudItem>
+            <MudGrid Justify="Justify.Center">
+                @if (artifacts is not null)
+                {
+                    <MudVirtualize Items="artifacts" Context="a">
+                        <ArtifactTemplate @key="a.Id" Artifact="a" />
+                    </MudVirtualize>
+                }
+            </MudGrid>
+        </MudItem>
+    </MudItem>
+</MudGrid>
 
 @code {
     private CategoryModel selectedCategory;
@@ -164,6 +153,14 @@
         eras = showAllEras ? allEras : allEras.Take(5).ToList();
     }
 
+    private async Task<IEnumerable<string>> SearchArtifactsAsync(string value)
+    {
+        searchText = value;
+        var output = await ArtifactEndpoint.GetAllArtifactsAsync();
+
+        return output.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name);
+    }
+
     private async Task LoadFilterStateAsync()
     {
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
@@ -194,7 +191,7 @@
 
     private async Task SaveFilterStateAsync()
     {
-        await SessionStorage.SetItemAsStringAsync(nameof(searchText), searchText);
+        await SessionStorage.SetItemAsStringAsync(nameof(searchText), searchText ?? "");
         await SessionStorage.SetItemAsync(nameof(selectedEra), selectedEra);
         await SessionStorage.SetItemAsync(nameof(selectedCategory), selectedCategory);
         await SessionStorage.SetItemAsync(nameof(selectedRating), selectedRating);
@@ -202,7 +199,7 @@
     }
 
     private async Task FilterArtifactsAsync()
-    {
+   {
         isArtifactLoading = true;
         var output = await ArtifactEndpoint.GetAllArtifactsAsync();
 
@@ -244,6 +241,11 @@
 
     private async Task OnSearchInputAsync(string searchInput)
     {
+        if (string.IsNullOrWhiteSpace(searchInput))
+        {
+            searchText = "";
+        }
+
         searchText = searchInput;
         await FilterArtifactsAsync();
     }
@@ -302,54 +304,47 @@
         Navigation.NavigateTo("/");
     }
 
-    private void LoadArtifactPage(ArtifactModel artifact)
-    {
-        Navigation.NavigateTo($"/Artifact/{artifact.Id}");
-    }
-
-    private string GetSelectedEraClass(EraModel era = null)
+    private Color GetSelectedEraClass(EraModel era = null)
     {
         if (selectedEra?.Id == era?.Id)
         {
-            return "text-success";
+            return Color.Success;
         }
 
-        return "";
+        return Color.Default;
     }
 
-    private string GetSelectedCategory(CategoryModel category = null)
+    private Color GetSelectedCategory(CategoryModel category = null)
     {
         if (selectedCategory?.Id == category?.Id)
         {
-            return "text-success";
+            return Color.Success;
         }
 
-        return "";
+        return Color.Default;
     }
 
-    private string GetSelectedRating(Rating rating)
+    private int GetRatingValue(Rating rating)
     {
-        if (rating == selectedRating)
+        return rating switch
         {
-            return "text-success";
-        }
-
-        return "";
-    }
-
-    private string GetRatingText(Rating rating)
-    {
-        string text = rating switch
-        {
-            Rating.ZeroStar => "Zero star",
-            Rating.OneStar => "One star",
-            Rating.TwoStar => "Two stars",
-            Rating.ThreeStar => "Three stars",
-            Rating.FourStar => "Four stars",
-            Rating.FiveStar => "Five stars",
-            _ => "",
+            Rating.ZeroStar => 0,
+            Rating.OneStar => 1,
+            Rating.TwoStar => 2,
+            Rating.ThreeStar => 3,
+            Rating.FourStar => 4,
+            Rating.FiveStar => 5,
+            _ => 0,
         };
+    }
 
-        return $"{text} and above";
+    private Color GetSelectedRating(Rating rating)
+    {
+        if (selectedRating == rating)
+        {
+            return Color.Success;
+        }
+
+        return Color.Default;
     }
 }

@@ -15,7 +15,9 @@
             </MudButton>
 
             <MudSpacer />
-            <MudText>Hello, @context.User.Identity?.Name!</MudText>
+            <MudButton OnClick="LoadProfilePage" Variant="Variant.Text">
+                Hello, @context.User.Identity?.Name!
+            </MudButton>
             <MudButton OnClick="BeginLogOut"
                        StartIcon="@Icons.Material.Filled.Logout">Logout</MudButton>
         </Authorized>
@@ -50,6 +52,11 @@
     private void BeginLogIn()
     {
         Navigation.NavigateToLogin("authentication/login");
+    }
+
+    private void LoadProfilePage()
+    {
+        Navigation.NavigateTo("authentication/profile");
     }
 
     private void LoadHomePage()
