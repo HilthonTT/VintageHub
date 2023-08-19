@@ -1,0 +1,62 @@
+﻿@inject IImageEndpoint ImageEndpoint
+@inject IVendorEndpoint VendorEndpoint
+@inject IShoppingCartStorage ShoppingCartStorage
+@inject NavigationManager Navigation
+
+<MudItem xs="4">
+    <MudCard Class="m-2">
+        <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
+                      Height="200" alt="@Artifact?.Name" />
+        <MudCardContent>
+            <MudText Typo="Typo.h5">@Artifact?.Name</MudText>
+            <MudText Typo="Typo.body2">@Artifact?.Description</MudText>
+            <MudDivider Class="mt-3 mb-3" />
+            <MudText Typo="Typo.body2">This artifact is sold by: @vendor?.Name</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton OnClick="AddToCartAsync" Variant="Variant.Text"
+                       Color="Color.Error" StartIcon="@Icons.Material.Filled.AddShoppingCart">
+                Add to Cart
+            </MudButton>
+            <MudButton OnClick="OpenDetails" Variant="Variant.Text"
+                       Color="Color.Primary" StartIcon="@Icons.Material.Filled.Details">
+                Learn More
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudItem>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public ArtifactModel Artifact { get; set; }
+
+    private VendorModel vendor;
+    private string imageSource = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        imageSource = await ImageEndpoint.GetImageAsync(Artifact.ImageId);
+        vendor = await VendorEndpoint.GetVendorByIdAsync(Artifact.VendorId);
+    }
+
+    private void OpenDetails()
+    {
+        Navigation.NavigateTo($"/Artifact/{Artifact.Id}");
+    }
+
+    private async Task AddToCartAsync()
+    {
+        var shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
+
+        var newCartItem = new CartItemModel
+            {
+                Artifact = Artifact,
+                Quantity = 1,
+            };
+
+        shoppingCart.CartItems.Add(newCartItem);
+
+        await ShoppingCartStorage.SaveShoppingCartAsync(shoppingCart);
+    }
+}

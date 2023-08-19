@@ -10,70 +10,86 @@
 
 @if (string.IsNullOrWhiteSpace(errorMessage) is false)
 {
-    <div class="alert alert-danger">
+    <MudAlert Severity="Severity.Error" Class="mb-2" Elevation="5" Variant="Variant.Outlined">
         @errorMessage
-    </div>
+    </MudAlert>
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-               <img src="/images/egyptian-walls.jpg" alt="egyptian-walls" width="900"/>
-            </div>
-            <div class="row mt-2">
-                <div class="col-4 d-flex justify-content-center align-items-center">
-                    <img src="/images/snow_statue.jpg" alt="Snow Statue" class=" img-fluid rounded w-75" />
-                </div>
-                <div class="col-4 d-flex justify-content-center align-items-center">
-                    <img src="/images/buddha-picture.jpg" alt="Buddha Statue" class="img-fluid rounded fluid w-75" />
-                </div>
-                <div class="col-4 d-flex justify-content-center align-items-center">
-                    <img src="/images/weird-head-picture.jpg" alt="Weird Head Picture" class="img-fluid rounded w-75" />
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-12">
-                    <h3>Our best sellers!</h3>
-                    @if (artifacts is not null)
-                    {
-                        <Virtualize Items="artifacts" OverscanCount="10" Context="a">
-                            <div @onclick="() => OnArtifactClick(a)">
-                                @a.Name
-                            </div>
-                        </Virtualize>
-                    }
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <h3>Choose a category</h3>
-                    @if (categories is not null)
-                    {
-                        <Virtualize Items="categories" OverscanCount="10" Context="c">
-                            <div @onclick="() => OnCategoryClick(c)">
-                                @c.Name
-                            </div>
-                        </Virtualize>
-                    }
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <h3>Choose an era</h3>
-                    @if (eras is not null)
-                    {
-                        <Virtualize Items="eras" OverscanCount="10" Context="e">
-                            <div @onclick="() => OnEraClick(e)">
-                                @e.Name
-                            </div>
-                        </Virtualize>
-                    }
-                </div>
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="12" Class="text-center">
+        <MudAvatar Size="Size.Large" Style="height:150px; width:150px; font-size:2rem;">
+            <MudImage Src="images/hat-cowboy-solid.svg" Alt="Vintage Hub" Fluid="true" />
+        </MudAvatar>
+        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Vintage Hub</MudText>
+    </MudItem>
+</MudGrid>
+
+<MudGrid Class="mt-8" Spacing="5">
+    <MudItem xs="12">
+        <div class="d-flex justify-content-between">
+            <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">Artifacts</MudText>
+            <div>
+                <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.More">See More</MudButton>
+                @if (artifacts is null)
+                {
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                }
             </div>
         </div>
-    </div>
-</div>
+        <MudGrid Justify="Justify.Center">
+            @if (artifacts is not null)
+            {
+                <MudVirtualize Items="artifacts?.Take(5).ToList()" Context="a">
+                    <ArtifactTemplate @key="a.Id" Artifact="a"/>
+                </MudVirtualize>
+            }
+        </MudGrid>
+    </MudItem>
+
+    <MudDivider />
+    <MudItem xs="12">
+        <div class="d-flex justify-content-between">
+            <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">Categories</MudText>
+            @if (categories is null)
+            {
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            }
+        </div>
+        <MudGrid Justify="Justify.Center">
+            @if (categories is not null)
+            {
+                <MudVirtualize Items="categories" Context="c" OverscanCount="10">
+                    <CategoryTemplate @key="c.Id" Category="c"/>
+                </MudVirtualize>
+            }
+        </MudGrid>
+    </MudItem>
+
+    <MudDivider />
+    <MudItem xs="12">
+        <div class="d-flex justify-content-between">
+            <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">Eras</MudText>
+            @if (eras is null)
+            {
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            }
+        </div>
+        <MudGrid Justify="Justify.Center">
+            @if (eras is not null)
+            {
+                <MudVirtualize Items="eras" Context="e" OverscanCount="10">
+                    <EraTemplate @key="e.Id" Era="e"/>
+                </MudVirtualize>
+            }
+        </MudGrid>
+    </MudItem>
+</MudGrid>
 
 @code {
     private UserModel loggedInUser;
@@ -81,7 +97,6 @@
     private List<CategoryModel> categories;
     private List<EraModel> eras;
     private string errorMessage = "";
-    private string oid = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,38 +113,8 @@
         }
     }
 
-    private void OnArtifactClick(ArtifactModel artifact)
+    private void LoadListingPage()
     {
-        Navigation.NavigateTo($"/Artifact/{artifact.Id}");
-    }
-
-    private void OnCategoryClick(CategoryModel category)
-    {
-        var uriBuilder = new UriBuilder(Navigation.ToAbsoluteUri("/Listing"));
-
-        var queryParameters = new Dictionary<string, string>
-            {
-                ["categoryId"] = category.Id.ToString()
-            };
-
-        string queryString = string.Join("&", queryParameters.Select(kv => $"{kv.Key}={kv.Value}"));
-        uriBuilder.Query = queryString;
-
-        Navigation.NavigateTo(uriBuilder.Uri.ToString());
-    }
-
-    private void OnEraClick(EraModel era)
-    {
-        var uriBuilder = new UriBuilder(Navigation.ToAbsoluteUri("/Listing"));
-
-        var queryParameters = new Dictionary<string, string>
-            {
-                ["eraId"] = era.Id.ToString()
-            };
-
-        string queryString = string.Join("&", queryParameters.Select(kv => $"{kv.Key}={kv.Value}"));
-        uriBuilder.Query = queryString;
-
-        Navigation.NavigateTo(uriBuilder.Uri.ToString());
+        Navigation.NavigateTo("/Listing");
     }
 }

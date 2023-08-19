@@ -1,36 +1,38 @@
 ﻿@inject IShoppingCartStorage ShoppingCartStorage
 @inject NavigationManager Navigation
 
-<AuthorizeView>
-    <Authorized>
-        <MudButton OnClick="LoadHomePage" StartIcon="@Icons.Material.Filled.Home">
-            Home
-        </MudButton>
-        <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.List">
-            Our Artifacts
-        </MudButton>
-        <MudButton OnClick="LoadCartPage" StartIcon="@Icons.Material.Filled.ShoppingCart">
-            Cart [@shoppingCart?.CartItems.Count]
-        </MudButton>
+<MudAppBar Color="Color.Dark">
+    <AuthorizeView>
+        <Authorized>
+            <MudButton OnClick="LoadHomePage" StartIcon="@Icons.Material.Filled.Home">
+                Home
+            </MudButton>
+            <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.List">
+                Our Artifacts
+            </MudButton>
+            <MudButton OnClick="LoadCartPage" StartIcon="@Icons.Material.Filled.ShoppingCart">
+                Cart [@shoppingCart?.CartItems.Count]
+            </MudButton>
 
-        <MudSpacer />
-        <MudText>Hello, @context.User.Identity?.Name!</MudText>
-        <MudButton OnClick="BeginLogOut"
-                   StartIcon="@Icons.Material.Filled.Logout">Logout</MudButton>
-    </Authorized>
-    <NotAuthorized>
-        <MudButton OnClick="LoadHomePage" StartIcon="@Icons.Material.Filled.Home">
-            Home
-        </MudButton>
-        <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.List">
-            Our Artifacts
-        </MudButton>
-        <MudSpacer />
-        <MudButton OnClick="BeginLogIn" StartIcon="@Icons.Material.Filled.Login">
-            Login
-        </MudButton>
-    </NotAuthorized>
-</AuthorizeView>
+            <MudSpacer />
+            <MudText>Hello, @context.User.Identity?.Name!</MudText>
+            <MudButton OnClick="BeginLogOut"
+                       StartIcon="@Icons.Material.Filled.Logout">Logout</MudButton>
+        </Authorized>
+        <NotAuthorized>
+            <MudButton OnClick="LoadHomePage" StartIcon="@Icons.Material.Filled.Home">
+                Home
+            </MudButton>
+            <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.List">
+                Our Artifacts
+            </MudButton>
+            <MudSpacer />
+            <MudButton OnClick="BeginLogIn" StartIcon="@Icons.Material.Filled.Login">
+                Login
+            </MudButton>
+        </NotAuthorized>
+    </AuthorizeView>
+</MudAppBar>
 
 @code {
     private ShoppingCartModel shoppingCart;

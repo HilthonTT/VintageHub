@@ -2,11 +2,11 @@
 
 
 <MudLayout>
-    <MudAppBar Color="Color.Dark">
-        <NavMenu />
-    </MudAppBar>
+    <NavMenu />
     <MudMainContent>
-        @Body
+        <MudContainer MaxWidth="MaxWidth.Large" Class="p-3">
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 

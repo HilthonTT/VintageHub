@@ -1,0 +1,63 @@
+﻿@inject NavigationManager Navigation
+
+<MudItem xs="3">
+    <MudCard Class="m-2">
+        <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
+                      Height="200" alt="@Era.Name" />
+        <MudCardContent>
+            <MudText Typo="Typo.h5">@Era.Name</MudText>
+            <MudText Typo="Typo.body2">@Era.Description</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton OnClick="OnEraClick" Variant="Variant.Text" Color="Color.Primary">
+                Learn More
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudItem>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public EraModel Era { get; set; }
+
+    private string imageSource = "";
+
+    protected override void OnInitialized()
+    {
+        imageSource = GetImageSource();
+    }
+
+    private string GetImageSource()
+    {
+        string source = Era.Name switch
+        {
+            "Victorian Era" => "victorian.jpg",
+            "Roaring Twenties" => "roaring-twenties.jpg",
+            "Art Deco Period" => "art-deco.jpg",
+            "Renaissance Era" => "renaissance.jpg",
+            "Ancient Civilizations" => "ancient-civilizations.jpg",
+            "Industrial Revolution" => "industrial-revolution.jpg",
+            "Space Age" => "space-age.jpg",
+            "Medieval Period" => "medieval-period.jpg",
+            _ => "",
+        };
+
+        return $"images/era/{source}";
+    }
+
+    private void OnEraClick()
+    {
+        var uriBuilder = new UriBuilder(Navigation.ToAbsoluteUri("/Listing"));
+
+        var queryParameters = new Dictionary<string, string>
+            {
+                ["eraId"] = Era.Id.ToString()
+            };
+
+        string queryString = string.Join("&", queryParameters.Select(kv => $"{kv.Key}={kv.Value}"));
+        uriBuilder.Query = queryString;
+
+        Navigation.NavigateTo(uriBuilder.Uri.ToString());
+    }
+}
