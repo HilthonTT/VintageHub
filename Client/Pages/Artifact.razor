@@ -11,114 +11,118 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-8">
-                    <div>
-                        <div>
-                            @if (string.IsNullOrWhiteSpace(artifactImageSource) is false)
-                            {
-                                <img src="@artifactImageSource"
-                                     class="img-thumbnail rounded"
-                                     alt="@artifact?.Name"
-                                     width="@ImageSize"
-                                     height="@ImageSize" />
-                            }
-                            else
-                            {
-                                <img src="https://dummyimage.com/600x400/000/fff"
-                                     class="img-thumbnail rounded"
-                                     alt="Placeholder text"
-                                     width="@ImageSize"
-                                     height="@ImageSize" />
-                            }
-                        </div>
-                        <div class="row">
-                            <h2>@artifact?.Name</h2>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div>
-                                <span>
-                                    Designed by
-                                </span>
-                                <span @onclick="LoadVendorPage" class="fw-bold">
-                                    @vendor?.Name
-                                </span>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <p>@artifact?.Description</p>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <p>@artifact?.Price &euro;</p>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <p>Quantity available: @artifact?.Quantity</p>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="d-flex justify-content-between">
-                                <p>Vendor: @vendor?.Name</p>
-                                <div class="d-flex align-items-center">
-                                    <InputNumber @bind-Value="selectedQuantity" class="form-control" style="flex: 1;" />
-                                    <button @onclick="AddToCart" class="btn btn-success mx-1">
-                                        Add To Cart
-                                    </button>
+
+<PageTitle>@artifact?.Name</PageTitle>
+
+@if (isLoading is false)
+{
+    <MudGrid>
+        <MudItem xs="9">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudCard Elevation="5">
+                        <MudCardHeader>
+                            <MudItem xs="12">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex">
+                                        <MudAvatar>
+                                            <MudImage Src="@(string.IsNullOrWhiteSpace(vendorImageSource)? "https://dummyimage.com/600x400/000/fff": vendorImageSource)"
+                                                      Alt="@vendor?.Name" />
+                                        </MudAvatar>
+                                        <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
+                                            Vendor:
+                                            <MudButton OnClick="LoadVendorPage" StartIcon="@Icons.Material.Filled.BrandingWatermark" Color="Color.Primary">
+                                                @vendor?.Name
+                                            </MudButton>
+                                        </MudText>
+                                    </div>
+                                    <button @onclick="ClosePage" class="btn btn-close btn-close-white"></button>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <hr />
+                            </MudItem>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudGrid Justify="Justify.Center">
+                                <MudItem xs="12" Class="text-center">
+                                    <MudImage Src="@(string.IsNullOrWhiteSpace(artifactImageSource) ? "https://dummyimage.com/600x400/000/fff": artifactImageSource)"
+                                              Alt="@artifact?.Name" />
+                                </MudItem>
+                                @if (artifact is not null)
+                                {
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h5">@artifact?.Name</MudText>
+                                        <MudDivider Class="mt-3 mb-3" />
+                                        <MudText Typo="Typo.body1">@artifact?.Description</MudText>
+                                        <MudText Typo="Typo.subtitle1">Quantity: @artifact?.Quantity</MudText>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <div class="d-flex justify-content-between">
+                                            <MudRating SelectedValue="(int)artifact?.Rating" />
+                                            <div class="d-flex">
+                                                <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity" />
+                                                <MudButton OnClick="AddToCart" StartIcon="@Icons.Material.Filled.AddShoppingCart"
+                                                           Color="Color.Error">
+                                                    Add To Cart
+                                                </MudButton>
+                                            </div>
+                                        </div>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudPaper Elevation="3" Class="p-2">
+                        <MudItem xs="12">
                             <div class="d-flex justify-content-between">
-                                <h4 class="fw-bold text-uppercase">Reviews - @reviews?.Count</h4>
-                                <button @onclick="LoadReviewPage" class="btn btn-primary">
+                                <MudText Typo="Typo.h5" Class="text-start text-uppercase fw-bold">Reviews [@reviews?.Count]</MudText>
+                                <MudButton OnClick="LoadReviewPage" StartIcon="@Icons.Material.Filled.Create" Color="Color.Warning">
                                     Make A Review
-                                </button>
+                                </MudButton>
                             </div>
+                            <MudDivider />
+                        </MudItem>
+                        <MudItem xs="12" Class="mt-3">
+
                             @if (reviews is not null)
                             {
-                                <Virtualize Items="reviews" Context="r" OverscanCount="10">
-                                    <div @key="r.Id">
-                                        <div>
-                                            @r.Title
-                                        </div>
-                                        <div>
-                                            @r.Description
-                                        </div>
-                                        <div>
-                                            Rating: @r.Rating
-                                        </div>
-                                    </div>
-                                </Virtualize>
+                                <MudVirtualize Items="reviews" Context="r" OverscanCount="10">
+                                    <ReviewTemplate @key="r.Id" Review="r" />
+                                </MudVirtualize>
                             }
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4 text-end">
-                    <div class="text-end">
-                        <button @onclick="LoadAllArtifactsPage" class="btn btn-outline-primary">
-                            See More
-                        </button>
-                    </div>
-                    @if (randomArtifacts is not null)
-                    {
-                        <Virtualize Items="randomArtifacts" Context="a" OverscanCount="10">
-                            <div @key="a.Id">
-                                @a.Name
-                            </div>
-                        </Virtualize>
-                    }
-                </div>
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="3">
+            <div class="d-flex justify-content-between">
+                <MudText Typo="Typo.h6">Artifacts</MudText>
+                <MudButton OnClick="LoadAllArtifactsPage" StartIcon="@Icons.Material.Filled.More">
+                    See More
+                </MudButton>
             </div>
-        </div>
-    </div>
-</div>
+            <MudDivider Class="mt-3 mb-3" />
+            @if (randomArtifacts is not null)
+            {
+                <MudVirtualize Items="randomArtifacts" Context="a" OverscanCount="10">
+                    <ArtifactDetailsTemplate @key="a.Id" Artifact="a" />
+                </MudVirtualize>
+            }
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <MudGrid Justify="Justify.Center" Class="centered-layout">
+        <MudItem Class="centered-layout" xs="12">
+            <div class="spinner-border centered-layout" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </MudItem>
+    </MudGrid>
+}
+
 
 @code {
     [Parameter]
@@ -129,6 +133,8 @@
     private int selectedQuantity = 1;
     private string artifactImageSource = "";
     private string vendorImageSource = "";
+    private string errorMessage = "";
+    private bool isLoading = true;
     private List<ArtifactModel> randomArtifacts;
     private List<ReviewModel> reviews;
     private VendorModel vendor;
@@ -139,10 +145,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+        try
+        {
+            loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
 
-        await LoadArtifactAsync();
-        await LoadRandomArtifactsAsync();
+            await LoadArtifactAsync();
+            await LoadRandomArtifactsAsync();
+
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
     }
 
     private async Task LoadArtifactAsync()

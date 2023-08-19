@@ -1,0 +1,32 @@
+﻿@inject IUserEndpoint UserEndpoint
+
+<MudCard Outlined="true" Class="mb-3">
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudText Typo="Typo.body1">@Review.Title</MudText>
+                <MudDivider Class="mt-3 mb-3"/>
+                <MudText Typo="Typo.body2">@Review.Description</MudText>
+                <MudText Typo="Typo.subtitle1">Written by: @reviewerFullName</MudText>
+            </MudItem>
+            <MudItem xs="12">
+                <MudRating SelectedValue="(int)Review.Rating"></MudRating>
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public ReviewModel Review { get; set; }
+
+    private UserModel reviewer;
+    private string reviewerFullName = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        reviewer = await UserEndpoint.GetUserByIdAsync(Review.UserId);
+        reviewerFullName = $"{reviewer?.FirstName} {reviewer?.LastName}";
+    }
+}
