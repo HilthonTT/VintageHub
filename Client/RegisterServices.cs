@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using System.Web;
 using VintageHub.Client.Authentication.Interfaces;
 using VintageHub.Client.Authentication;
+using MudBlazor.Services;
 
 namespace VintageHub.Client;
 
@@ -58,6 +59,8 @@ public static class RegisterServices
 
     public static void ConfigureServices(this WebAssemblyHostBuilder builder)
     {
+        builder.Services.AddMudServices();
+
         builder.Services.AddTransient<IUserDataVerifier, UserDataVerifier>();
 
         builder.Services.AddBlazoredLocalStorageAsSingleton();
