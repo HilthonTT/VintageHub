@@ -6,76 +6,76 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-@if (isCreatingReview)
+
+@if (isCreatingReview is false)
 {
-    <LoadingTemplate Object="Loading.ReviewCreate" />
+    <MudGrid Class="mt-3">
+        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+        {
+            <MudAlert Severity="Severity.Error" Elevation="3">
+                @errorMessage
+            </MudAlert>
+        }
+        <MudItem xs="12">
+            <EditForm Model="review" OnValidSubmit="CreateReviewAsync" EditContext="editContext">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText >
+                                <div class="d-flex">
+                                    <MudText Color="Color.Default" Typo="Typo.h6" Class="mx-1">Make A Review for </MudText>
+                                    <MudText Color="Color.Primary" Typo="Typo.h6">'@artifact?.Name'</MudText>
+                                </div>
+                            </MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudItem xs="12">
+                            <MudItem>
+                                <MudTextField @bind-Value="review.Title" T="string" Label="Review Title"
+                                              Required="true" Variant="Variant.Outlined"
+                                              RequiredError="The title is required." 
+                                              Clearable="true"/>
+                            </MudItem>
+                            <MudDivider Class="mt-5 mb-7"/>
+                            <MudItem>
+                                <MudTextField @bind-Value="review.Description" T="string" Label="Review Description"
+                                              Required="true" Lines="2" Variant="Variant.Outlined"
+                                              RequiredError="The description is required." 
+                                              Clearable="true"/>
+                            </MudItem>
+                        </MudItem>
+                        <MudDivider Class="mt-3 mb-3"/>
+                        <MudText Typo="Typo.subtitle1">Your Rating.</MudText>
+                        <MudItem xs="12">
+                            <MudRating SelectedValue="(int)review.Rating" Size="Size.Large" MaxValue="5"></MudRating>
+                        </MudItem>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                                    Color="Color.Primary" Class="ml-auto" Size="Size.Large">
+                            Make Review
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </EditForm>
+        </MudItem>
+    </MudGrid>
 }
 else
 {
-    <div class="container">
-        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
-        {
-            <div class="alert alert-danger">
-                @errorMessage
-            </div>
-        }
-        <h1 class="text-center fw-bold">Create A Review</h1>
-        <div class="text-center fw-bold">
-            You are currently creating a review for the artifact " @artifact?.Name "
-        </div>
-        <div class="row">
-            <div class="col-12 justify-content-center">
-                <div class="row mb-4">
-                    <div class="d-flex justify-content-end">
-                        <button @onclick="ClosePage" class="btn btn-close"></button>
-                    </div>
-                    <div class="col-12">
-                        <EditForm Model="review" OnValidSubmit="CreateReviewAsync">
-                            <DataAnnotationsValidator />
-                            <ValidationSummary />
-                            <div class="row">
-                                <div class="mt-2">
-                                    <label class="form-label" for="review-title">Review Title</label>
-                                    <div class="form-text" id="review-title">Enter the review's title.</div>
-                                    <InputText @bind-Value="review.Title" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="review-description">Review Description</label>
-                                    <div class="form-text" id="review-description">
-                                        Provide your experience with the artifact or vendor.
-                                    </div>
-                                    <InputTextArea @bind-Value="review.Description" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="review-rating">The Rating</label>
-                                    <div class="form-text">
-                                        How are you feeling with the artifact?
-                                        Please provide us a rating about it.
-                                    </div>
-                                    <input class="form-range" type="range" min="0" max="5" step="0.5" @bind="review.Rating" />
-                                    <div class="text-body">
-                                        <span>Your rating:</span>
-                                        <span class="text-danger">@review.Rating out of 5 stars.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary text-uppercase">
-                                    Create
-                                </button>
-                            </div>
-                        </EditForm>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <LoadingTemplate />
 }
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
+    private EditContext editContext;
     private CreateReviewModel review = new();
     private UserModel loggedInUser;
     private ArtifactModel artifact;

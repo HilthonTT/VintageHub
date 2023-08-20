@@ -61,7 +61,7 @@
             <MudDivider Class="mt-3 mb-3" />
             <MudVirtualize Items="ratings" Context="r" OverscanCount="10">
                 <MudItem xs="12" @onclick="() => OnRatingClickAsync(r)">
-                    <MudRating SelectedValue="@GetRatingValue(r)" Color="@GetSelectedRating(r)" />
+                    <MudRating SelectedValue="@GetRatingValue(r)" Color="@GetSelectedRating(r)" ReadOnly="true"/>
                 </MudItem>
             </MudVirtualize>
         </MudItem>

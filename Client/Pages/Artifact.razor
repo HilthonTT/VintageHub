@@ -56,7 +56,7 @@
                                     </MudItem>
                                     <MudItem xs="12">
                                         <div class="d-flex justify-content-between">
-                                            <MudRating SelectedValue="(int)artifact?.Rating" />
+                                            <MudRating SelectedValue="(int)artifact?.Rating" ReadOnly="true"/>
                                             <div class="d-flex">
                                                 <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity" />
                                                 <MudButton OnClick="AddToCart" StartIcon="@Icons.Material.Filled.AddShoppingCart"
@@ -114,13 +114,7 @@
 }
 else
 {
-    <MudGrid Justify="Justify.Center" Class="centered-layout">
-        <MudItem Class="centered-layout" xs="12">
-            <div class="spinner-border centered-layout" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </MudItem>
-    </MudGrid>
+    <LoadingTemplate />
 }
 
 
