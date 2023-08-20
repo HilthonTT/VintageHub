@@ -1,4 +1,4 @@
-﻿@page "/SampleData"
+﻿@page "/Admin/SampleData"
 @inject ICategoryEndpoint CategoryEndpoint
 @inject IEraEndpoint EraEndpoint
 @inject IArtifactEndpoint ArtifactEndpoint
@@ -8,71 +8,63 @@
 @inject AuthenticationStateProvider AuthProvider
 @attribute [Authorize(Policy = "Admin")]
 
-<div class="container">
-
+<MudGrid>
     @if (string.IsNullOrWhiteSpace(errorMessage) is false)
     {
-        <div class="alert alert-danger">
+        <MudAlert Severity="Severity.Error">
             @errorMessage
-        </div>
+        </MudAlert>
     }
-
-    <div class="row">
-        <div class="mt-2">
-            <h3>
-                Created @createdCategoriesCount categories out of @categories?.Count categories.
-            </h3>
-            @if (categoriesCreated is false)
-            {
-                <button @onclick="GenerateCategoriesAsync"
-                        class="btn btn-primary"
-                        disabled="@GetButtonClass()">
-                    Generate Categories
-                </button>
-            }
-        </div>
-        <div class="mt-2">
-            <h3>
-                Created @createdErasCount eras out of @eras?.Count eras.
-            </h3>
-            @if (erasCreated is false)
-            {
-                <button @onclick="GenerateErasAsync"
-                        class="btn btn-primary"
-                        disabled="@GetButtonClass()">
-                    Generate Eras
-                </button>
-
-            }
-        </div>
-        <div class="mt-2">
-            <h3>
-                Created Vendors: @vendorsCreated
-            </h3>
-            @if (vendorsCreated is false)
-            {
-                <button @onclick="GenerateVendorsAsync"
-                        class="btn btn-primary"
-                        disabled="@GetButtonClass()">
-                    Generate Vendors
-                </button>
-            }
-        </div>
-        <div class="mt-2">
-            <h3>
-                Created Artifacts: @artifactsCreated
-            </h3>
-            @if (artifactsCreated is false)
-            {
-                <button @onclick="GenerateArtifactAsync"
-                        class="btn btn-secondary"
-                        disabled="@GetButtonClass()">
-                    Generate Artifacts
-                </button>
-            }
-        </div>
-    </div>
-</div>
+    <MudItem xs="12">
+        <MudItem>
+            <MudText Typo="Typo.h6">Categories</MudText>
+            <MudDivider Class="mt-3 mb-3" />
+        </MudItem>
+        <MudItem>
+            <MudButton OnClick="GenerateCategoriesAsync" Variant="Variant.Filled"
+                       Color="Color.Primary" Disabled="DisableButton(categoriesCreated)">
+                Create Categories
+            </MudButton>
+        </MudItem>
+    </MudItem>
+    <MudDivider Class="mb-3 mt-3" />
+    <MudItem xs="12">
+        <MudItem>
+            <MudText Typo="Typo.h6">Eras</MudText>
+            <MudDivider Class="mt-3 mb-3" />
+        </MudItem>
+        <MudItem>
+            <MudButton OnClick="GenerateErasAsync" Variant="Variant.Filled"
+                       Color="Color.Primary" Disabled="DisableButton(erasCreated)">
+                Create Eras
+            </MudButton>
+        </MudItem>
+    </MudItem>
+    <MudItem xs="12">
+        <MudItem>
+            <MudText Typo="Typo.h6">Artifacts</MudText>
+            <MudDivider Class="mt-3 mb-3" />
+        </MudItem>
+        <MudItem>
+            <MudButton OnClick="GenerateArtifactAsync" Variant="Variant.Filled"
+                       Color="Color.Primary" Disabled="DisableButton(artifactsCreated)">
+                Create Artifacts
+            </MudButton>
+        </MudItem>
+    </MudItem>
+    <MudItem xs="12">
+        <MudItem>
+            <MudText Typo="Typo.h6">Vendors</MudText>
+            <MudDivider Class="mt-3 mb-3" />
+        </MudItem>
+        <MudItem>
+            <MudButton OnClick="GenerateVendorsAsync" Variant="Variant.Filled" 
+                       Color="Color.Primary" Disabled="DisableButton(vendorsCreated)">
+                Create Vendors
+            </MudButton>
+        </MudItem>
+    </MudItem>
+</MudGrid>
 
 @code {
     private UserModel loggedInUser;
@@ -330,7 +322,7 @@
                     Price = 120.50m,
                     VendorId = vendors[1].Id,
                     CategoryId = categories[1].Id,
-                    EraId = eras[4].Id, 
+                    EraId = eras[4].Id,
                     Availability = true,
                 },
             };
@@ -356,15 +348,13 @@
         }
     }
 
-    private bool GetButtonClass()
+    private bool DisableButton(bool isCreated)
     {
-        if (isBusy)
+        if (isBusy || isCreated)
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 }
