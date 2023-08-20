@@ -38,7 +38,7 @@
                 }
             </div>
         </div>
-        <MudGrid Justify="Justify.Center">
+        <MudGrid>
             @if (artifacts is not null)
             {
                 <MudVirtualize Items="artifacts?.Take(5).ToList()" Context="a">
@@ -59,7 +59,7 @@
                 </div>
             }
         </div>
-        <MudGrid Justify="Justify.Center">
+        <MudGrid>
             @if (categories is not null)
             {
                 <MudVirtualize Items="categories" Context="c" OverscanCount="10">
@@ -80,7 +80,7 @@
                 </div>
             }
         </div>
-        <MudGrid Justify="Justify.Center">
+        <MudGrid>
             @if (eras is not null)
             {
                 <MudVirtualize Items="eras" Context="e" OverscanCount="10">

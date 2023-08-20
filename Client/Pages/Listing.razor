@@ -6,108 +6,115 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<MudGrid>
-    <MudItem xs="3">
-        <MudItem xs="12">
-            <MudText Typo="Typo.h6">Categories</MudText>
-            <MudDivider Class="mt-3 mb-3" />
+@if (isLoading is false)
+{
+    <MudGrid Class="mb-4">
+        <MudItem xs="3">
             <MudItem xs="12">
-                <MudButton OnClick="() => OnCategoryClickAsync(null)" Color="@GetSelectedCategory()" Class="mt-1 mb-1">
-                    All
-                </MudButton>
-            </MudItem>
-            @if (categories is not null)
-            {
-                <MudVirtualize Items="categories" Context="c" OverscanCount="10">
-                    <MudItem xs="12">
-                        <MudButton @key="@c.Id" Class="mt-1 mb-1" Color="@GetSelectedCategory(c)"
-                                   OnClick="() => OnCategoryClickAsync(c)">
-                            @c.Name
-                        </MudButton>
-                    </MudItem>
-                </MudVirtualize>
-            }
-            <MudButton OnClick="() => ToggleShowAllCategoriesAsync(!showAllCategories)" Color="Color.Secondary"
-                       Size="Size.Small">
-                @((showAllCategories ? "See Less" : "Show More"))
-            </MudButton>
-        </MudItem>
-        <MudItem xs="12">
-            <MudText Typo="Typo.h6">Eras</MudText>
-            <MudDivider Class="mt-3 mb-3" />
-            <MudItem xs="12">
-                <MudButton OnClick="() => OnEraClickAsync(null)" Color="@GetSelectedEraClass()" Class="mt-1 mb-1">
-                    All
-                </MudButton>
-            </MudItem>
-            @if (eras is not null)
-            {
-                <MudVirtualize Items="eras" Context="e" OverscanCount="10">
-                    <MudItem xs="12">
-                        <MudButton @key="@e.Id" Class="mt-1 mb-1" Color="@GetSelectedEraClass(e)"
-                                   OnClick="() => OnEraClickAsync(e)">
-                            @e.Name
-                        </MudButton>
-                    </MudItem>
-                </MudVirtualize>
-            }
-            <MudButton OnClick="() => ToggleShowAllErasAsync(!showAllEras)" Color="Color.Secondary"
-                       Size="Size.Small">
-                @((showAllEras ? "See Less" : "Show More"))
-            </MudButton>
-        </MudItem>
-        <MudItem xs="12">
-            <MudText Typo="Typo.h6">Rating</MudText>
-            <MudDivider Class="mt-3 mb-3" />
-            <MudVirtualize Items="ratings" Context="r" OverscanCount="10">
-                <MudItem xs="12" @onclick="() => OnRatingClickAsync(r)">
-                    <MudRating SelectedValue="@GetRatingValue(r)" Color="@GetSelectedRating(r)" ReadOnly="true"/>
+                <MudText Typo="Typo.h6">Categories</MudText>
+                <MudDivider Class="mt-3 mb-3" />
+                <MudItem xs="12">
+                    <MudButton OnClick="() => OnCategoryClickAsync(null)" Color="@GetSelectedCategory()" Class="mt-1 mb-1">
+                        All
+                    </MudButton>
                 </MudItem>
-            </MudVirtualize>
-        </MudItem>
-    </MudItem>
-    <MudItem xs="9">
-        <MudItem>
-            <MudText Typo="Typo.h4" Class="fw-bold text-uppercase">
-                Artifacts
-            </MudText>
-            <MudText Typo="Typo.body1">
-                Our Artifacts appear in a wide range of variety! You just have to choose wisely!
-            </MudText>
-            <MudDivider />
-        </MudItem>
-        <MudItem Class="mt-5">
-            <MudGrid>
-                <MudItem xs="10">
-                    <MudText>@artifacts?.Count results</MudText>
-                </MudItem>
-                <MudItem xs="2">
-                    <MudSelect T="string" ValueChanged="((e) => OnSelectChange(e))"
-                               Label="Ordering" AnchorOrigin="Origin.BottomCenter">
-                        <MudSelectItem Value="@("rating")">Rating</MudSelectItem>
-                        <MudSelectItem Value="@("price")">Price &euro;</MudSelectItem>
-                    </MudSelect>
-                </MudItem>
-            </MudGrid>
-        </MudItem>
-        <MudItem>
-            <MudAutocomplete T="string" Label="Search"
-                             SearchFunc="SearchArtifactsAsync" ResetValueOnEmptyText="true"
-                             ValueChanged="OnSearchInputAsync"/>
-        </MudItem>
-        <MudDivider Class="mb-3 mt-3"/>
-        <MudItem>
-            <MudGrid Justify="Justify.Center">
-                @if (artifacts is not null)
+                @if (categories is not null)
                 {
-                    <MudVirtualize Items="artifacts" Context="a">
-                        <ArtifactTemplate @key="a.Id" Artifact="a" />
+                    <MudVirtualize Items="categories" Context="c" OverscanCount="10">
+                        <MudItem xs="12">
+                            <MudButton @key="@c.Id" Class="mt-1 mb-1" Color="@GetSelectedCategory(c)"
+                                       OnClick="() => OnCategoryClickAsync(c)">
+                                @c.Name
+                            </MudButton>
+                        </MudItem>
                     </MudVirtualize>
                 }
-            </MudGrid>
+                <MudButton OnClick="() => ToggleShowAllCategoriesAsync(!showAllCategories)" Color="Color.Secondary"
+                           Size="Size.Small">
+                    @((showAllCategories ? "See Less" : "Show More"))
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12">
+                <MudText Typo="Typo.h6">Eras</MudText>
+                <MudDivider Class="mt-3 mb-3" />
+                <MudItem xs="12">
+                    <MudButton OnClick="() => OnEraClickAsync(null)" Color="@GetSelectedEraClass()" Class="mt-1 mb-1">
+                        All
+                    </MudButton>
+                </MudItem>
+                @if (eras is not null)
+                {
+                    <MudVirtualize Items="eras" Context="e" OverscanCount="10">
+                        <MudItem xs="12">
+                            <MudButton @key="@e.Id" Class="mt-1 mb-1" Color="@GetSelectedEraClass(e)"
+                                       OnClick="() => OnEraClickAsync(e)">
+                                @e.Name
+                            </MudButton>
+                        </MudItem>
+                    </MudVirtualize>
+                }
+                <MudButton OnClick="() => ToggleShowAllErasAsync(!showAllEras)" Color="Color.Secondary"
+                           Size="Size.Small">
+                    @((showAllEras ? "See Less" : "Show More"))
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12">
+                <MudText Typo="Typo.h6">Rating</MudText>
+                <MudDivider Class="mt-3 mb-3" />
+                <MudVirtualize Items="ratings" Context="r" OverscanCount="10">
+                    <MudItem xs="12" @onclick="() => OnRatingClickAsync(r)">
+                        <MudRating SelectedValue="@GetRatingValue(r)" Color="@GetSelectedRating(r)" ReadOnly="true" />
+                    </MudItem>
+                </MudVirtualize>
+            </MudItem>
         </MudItem>
-    </MudItem>
-</MudGrid>
+        <MudItem xs="9">
+            <MudItem>
+                <MudText Typo="Typo.h4" Class="fw-bold text-uppercase">
+                    Artifacts
+                </MudText>
+                <MudText Typo="Typo.body1">
+                    Our Artifacts appear in a wide range of variety! You just have to choose wisely!
+                </MudText>
+                <MudDivider />
+            </MudItem>
+            <MudItem Class="mt-5">
+                <MudGrid>
+                    <MudItem xs="10">
+                        <MudText>@artifacts?.Count results</MudText>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudSelect T="string" ValueChanged="((e) => OnSelectChange(e))"
+                                   Label="Ordering" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem Value="@("rating")">Rating</MudSelectItem>
+                            <MudSelectItem Value="@("price")">Price &euro;</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem>
+                <MudAutocomplete T="string" Label="Search"
+                                 SearchFunc="SearchArtifactsAsync" ResetValueOnEmptyText="true"
+                                 ValueChanged="OnSearchInputAsync" />
+            </MudItem>
+            <MudDivider Class="mb-3 mt-3" />
+            <MudItem>
+                <MudGrid>
+                    @if (artifacts is not null)
+                    {
+                        <MudVirtualize Items="artifacts" Context="a">
+                            <ArtifactTemplate @key="a.Id" Artifact="a" />
+                        </MudVirtualize>
+                    }
+                </MudGrid>
+            </MudItem>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <LoadingTemplate />
+}
 
 @code {
     private CategoryModel selectedCategory;
@@ -130,7 +137,7 @@
     private bool showAllCategories = false;
     private bool showAllEras = false;
     private bool sortByPrice = false;
-    private bool isArtifactLoading = true;
+    private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -139,6 +146,8 @@
 
         await LoadCategoriesAsync();
         await LoadErasAsync();
+
+        isLoading = false;
     }
 
     private async Task LoadCategoriesAsync()
@@ -199,8 +208,7 @@
     }
 
     private async Task FilterArtifactsAsync()
-   {
-        isArtifactLoading = true;
+    {
         var output = await ArtifactEndpoint.GetAllArtifactsAsync();
 
         if (string.IsNullOrWhiteSpace(searchText) is false)
@@ -235,18 +243,16 @@
 
         artifacts = output;
         await SaveFilterStateAsync();
-
-        isArtifactLoading = false;
     }
 
     private async Task OnSearchInputAsync(string searchInput)
     {
+        searchText = searchInput;
+
         if (string.IsNullOrWhiteSpace(searchInput))
         {
             searchText = "";
         }
-
-        searchText = searchInput;
         await FilterArtifactsAsync();
     }
 
@@ -266,17 +272,12 @@
     {
         value = value.ToLower();
 
-        switch (value)
+        sortByPrice = value switch
         {
-            case "price":
-                sortByPrice = true;
-                break;
-            case "rating":
-                sortByPrice = false;
-                break;
-            default:
-                break;
-        }
+            "price" => true,
+            "rating" => false,
+            _ => false,
+        };
 
         await FilterArtifactsAsync();
     }
