@@ -9,132 +9,123 @@
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
-@if (isCreatingArtifact)
+@if (isCreatingArtifact is false)
 {
-    <LoadingTemplate Object="Loading.ArtifactCreate"/>
+    <MudGrid Class="mt-3 mb-5">
+        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+        {
+            <MudAlert Severity="Severity.Error" Elevation="3">
+                @errorMessage
+            </MudAlert>
+        }
+        <MudItem xs="12">
+            <EditForm Model="artifact" OnValidSubmit="CreateArtifactAsync">
+                <DataAnnotationsValidator />
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudCard>
+                            <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
+                                          Height="200" />
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
+                                        Create An Artifact
+                                    </MudText>
+                                </CardHeaderContent>
+                                <CardHeaderActions>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
+                                </CardHeaderActions>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <ValidationSummary />
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudTextField @bind-Value="artifact.Name" Label="Artifact Name"
+                                                      Required="true" Variant="Variant.Outlined" Clearable="true"
+                                                      HelperText="Enter the artifact's name."
+                                                      RequiredError="The artifact name is required." />
+                                    </MudItem>
+                                    <MudDivider Class="mt-3 mb-3" />
+                                    <MudItem xs="12">
+                                        <MudTextField @bind-Value="artifact.Description" Label="Artifact Description"
+                                                      Lines="2" Required="true" Variant="Variant.Outlined" Clearable="true"
+                                                      HelperText="Describe your artifact in 256 characters."
+                                                      RequiredError="The artifact description is required." />
+                                    </MudItem>
+
+                                    <MudItem xs="6">
+                                        <MudNumericField @bind-Value="artifact.Quantity" Label="Quantity" Required="true"
+                                                         Variant="Variant.Outlined" Clearable="true"
+                                                         HelperText="Please enter the quantity of artifacts you have available." />
+                                    </MudItem>
+
+                                    <MudItem xs="6">
+                                        <MudNumericField @bind-Value="artifact.Price" Label="Price" Required="true"
+                                                         Variant="Variant.Outlined" Clearable="true"
+                                                         HelperText="Please enter the price of the artifact in Euros." />
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudSelect @bind-Value="artifact.CategoryId" Variant="Variant.Outlined"
+                                                   Label="Select the suited category for the artifact.">
+                                            @if (categories is not null)
+                                            {
+                                                <MudVirtualize Items="categories" Context="c" OverscanCount="10">
+                                                    <MudSelectItem @key="@c.Id" Value="@c.Id">@c.Name</MudSelectItem>
+                                                </MudVirtualize>
+                                            }
+                                        </MudSelect>
+                                    </MudItem>
+
+                                    <MudItem xs="6">
+                                        <MudSelect @bind-Value="artifact.EraId" Variant="Variant.Outlined"
+                                                   Label="Select the correct era of the artifact.">
+                                            @if (eras is not null)
+                                            {
+                                                <MudVirtualize Items="eras" Context="e" OverscanCount="10">
+                                                    <MudSelectItem @key="@e.Id" Value="@e.Id">@e.Name</MudSelectItem>
+                                                </MudVirtualize>
+                                            }
+                                        </MudSelect>
+                                    </MudItem>
+                                </MudGrid>
+                                <MudGrid>
+                                    <MudDivider Class="mt-5 mb-7" />
+                                    <MudAutocomplete Label="Select the vendor you're portraying."
+                                                     SearchFunc="SearchVendorsAsync"
+                                                     ValueChanged="(e) => artifact.VendorId = e.Id" T="VendorModel"
+                                                     ToStringFunc="@(e => e==null?null : $"{e.Name}")"
+                                                     Variant="Variant.Outlined">
+                                        <NoItemsTemplate>
+                                            <MudText>No vendors with such name</MudText>
+                                        </NoItemsTemplate>
+                                    </MudAutocomplete>
+                                </MudGrid>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="HandleImageSelected" Context="file_context">
+                                    <ButtonTemplate>
+                                        <MudFab HtmlTag="label"
+                                                Color="Color.Secondary"
+                                                StartIcon="@Icons.Material.Filled.Image"
+                                                Label="Load picture"
+                                                for="@file_context" />
+                                    </ButtonTemplate>
+                                </MudFileUpload>
+                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                                           Color="Color.Primary" Class="ml-auto" Size="Size.Large">
+                                    Make Artifact
+                                </MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        </MudItem>
+    </MudGrid>
 }
 else
 {
-    <div class="container">
-        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
-        {
-            <div class="alert alert-danger">
-                @errorMessage
-            </div>
-        }
-        <h1 class="text-center fw-bold">Create the artifact</h1>
-        <div class="row">
-            <div class="col-12 justify-content-center">
-                <div class="row mb-4">
-                    <div class="d-flex justify-content-end">
-                        <button @onclick="ClosePage" class="btn btn-close"></button>
-                    </div>
-                    <div class="col-12">
-                        <EditForm Model="artifact" OnValidSubmit="CreateArtifactAsync">
-                            <DataAnnotationsValidator />
-                            <ValidationSummary />
-                            <div class="row">
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-name">Artifact Name</label>
-                                    <div id="artifact-name">Enter the artifact's name.</div>
-                                    <InputText @bind-Value="artifact.Name" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-description">Artifact Description</label>
-                                    <div id="artifact-name">Describe your artifact in 256 characters.</div>
-                                    <InputTextArea @bind-Value="artifact.Description" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-image">Artifact's image</label>
-                                    <div id="artifact-image">Select an image of your artifact.</div>
-                                    <InputFile OnChange="HandleImageSelected" accept="image/*" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-quantity">Quantity</label>
-                                    <div id="artifact-quantity">
-                                        Please enter the quantity of artifacts you have available.
-                                    </div>
-                                    <InputNumber @bind-Value="artifact.Quantity" class="form-control" />
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="artifact-price">Price</label>
-                                    <div id="artifact-price">
-                                        Please enter the price of the artifact in Euros.
-                                    </div>
-                                    <InputNumber @bind-Value="artifact.Price" class="form-control" />
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row mt-2">
-                                <div class="col-6">
-                                    <label class="form-label">Select a category.</label>
-                                    <InputSelect @bind-Value="artifact.CategoryId"
-                                                 class="form-select"
-                                                 aria-label="Select the suited category for the artifact.">
-                                        @if (categories is not null)
-                                        {
-                                            @foreach (var cat in categories)
-                                            {
-                                                <option @key="@cat.Id" value="@cat.Id">@cat.Name</option>
-                                            }
-                                        }
-                                    </InputSelect>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Select an era.</label>
-                                    <InputSelect @bind-Value="artifact.EraId"
-                                                 class="form-select"
-                                                 aria-label="Select the correct era of the artifact.">
-                                        @if (eras is not null)
-                                        {
-                                            @foreach (var e in eras)
-                                            {
-                                                <option @key="@e.Id" value="@e.Id">@e.Name</option>
-                                            }
-                                        }
-                                    </InputSelect>
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-12">
-                                    <label class="form-label">Select the vendor you're portraying</label>
-                                    <InputSelect @bind-Value="artifact.VendorId"
-                                                 class="form-select"
-                                                 aria-label="Select the vendor you're portraying.">
-                                        @if (vendors is not null)
-                                        {
-                                            @foreach (var v in vendors)
-                                            {
-                                                <option @key="@v.Id" value="@v.Id">@v.Name</option>
-                                            }
-                                        }
-                                    </InputSelect>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row mt-2">
-                                <div class="form-check">
-                                    <InputCheckbox @bind-Value="artifact.Availability"
-                                                   class="form-check-input"
-                                                   id="artifact-availability-check-box" />
-                                    <label class="form-check-label" for="artifact-availability-check-box">
-                                        Artifact is available
-                                    </label>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="text-center">
-                                <button type="submit"
-                                        class="btn btn-primary text-uppercase">
-                                    Create
-                                </button>
-                            </div>
-                        </EditForm>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <LoadingTemplate />
 }
 
 @code {
@@ -147,6 +138,7 @@ else
 
     private IBrowserFile selectedImageFile;
     private string errorMessage = "";
+    private string imageSource = "";
     private bool isCreatingArtifact = false;
 
     protected override async Task OnInitializedAsync()
@@ -160,14 +152,27 @@ else
         artifact.VendorId = vendors.FirstOrDefault().Id;
     }
 
+    private async Task<IEnumerable<VendorModel>> SearchVendorsAsync(string value)
+    {
+        var vendors = await VendorEndpoint.GetAllVendorsAsync();
+
+        return vendors.Where(v => v.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
     private void ClosePage()
     {
         Navigation.NavigateTo("/");
     }
 
-    private void HandleImageSelected(InputFileChangeEventArgs e)
+    private async Task HandleImageSelected(IBrowserFile e)
     {
-        selectedImageFile = e.File;
+        selectedImageFile = e;
+
+        using var stream = selectedImageFile.OpenReadStream(e.Size);
+        using var memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream);
+        byte[] bytes = memoryStream.ToArray();
+        imageSource = $"data:{selectedImageFile.ContentType};base64,{Convert.ToBase64String(bytes)}";
     }
 
     private bool IsArtifactInvalid(ArtifactModel artifact)
