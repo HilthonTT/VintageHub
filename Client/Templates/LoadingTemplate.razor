@@ -1,38 +1,8 @@
-﻿<div class="modal modal-dialog-centered" id="loadingModal" aria-labelledby="loadingModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loadingModalLabel">
-                    @GetTitle()
-                </h5>
-            </div>
-            <div class="modal-body text-center">
-                <div class="spinner-border text-primary text-center" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
+﻿
+<MudGrid Justify="Justify.Center" Class="centered-layout">
+    <MudItem Class="centered-layout" xs="12">
+        <div class="spinner-border centered-layout" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
-    </div>
-</div>
-
-@code {
-    [Parameter]
-    [EditorRequired]
-    public Loading Object { get; set; }
-
-    private string GetTitle()
-    {
-        string message = (Object) switch
-        {
-            Loading.ArtifactCreate => "we are currently creating your artifact.",
-            Loading.VendorCreate => "we are currently creating your vendor.",
-            Loading.OrderCreate => "we are currently submitting your order.",
-            Loading.ReviewCreate => "we are currently creating your review.",
-            Loading.Artifact => "we are loading the artifacts for you.",
-            Loading.Order => "we are loading the orders for you.",
-            _ => "this might take a while.",
-        };
-
-        return $"Please remain patient, {message}";
-    }
-}
+    </MudItem>
+</MudGrid>
