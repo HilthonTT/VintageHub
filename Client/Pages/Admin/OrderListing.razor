@@ -1,7 +1,5 @@
 ﻿@page "/Admin/OrderListing"
 @inject IOrderEndpoint OrderEndpoint
-@inject IUserEndpoint UserEndpoint
-@inject ISessionStorageService SessionStorage
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
@@ -16,8 +14,7 @@
                     Order Listing
                 </MudText>
                 <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage"/>
-            </div>
-            
+            </div>      
         </MudItem>
         <MudDivider Class=" mb-3" />
         <MudItem xs="12">
@@ -50,7 +47,7 @@
                             </CellTemplate>
                         </TemplateColumn>
                     </Columns>
-                    <PagerContent>
+                    <PagerContent> 
                         <MudDataGridPager T="OrderModel" />
                     </PagerContent>
                 </MudDataGrid>
@@ -65,16 +62,12 @@ else
 
 @code {
     private List<OrderModel> orders;
-    private UserModel selectedUser;
-    private bool sortByPrice = false;
     private bool isLoading = true;
     private int userId = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadFilterStateAsync();
-        await FilterOrdersAsync();
-
+        orders = await OrderEndpoint.GetAllOrdersAsync();
         isLoading = false;
     }
 
@@ -86,79 +79,6 @@ else
     private void LoadOrderDetailsPage(OrderModel order)
     {
         Navigation.NavigateTo($"/Admin/OrderDetails/{order.Id}");
-    }
-
-    private async Task LoadFilterStateAsync()
-    {
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var queryParameters = HttpUtility.ParseQueryString(uri.Query);
-
-        selectedUser = queryParameters["userId"] is not null
-            ? selectedUser = await UserEndpoint.GetUserByIdAsync(int.Parse(queryParameters["userId"]))
-            : selectedUser = await SessionStorage.GetItemAsync<UserModel>(nameof(selectedUser)) ?? null;
-
-        sortByPrice = queryParameters["sortByPrice"] is not null
-            ? sortByPrice = bool.Parse(queryParameters["sortByPrice"])
-            : sortByPrice = await SessionStorage.GetItemAsync<bool>(nameof(sortByPrice));
-    }
-
-    private async Task SaveFilterStateAsync()
-    {
-        await SessionStorage.SetItemAsync(nameof(selectedUser), selectedUser);
-        await SessionStorage.SetItemAsync(nameof(sortByPrice), sortByPrice);
-    }
-
-    private async Task FilterOrdersAsync()
-    {
-        var output = await OrderEndpoint.GetAllOrdersAsync();
-        output = output.Where(o => o.IsCanceled is false).ToList();
-
-        if (selectedUser is not null)
-        {
-            output = output.Where(o => o.UserId == selectedUser.Id).ToList();
-        }
-
-        output = sortByPrice
-            ? output.OrderByDescending(o => o.TotalPrice).ThenByDescending(o => o.DateOrdered).ToList()
-            : output.OrderByDescending(o => o.DateOrdered).ThenByDescending(o => o.TotalPrice).ToList();
-
-        orders = output;
-        await SaveFilterStateAsync();
-    }
-
-    private async Task OnUserClickAsync(UserModel user = null)
-    {
-        selectedUser = user;
-        await FilterOrdersAsync();
-    }
-
-    private async Task OnSelectChange(string value)
-    {
-        value = value.ToLower();
-
-        switch (value)
-        {
-            case "price":
-                sortByPrice = true;
-                break;
-            case "date-ordered":
-                sortByPrice = false;
-                break;
-            default:
-                break;
-        }
-
-        await FilterOrdersAsync();
-    }
-
-    private string GetSelectedUser(UserModel user = null)
-    {
-        if (user?.Id == selectedUser?.Id)
-        {
-            return "text-success";
-        }
-
-        return "";
     }
 
     private Func<OrderModel, bool> quickFilter => x =>
