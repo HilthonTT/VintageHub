@@ -1,4 +1,5 @@
 ﻿using Client.Library.Endpoints.Interfaces;
+using Client.Library.LocalStorage.Interfaces;
 using Client.Library.Models;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System.Net.Http.Json;
@@ -6,23 +7,36 @@ using System.Net.Http.Json;
 namespace Client.Library.Endpoints;
 public class UserEndpoint : IUserEndpoint
 {
+    private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
+    private const string CacheName = nameof(UserEndpoint);
+    private const string CacheNameSingle = $"{CacheName}_Single";
     private const string ApiEndpointUrl = "api/User";
     private readonly HttpClient _httpClient;
+    private readonly ILocalStorage _localStorage;
 
-    public UserEndpoint(HttpClient httpClient)
+    public UserEndpoint(
+        HttpClient httpClient,
+        ILocalStorage localStorage)
     {
         _httpClient = httpClient;
+        _localStorage = localStorage;
     }
 
     public async Task<List<UserModel>> GetAllUsersAsync()
     {
         try
         {
-            using var response = await _httpClient.GetAsync(ApiEndpointUrl);
-            response.EnsureSuccessStatusCode();
+            var output = await _localStorage.GetAsync<List<UserModel>>(CacheName);
+            if (output is null)
+            {
+                using var response = await _httpClient.GetAsync(ApiEndpointUrl);
+                response.EnsureSuccessStatusCode();
 
-            var users = await response.Content.ReadFromJsonAsync<List<UserModel>>();
-            return users;
+                output = await response.Content.ReadFromJsonAsync<List<UserModel>>();
+                await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
+            }
+ 
+            return output;
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -40,11 +54,23 @@ public class UserEndpoint : IUserEndpoint
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
-            response.EnsureSuccessStatusCode();
+            var cachedUsers = await _localStorage.GetAsync<List<UserModel>>(CacheNameSingle);
+            cachedUsers ??= new();
 
-            var user = await response.Content.ReadFromJsonAsync<UserModel>();
-            return user;
+            var cachedUser = cachedUsers.FirstOrDefault(x => x.Id == id);
+
+            if (cachedUser is null)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
+                response.EnsureSuccessStatusCode();
+
+                cachedUser = await response.Content.ReadFromJsonAsync<UserModel>();
+
+                cachedUsers.Add(cachedUser);
+                await _localStorage.SetAsync(CacheNameSingle, cachedUsers, CacheTimeSpan);
+            }
+      
+            return cachedUser;
         }
         catch (AccessTokenNotAvailableException ex)
         {
