@@ -8,6 +8,8 @@
 @inject AuthenticationStateProvider AuthProvider
 @attribute [Authorize(Policy = "Admin")]
 
+<PageTitle>Sample Data</PageTitle>
+
 <MudGrid>
     @if (string.IsNullOrWhiteSpace(errorMessage) is false)
     {

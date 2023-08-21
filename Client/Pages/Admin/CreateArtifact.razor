@@ -9,6 +9,8 @@
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
+<PageTitle>Create An Artifact</PageTitle>
+
 @if (isCreatingArtifact is false && viewPreview is false)
 {
     <MudGrid Class="mt-3 mb-5">

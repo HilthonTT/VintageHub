@@ -8,6 +8,8 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
+<PageTitle>@vendor?.Name</PageTitle>
+
 @if (isLoading is false)
 {
     <MudGrid Class="mb-4">
