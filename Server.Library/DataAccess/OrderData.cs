@@ -27,7 +27,7 @@ public class OrderData : IOrderData
 
     private static string GetOrderDetailsStoredProcedure(string operation)
     {
-        return $"dbo.spOrderDetails_Insert";
+        return $"dbo.spOrderDetails_{operation}";
     }
 
     private static object GetOrderInsertParams(OrderModel order)

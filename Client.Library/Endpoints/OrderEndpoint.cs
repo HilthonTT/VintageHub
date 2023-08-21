@@ -107,6 +107,7 @@ public class OrderEndpoint : IOrderEndpoint
         try
         {
             var cachedOrders = await _localStorage.GetAsync<List<OrderModel>>(CacheNameSingle);
+            cachedOrders ??= new();
 
             var cachedOrder = cachedOrders.FirstOrDefault(o => o.Id == id);
             if (cachedOrder is null)
