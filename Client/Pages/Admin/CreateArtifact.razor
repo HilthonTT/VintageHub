@@ -44,8 +44,7 @@
                                     <MudItem xs="12">
                                         <MudTextField @bind-Value="artifact.Name" Label="Artifact Name"
                                                       Required="true" Variant="Variant.Outlined" Clearable="true"
-                                                      HelperText="Enter the artifact's name."
-                                                      RequiredError="The artifact name is required." />
+                                                      HelperText="Enter the artifact's name." />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.Name" />
                                         </MudText>
@@ -53,8 +52,7 @@
                                     <MudItem xs="12">
                                         <MudTextField @bind-Value="artifact.Description" Label="Artifact Description"
                                                       Lines="2" Required="true" Variant="Variant.Outlined" Clearable="true"
-                                                      HelperText="Describe your artifact in 256 characters."
-                                                      RequiredError="The artifact description is required." />
+                                                      HelperText="Describe your artifact in 256 characters."/>
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.Description" />
                                         </MudText>
@@ -107,10 +105,11 @@
                                         </MudText>
                                     </MudItem>
                                     <MudItem xs="12">
-                                        <MudAutocomplete Label="Select the vendor you're portraying."
+                                        <MudAutocomplete Label="Artifact Owner"
+                                                         HelperText="Select the vendor you're portraying."
                                                          SearchFunc="SearchVendorsAsync"
                                                          ValueChanged="(e) => artifact.VendorId = e.Id" T="VendorModel"
-                                                         ToStringFunc="@(e => e==null?null : $"{e.Name}")"
+                                                         ToStringFunc="@(e => e==null?null : $"{e.Name} - {e.Id}")"
                                                          Variant="Variant.Outlined">
                                             <NoItemsTemplate>
                                                 <MudText>No vendors with such name</MudText>
@@ -235,15 +234,27 @@ else
         selectedVendor = vendors.FirstOrDefault(v => v.Id == artifact.VendorId);
     }
 
+    private async Task LoadImageSourceAsync()
+    {
+        if (selectedImageFile is null)
+        {
+            return;
+        }
+
+        using var stream = selectedImageFile.OpenReadStream(selectedImageFile.Size);
+        using var memoryStream = new MemoryStream();
+
+        await stream.CopyToAsync(memoryStream);
+        byte[] bytes = memoryStream.ToArray();
+
+        imageSource = $"data:{selectedImageFile.ContentType};base64,{Convert.ToBase64String(bytes)}";
+    }
+
     private async Task HandleImageSelected(IBrowserFile e)
     {
         selectedImageFile = e;
 
-        using var stream = selectedImageFile.OpenReadStream(e.Size);
-        using var memoryStream = new MemoryStream();
-        await stream.CopyToAsync(memoryStream);
-        byte[] bytes = memoryStream.ToArray();
-        imageSource = $"data:{selectedImageFile.ContentType};base64,{Convert.ToBase64String(bytes)}";
+        await LoadImageSourceAsync();
     }
 
     private bool IsArtifactInvalid(ArtifactModel artifact)

@@ -6,101 +6,113 @@
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
-@if (isCreatingVendor)
+
+@if (isCreatingVendor is false)
 {
-    <LoadingTemplate Object="Loading.VendorCreate" />
+    <MudGrid Class="mt-3 mb-5">
+        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+        {
+            <MudAlert Severity="Severity.Error" Elevation="3">
+                @errorMessage
+            </MudAlert>
+        }
+        <MudItem xs="12">
+            <EditForm Model="vendor" OnValidSubmit="CreateVendorAsync">
+                <DataAnnotationsValidator />
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudCard>
+                            <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
+                                          Height="200" />
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
+                                        Create A Vendor
+                                    </MudText>
+                                </CardHeaderContent>
+                                <CardHeaderActions>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
+                                </CardHeaderActions>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudTextField @bind-Value="vendor.Name" Label="Vendor Name"
+                                                      Required="true" Variant="Variant.Outlined" Clearable="true"
+                                                      HelperText="Enter the vendor's name." />
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => vendor.Name" />
+                                        </MudText>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudTextField @bind-Value="vendor.Description" Label="Vendor Description"
+                                                      Lines="2" Required="true" Clearable="true" Variant="Variant.Outlined"
+                                                      HelperText="Describe the vendor. Who are they? What do they do? etc..." />
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => vendor.Description" />
+                                        </MudText>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudDatePicker @bind-Date="vendor.DateFounded" Label="Date Founded" Required="true"
+                                                       Clearable="true" Variant="Variant.Outlined"
+                                                       HelperText="Provide the date the vendor was founded." />
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => vendor.DateFounded" />
+                                        </MudText>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudAutocomplete Label="Vendor Owner" HelperText="Select the owner of the vendor."
+                                                         SearchFunc="SearchUserAsync" T="UserModel"
+                                                         ValueChanged="(u) => vendor.OwnerUserId = u.Id"
+                                                         ToStringFunc="@(u => u==null?null : $"{u.FirstName} {u.LastName} - {u.Id}")"
+                                                         Variant="Variant.Outlined">
+                                            <NoItemsTemplate>
+                                                <MudText>No users with such name</MudText>
+                                            </NoItemsTemplate>
+                                        </MudAutocomplete>
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => vendor.OwnerUserId" />
+                                        </MudText>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="HandleImageSelected" Context="file_context">
+                                    <ButtonTemplate>
+                                        <MudFab HtmlTag="label"
+                                                Color="Color.Secondary"
+                                                StartIcon="@Icons.Material.Filled.Image"
+                                                Label="Load picture"
+                                                for="@file_context" />
+                                    </ButtonTemplate>
+                                </MudFileUpload>
+                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                                           Color="Color.Primary" Class="ml-auto" Size="Size.Large">
+                                    Make Vendor
+                                </MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        </MudItem>
+    </MudGrid>
 }
 else
 {
-    <div class="container">
-        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
-        {
-            <div class="alert alert-danger">
-                @errorMessage
-            </div>
-        }
-        <h1 class="text-center fw-bold">Create the vendor</h1>
-        <div class="row">
-            <div class="col-12 justify-content-center">
-                <div class="row mb-4">
-                    <div class="d-flex justify-content-end">
-                        <button @onclick="ClosePage" class="btn btn-close"></button>
-                    </div>
-                    <div class="col-12">
-                        <EditForm Model="vendor" OnValidSubmit="CreateVendorAsync">
-                            <DataAnnotationsValidator />
-                            <ValidationSummary />
-                            <div class="row">
-                                <div class="col-9">
-                                    <div class="mt-2">
-                                        <label class="form-label" for="vendor-name">Vendor Name</label>
-                                        <div id="vendor-name" class="form-text">Enter the vendor's name.</div>
-                                        <InputText @bind-Value="vendor.Name" class="form-control" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <label class="form-label" for="vendor-description">Vendor Description</label>
-                                        <div id="vendor-description" class="form-text">Describe the vendor. Who are they, etc...</div>
-                                        <InputTextArea @bind-Value="vendor.Description" class="form-control"/>
-                                    </div>
-                                    <div class="mt-2">
-                                        <label class="form-label" for="vendor-logo">Logo</label>
-                                        <div id="vendor-logo" class="form-text">
-                                            <span>Select the logo for the vendor.</span>
-                                            <span class="text-danger">This is not required.</span>
-                                        </div>
-                                        <InputFile OnChange="HandleImageSelected" class="form-control" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <label class="form-label" for="vendor-date-founded">Date Founded</label>
-                                        <div id="vendor-date-founded" class="form-text">Provide the date the vendor was founded.</div>
-                                        <InputDate @bind-Value="vendor.DateFounded" class="form-control"/>
-                                    </div>
-                                    <div class="text-center mt-2">
-                                        <button type="submit" class="btn btn-primary text-uppercase">
-                                            Create
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="mt-2">
-                                        <label class="form-label" for="vendor-owner">Owner</label>
-                                        <div id="vendor-owner" class="form-text">Select the owner of the vendor.</div>
-                                        <input @oninput="(e) => FilterUsersAsync((string)e.Value)"
-                                               type="text" class="form-control" placeholder="Search" />
-                                        <hr />
-                                        <div class="text-center">
-                                            @if (users is not null)
-                                            {
-                                                <InputRadioGroup @bind-Value="vendor.OwnerUserId" class="form-check">
-                                                    <Virtualize Items="users" Context="u" OverscanCount="10">
-                                                        <div @key="@u.Id">
-                                                            <InputRadio Value="@u.Id" id="@u.Id" class="form-check-input" />
-                                                            <label for="@u.Id" class="form-check-label">
-                                                                @u.FirstName @u.LastName - @u.Id
-                                                            </label>
-                                                        </div>
-                                                    </Virtualize>
-                                                </InputRadioGroup>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </EditForm>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <LoadingTemplate />
 }
+
 
 @code {
     private const long MaxFileSize = 1024 * 1024 * 5; // represents 5MB
 
     private CreateVendorModel vendor = new();
     private List<UserModel> users;
+    private UserModel selectedUser;
     private IBrowserFile selectedImageFile;
-    private string errorMessage = ""; 
+    private string errorMessage = "";
+    private string imageSource = "";
     private bool isCreatingVendor = false;
 
     protected override async Task OnInitializedAsync()
@@ -108,14 +120,40 @@ else
         users = await UserEndpoint.GetAllUsersAsync();
     }
 
+    private async Task<IEnumerable<UserModel>> SearchUserAsync(string value)
+    {
+        var users = await UserEndpoint.GetAllUsersAsync();
+
+        return users.Where(u => u.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase) ||
+            u.LastName.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
     private void ClosePage()
     {
         Navigation.NavigateTo("/");
     }
 
-    private void HandleImageSelected(InputFileChangeEventArgs e)
+    private async Task LoadImageSourceAsync()
     {
-        selectedImageFile = e.File;
+        if (selectedImageFile is null)
+        {
+            return;
+        }
+
+        using var stream = selectedImageFile.OpenReadStream(selectedImageFile.Size);
+        using var memoryStream = new MemoryStream();
+
+        await stream.CopyToAsync(memoryStream);
+        byte[] bytes = memoryStream.ToArray();
+
+        imageSource = $"data:{selectedImageFile.ContentType};base64,{Convert.ToBase64String(bytes)}";
+    }
+
+    private async Task HandleImageSelected(IBrowserFile e)
+    {
+        selectedImageFile = e;
+
+        await LoadImageSourceAsync();
     }
 
     private bool IsVendorInvalid(VendorModel vendor)
@@ -162,7 +200,7 @@ else
             Name = vendor.Name,
             ImageId = "",
             Description = vendor.Description,
-            DateFounded = vendor.DateFounded,
+            DateFounded = vendor.DateFounded.GetValueOrDefault(),
         };
 
         var selectedUser = users.Where(u => u.Id == newVendor.OwnerUserId).FirstOrDefault();

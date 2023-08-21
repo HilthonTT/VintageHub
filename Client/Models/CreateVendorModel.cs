@@ -17,5 +17,5 @@ public class CreateVendorModel
 
     [Required]
     [Display(Name = "Date Founded")]
-    public DateTime DateFounded { get; set; } = DateTime.Now;
+    public DateTime? DateFounded { get; set; } = DateTime.Now;
 }
