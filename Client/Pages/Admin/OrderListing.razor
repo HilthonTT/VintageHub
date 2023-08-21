@@ -27,7 +27,7 @@
                         <MudText Typo="Typo.h6">Orders</MudText>
                         <MudSpacer />
                         <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
-                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Min="0" />
+                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
                     </ToolBarContent>
                     <Columns>
                         <SelectColumn T="OrderDataModel" />
@@ -68,7 +68,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await GetOrdersAsync();
+        await LoadOrdersAsync();
         isLoading = false;
     }
 
@@ -82,7 +82,7 @@ else
         Navigation.NavigateTo($"/Admin/OrderDetails/{order.Id}");
     }
 
-    private async Task GetOrdersAsync()
+    private async Task LoadOrdersAsync()
     {
         var orderList = await OrderEndpoint.GetAllOrdersAsync();
         var list = new List<OrderDataModel>();

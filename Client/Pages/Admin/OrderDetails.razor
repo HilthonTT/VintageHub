@@ -7,63 +7,55 @@
 
 <PageTitle>Order Details</PageTitle>
 
-<div class="container mb-5">
-    <div>
-        <h1>@userFullName's Order</h1>
-        <div class="text-muted">
-            You are currently looking at @userFullName's order with @totalItems total items.
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-end">
-                <button @onclick="ClosePage" class="btn btn-close"></button>
+@if (isLoading is false)
+{
+    <MudGrid Class="mt-3 mb-5">
+        <MudItem xs="12">
+            <div class="d-flex justify-content-between">
+                <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
+                    Order Details of @userFullName
+                </MudText>
+                <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage"/>
             </div>
-            <div class="row">
-                <div class="d-flex justify-content-between">
-                    <div class="w-25">
-                        <InputSelect @bind-Value="completeOption" @onchange="((e) => ToggleComplete((string)e.Value))"
-                                class="form-select" aria-label="Select if the order is complete or not.">
-                            <option value="complete">Complete the order</option>
-                            <option value="incomplete">Purse the order</option>
-                        </InputSelect>
-                    </div>
-                    <div class="w-25">
-                        <InputSelect @bind-Value="cancelOption" @onchange="((e) => ToggleCancel((string)e.Value))"
-                                     class="form-select" aria-label="Select if the order is canceled ot not.">
-                            <option value="cancel">Cancel the order</option>
-                            <option value="pursue">Pursue the order</option>
-                        </InputSelect>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end mt-1">
-                    <button @onclick="UpdateOrderAsync" class="btn btn-primary" disabled="@IsUpdateAvailable()">
-                        Update Order
-                    </button>
-                </div>
-            </div>
-            <hr />
-            <div class="row mt-2">
-                <h2 class="h5 text-start fw-bold text-uppercase">
-                    Order Details
-                </h2>
-                <hr />
-                @if (orderDetails is not null)
-                {
-                    <Virtualize Items="orderDetails" Context="o" OverscanCount="10">
-                        <div @key="o.Id">
-                            @o.ArtifactId - @o.Quantity
-                        </div>
-                    </Virtualize>
-                }
-                else
-                {
-                    <LoadingTemplate Object="Loading.Order"/>
-                }
-            </div>
-        </div>
-    </div>
-</div>
+        </MudItem>
+        <MudDivider Class="mb-3"/>
+        <MudItem xs="12">
+            @if (orderDetails is not null)
+            {
+                <MudDataGrid T="OrderDetailsDataModel" Items="orderDetails" Filterable="true" SortMode="SortMode.Multiple"
+                             Hideable="true" Bordered="true" Hover="true" Striped="true" QuickFilter="quickFilter"
+                             EditMode="@(isCellEditMode ? DataGridEditMode.Cell : DataGridEditMode.Form)"
+                             EditTrigger="@(editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)"
+                             CommittedItemChanges="(e) => UpdateOrderAsync(e)">
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">Order Details</MudText>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
+                    </ToolBarContent>
+                    <Columns>
+                        <SelectColumn T="OrderDetailsDataModel"/>
+                        <PropertyColumn Property="x => x.OrderDetails.Id" Title="Id" Sortable="false" Filterable="false"/>
+                        <PropertyColumn Property="x => x.Artifact.Name" Title="Artifact Name"/>
+                        <PropertyColumn Property="x => x.OrderDetails.Quantity" Title="Quantity"/>
+                        <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" />
+                        <PropertyColumn Property="x => x.OrderDetails.Quantity" Title="Total Quantity"/>
+                        <TemplateColumn Hidden="@(isCellEditMode || readOnly || editTriggerRowClick)" CellClass="d-flex justify-end">
+                            <CellTemplate>
+                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit"
+                                               OnClick="@context.Actions.StartEditingItemAsync" />
+                            </CellTemplate>
+                        </TemplateColumn>
+                    </Columns>
+                </MudDataGrid>
+            }
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <LoadingTemplate />
+}
 
 @code {
     [Parameter]
@@ -72,25 +64,48 @@
     private UpdateOrderModel updatedOrder = new();
     private OrderModel order;
     private UserModel user;
-    private List<OrderDetailsModel> orderDetails;
+    private List<OrderDetailsDataModel> orderDetails;
 
-    private string completeOption = "";
-    private string cancelOption = "";
+    private string searchText = "";
     private string userFullName = "";
 
     private decimal totalPrice = 0;
     private int totalItems = 0;
+
+    private bool isLoading = true;
+    private bool readOnly;
+    private bool isCellEditMode;
+    private bool editTriggerRowClick;
 
     protected override async Task OnInitializedAsync()
     {
         order = await OrderEndpoint.GetOrderByIdAsync(Id);
         updatedOrder = new(order);
 
-        orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(Id);
+        await LoadOrderDetailsAsync();
+        await CalculatePriceAndItems();
+
         user = await UserEndpoint.GetUserByIdAsync(order.UserId);
         userFullName = $"{user?.FirstName} {user?.LastName}";
 
-        CalculatePriceAndItems();
+        isLoading = false;
+    }
+
+    private async Task LoadOrderDetailsAsync()
+    {
+        var orderDetailsList = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(Id);
+        var list = new List<OrderDetailsDataModel>();
+
+        foreach (var o in orderDetailsList)
+        {
+            var data = new OrderDetailsDataModel(o);
+            data.Artifact = await ArtifactEndpoint.GetArtifactByIdAsync(o.ArtifactId);
+            data.TotalPrice = (decimal)o.Quantity * data.Artifact.Price;
+
+            list.Add(data);
+        }
+
+        orderDetails = list.ToList();
     }
 
     private void ClosePage()
@@ -98,31 +113,7 @@
         Navigation.NavigateTo("/Admin/OrderListing");
     }
 
-    private void ToggleComplete(string option)
-    {
-        completeOption = option;
-
-        updatedOrder.IsComplete = completeOption switch
-        {
-            "complete" => true,
-            "incomplete" => false,
-            _ => false,
-        };
-    }
-
-    private void ToggleCancel(string option)
-    {
-        cancelOption = option;
-
-        updatedOrder.IsCanceled = cancelOption switch
-        {
-            "cancel" => true,
-            "pursue" => false,
-            _ => false,
-        };
-    }
-
-    private async void CalculatePriceAndItems()
+    private async Task CalculatePriceAndItems()
     {
         decimal price = 0;
         int itemCounts = 0;
@@ -131,12 +122,12 @@
 
         foreach (var item in orderDetails)
         {
-            if (uniqueArtifacts.ContainsKey(item.ArtifactId) is false)
+            if (uniqueArtifacts.ContainsKey(item.Artifact.Id) is false)
             {
-                uniqueArtifacts[item.ArtifactId] = 0;
+                uniqueArtifacts[item.Artifact.Id] = 0;
             }
 
-            uniqueArtifacts[item.ArtifactId] += item.Quantity;
+            uniqueArtifacts[item.Artifact.Id] += item.OrderDetails.Quantity;
         }
 
         foreach (var kvp in uniqueArtifacts)
@@ -150,15 +141,31 @@
         totalItems = itemCounts;
     }
 
-    private async Task UpdateOrderAsync()
+    private List<OrderDetailsModel> GetOrderDetailsList()
+    {
+        var list = new List<OrderDetailsModel>();
+
+        foreach (var item in orderDetails)
+        {
+            list.Add(item.OrderDetails);
+        }
+
+        return list;
+    }
+
+    private async Task UpdateOrderAsync(OrderDetailsDataModel orderDetailsData)
     {
         if (IsUpdateAvailable() is false)
         {
             return;
         }
 
-        order.IsComplete = updatedOrder.IsComplete;
-        order.IsCanceled = updatedOrder.IsCanceled;
+        var orderDetails = GetOrderDetailsList();
+        var details = orderDetails.FirstOrDefault(x => x.Id == orderDetailsData.OrderDetails.Id);
+        orderDetails.Remove(details);
+
+        details.Quantity = orderDetailsData.OrderDetails.Quantity;
+        orderDetails.Add(details);
 
         var request = new OrderRequestModel()
             {
@@ -185,4 +192,19 @@
 
         return false;
     }
+
+    private Func<OrderDetailsDataModel, bool> quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            return true;
+        }
+
+        if (x.Artifact.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
+    };
 }
