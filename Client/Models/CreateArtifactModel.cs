@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Client.Library.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace VintageHub.Client.Models;
 
 public class CreateArtifactModel
 {
-
     [Required(ErrorMessage = "Please provide the artifact's name.")]
     [StringLength(50, ErrorMessage = "The artifact's name must not exceed 50 characters.")]
     public string Name { get; set; }
@@ -13,8 +13,8 @@ public class CreateArtifactModel
     [StringLength(256, ErrorMessage = "The artifact's description must not exceed 256 characters.")]
     public string Description { get; set; }
 
-    [Display(Name = "Image URL")]
-    public string ImageUrl { get; set; } = "";
+    [Display(Name = "Image")]
+    public string ImageId { get; set; } = "";
 
     [Required(ErrorMessage = "Please provide the artifact's quantity.")]
     public int Quantity { get; set; }

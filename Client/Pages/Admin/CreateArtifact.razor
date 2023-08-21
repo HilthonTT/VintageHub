@@ -9,7 +9,7 @@
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
-@if (isCreatingArtifact is false)
+@if (isCreatingArtifact is false && viewPreview is false)
 {
     <MudGrid Class="mt-3 mb-5">
         @if (string.IsNullOrWhiteSpace(errorMessage) is false)
@@ -33,36 +33,49 @@
                                     </MudText>
                                 </CardHeaderContent>
                                 <CardHeaderActions>
+                                    <MudButton StartIcon="@Icons.Material.Filled.Preview" Color="Color.Info" OnClick="LoadPreview">
+                                        Load Preview
+                                    </MudButton>
                                     <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
                                 </CardHeaderActions>
                             </MudCardHeader>
                             <MudCardContent>
-                                <ValidationSummary />
                                 <MudGrid>
                                     <MudItem xs="12">
                                         <MudTextField @bind-Value="artifact.Name" Label="Artifact Name"
                                                       Required="true" Variant="Variant.Outlined" Clearable="true"
                                                       HelperText="Enter the artifact's name."
                                                       RequiredError="The artifact name is required." />
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => artifact.Name" />
+                                        </MudText>
                                     </MudItem>
-                                    <MudDivider Class="mt-3 mb-3" />
                                     <MudItem xs="12">
                                         <MudTextField @bind-Value="artifact.Description" Label="Artifact Description"
                                                       Lines="2" Required="true" Variant="Variant.Outlined" Clearable="true"
                                                       HelperText="Describe your artifact in 256 characters."
                                                       RequiredError="The artifact description is required." />
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => artifact.Description" />
+                                        </MudText>
                                     </MudItem>
 
                                     <MudItem xs="6">
                                         <MudNumericField @bind-Value="artifact.Quantity" Label="Quantity" Required="true"
                                                          Variant="Variant.Outlined" Clearable="true"
                                                          HelperText="Please enter the quantity of artifacts you have available." />
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => artifact.Quantity" />
+                                        </MudText>
                                     </MudItem>
 
                                     <MudItem xs="6">
                                         <MudNumericField @bind-Value="artifact.Price" Label="Price" Required="true"
                                                          Variant="Variant.Outlined" Clearable="true"
                                                          HelperText="Please enter the price of the artifact in Euros." />
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => artifact.Price" />
+                                        </MudText>
                                     </MudItem>
                                     <MudItem xs="6">
                                         <MudSelect @bind-Value="artifact.CategoryId" Variant="Variant.Outlined"
@@ -74,6 +87,9 @@
                                                 </MudVirtualize>
                                             }
                                         </MudSelect>
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => artifact.CategoryId" />
+                                        </MudText>
                                     </MudItem>
 
                                     <MudItem xs="6">
@@ -86,19 +102,24 @@
                                                 </MudVirtualize>
                                             }
                                         </MudSelect>
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => artifact.EraId" />
+                                        </MudText>
                                     </MudItem>
-                                </MudGrid>
-                                <MudGrid>
-                                    <MudDivider Class="mt-5 mb-7" />
-                                    <MudAutocomplete Label="Select the vendor you're portraying."
-                                                     SearchFunc="SearchVendorsAsync"
-                                                     ValueChanged="(e) => artifact.VendorId = e.Id" T="VendorModel"
-                                                     ToStringFunc="@(e => e==null?null : $"{e.Name}")"
-                                                     Variant="Variant.Outlined">
-                                        <NoItemsTemplate>
-                                            <MudText>No vendors with such name</MudText>
-                                        </NoItemsTemplate>
-                                    </MudAutocomplete>
+                                    <MudItem xs="12">
+                                        <MudAutocomplete Label="Select the vendor you're portraying."
+                                                         SearchFunc="SearchVendorsAsync"
+                                                         ValueChanged="(e) => artifact.VendorId = e.Id" T="VendorModel"
+                                                         ToStringFunc="@(e => e==null?null : $"{e.Name}")"
+                                                         Variant="Variant.Outlined">
+                                            <NoItemsTemplate>
+                                                <MudText>No vendors with such name</MudText>
+                                            </NoItemsTemplate>
+                                        </MudAutocomplete>
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => artifact.VendorId" />
+                                        </MudText>
+                                    </MudItem>
                                 </MudGrid>
                             </MudCardContent>
                             <MudCardActions>
@@ -123,6 +144,48 @@
         </MudItem>
     </MudGrid>
 }
+else if (viewPreview && isCreatingArtifact is false)
+{
+    <MudGrid Justify="Justify.Center" Class="mt-3 mb-5">
+        <MudItem xs="12">
+            <MudGrid Justify="Justify.Center">
+                <MudItem xs="12">
+                    <div class="d-flex justify-content-between">
+                        <MudText Typo="Typo.h5">This is a preview on how your artifact will look like in the store.</MudText>
+                        <MudButton Color="Color.Info" StartIcon="@Icons.Material.Filled.Close" OnClick="() => viewPreview = false">
+                            Close Preview
+                        </MudButton>
+                    </div>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudDivider Class="mt-3 mb-3" />
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="4">
+            <MudCard Class="m-2">
+                <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
+                              Height="200" alt="@artifact?.Name" />
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">@artifact?.Name</MudText>
+                    <MudText Typo="Typo.body2">@artifact?.Description</MudText>
+                    <MudDivider Class="mt-3 mb-3" />
+                    <MudText Typo="Typo.body2">This artifact is sold by: @selectedVendor?.Name</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Error"
+                               StartIcon="@Icons.Material.Filled.AddShoppingCart">
+                        Add to Cart
+                    </MudButton>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.Details">
+                        Learn More
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
 else
 {
     <LoadingTemplate />
@@ -135,11 +198,13 @@ else
     private List<CategoryModel> categories;
     private List<EraModel> eras;
     private List<VendorModel> vendors;
+    private VendorModel selectedVendor;
 
     private IBrowserFile selectedImageFile;
     private string errorMessage = "";
     private string imageSource = "";
     private bool isCreatingArtifact = false;
+    private bool viewPreview = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -162,6 +227,12 @@ else
     private void ClosePage()
     {
         Navigation.NavigateTo("/");
+    }
+
+    private void LoadPreview()
+    {
+        viewPreview = true;
+        selectedVendor = vendors.FirstOrDefault(v => v.Id == artifact.VendorId);
     }
 
     private async Task HandleImageSelected(IBrowserFile e)
