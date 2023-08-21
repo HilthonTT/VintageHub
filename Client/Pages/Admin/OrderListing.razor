@@ -1,5 +1,6 @@
 ﻿@page "/Admin/OrderListing"
 @inject IOrderEndpoint OrderEndpoint
+@inject IUserEndpoint UserEndpoint
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
@@ -16,7 +17,7 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage"/>
             </div>      
         </MudItem>
-        <MudDivider Class=" mb-3" />
+        <MudDivider Class="mb-3" />
         <MudItem xs="12">
             @if (orders is not null)
             {
@@ -25,21 +26,21 @@
                     <ToolBarContent>
                         <MudText Typo="Typo.h6">Orders</MudText>
                         <MudSpacer />
-                        <MudNumericField @bind-Value="userId" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                        <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Min="0" />
                     </ToolBarContent>
                     <Columns>
-                        <SelectColumn T="OrderModel" />
-                        <PropertyColumn Property="x => x.Id" Title="Id" Sortable="false" Filterable="false" />
-                        <PropertyColumn Property="x => x.UserId" Title="User Id" />
-                        <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" />
-                        <PropertyColumn Property="x => x.DateOrdered" Title="Date Ordered" />
-                        <PropertyColumn Property="x => x.IsComplete" Title="Completed" />
-                        <PropertyColumn Property="x => x.IsCanceled" Title="Canceled" />
+                        <SelectColumn T="OrderDataModel" />
+                        <PropertyColumn Property="x => x.Order.Id" Title="Id" Sortable="false" Filterable="false" />
+                        <PropertyColumn Property="x => x.UserFullName" Title="Buyer" />
+                        <PropertyColumn Property="x => x.Order.TotalPrice" Title="Total Price &euro;" />
+                        <PropertyColumn Property="x => x.Order.DateOrdered" Title="Date Ordered" />
+                        <PropertyColumn Property="x => x.Order.IsComplete" Title="Completed" />
+                        <PropertyColumn Property="x => x.Order.IsCanceled" Title="Canceled" />
                         <TemplateColumn>
                             <CellTemplate>
                                 <MudStack Row="true">
-                                    <MudButton OnClick="() => LoadOrderDetailsPage(context.Item)" Size="Size.Small"
+                                    <MudButton OnClick="() => LoadOrderDetailsPage(context.Item.Order)" Size="Size.Small"
                                                Variant="Variant.Filled" Color="Color.Primary">
                                         Open Order
                                     </MudButton>
@@ -47,8 +48,8 @@
                             </CellTemplate>
                         </TemplateColumn>
                     </Columns>
-                    <PagerContent> 
-                        <MudDataGridPager T="OrderModel" />
+                    <PagerContent>
+                        <MudDataGridPager T="OrderDataModel" />
                     </PagerContent>
                 </MudDataGrid>
             }
@@ -61,13 +62,13 @@ else
 }
 
 @code {
-    private List<OrderModel> orders;
+    private List<OrderDataModel> orders;
     private bool isLoading = true;
-    private int userId = 0;
+    private string searchText = "";
 
     protected override async Task OnInitializedAsync()
     {
-        orders = await OrderEndpoint.GetAllOrdersAsync();
+        await GetOrdersAsync();
         isLoading = false;
     }
 
@@ -81,14 +82,30 @@ else
         Navigation.NavigateTo($"/Admin/OrderDetails/{order.Id}");
     }
 
-    private Func<OrderModel, bool> quickFilter => x =>
+    private async Task GetOrdersAsync()
     {
-        if (userId <= 0)
+        var orderList = await OrderEndpoint.GetAllOrdersAsync();
+        var list = new List<OrderDataModel>();
+
+        foreach (var o in orderList)
+        {
+            var data = new OrderDataModel(o);
+            data.User = await UserEndpoint.GetUserByIdAsync(o.UserId);
+
+            list.Add(data);
+        }
+
+        orders = list.ToList();
+    }
+
+    private Func<OrderDataModel, bool> quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
         {
             return true;
         }
 
-        if (x.UserId == userId)
+        if (x.UserFullName.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
         {
             return true;
         }

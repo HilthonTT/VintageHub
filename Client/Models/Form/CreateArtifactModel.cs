@@ -1,7 +1,6 @@
-﻿using Client.Library.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace VintageHub.Client.Models;
+namespace VintageHub.Client.Models.Form;
 
 public class CreateArtifactModel
 {
