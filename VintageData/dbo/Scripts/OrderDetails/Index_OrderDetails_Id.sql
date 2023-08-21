@@ -1,0 +1,1 @@
+﻿CREATE UNIQUE INDEX IX_OrderDetails ON [dbo].[OrderDetails] ([Id]);

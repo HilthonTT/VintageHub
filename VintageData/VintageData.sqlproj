@@ -126,9 +126,8 @@
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetByVendorId.sql" />
     <Build Include="dbo\Scripts\Artifact\Index_Artifact_Id.sql" />
-    <Build Include="dbo\Scripts\OrderDetails\Index_OrderDetails_OrderId.sql" />
+    <Build Include="dbo\Scripts\OrderDetails\Index_OrderDetails_Id.sql" />
     <Build Include="dbo\Scripts\Order\Index_Order_Id.sql" />
-    <Build Include="dbo\Scripts\Order\Index_Order_UserId.sql" />
     <Build Include="dbo\Scripts\User\Index_User_Id.sql" />
     <Build Include="dbo\Scripts\User\Index_User_Oid.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_GetById.sql" />
