@@ -1,4 +1,5 @@
 ﻿@page "/Admin/OrderDetails/{Id:int}"
+@using System.Text.Json;
 @inject IOrderEndpoint OrderEndpoint
 @inject IUserEndpoint UserEndpoint
 @inject IArtifactEndpoint ArtifactEndpoint
@@ -13,7 +14,7 @@
         <MudItem xs="12">
             <div class="d-flex justify-content-between">
                 <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
-                    Order Details of @userFullName
+                    Order Details of order Id @order?.Id
                 </MudText>
                 <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage"/>
             </div>
@@ -22,11 +23,10 @@
         <MudItem xs="12">
             @if (orderDetails is not null)
             {
-                <MudDataGrid T="OrderDetailsDataModel" Items="orderDetails" Filterable="true" SortMode="SortMode.Multiple"
-                             Hideable="true" Bordered="true" Hover="true" Striped="true" QuickFilter="quickFilter"
-                             EditMode="@(isCellEditMode ? DataGridEditMode.Cell : DataGridEditMode.Form)"
-                             EditTrigger="@(editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)"
-                             CommittedItemChanges="(e) => UpdateOrderAsync(e)">
+                <MudDataGrid T="OrderDetailsDataModel" Items="orderDetails" ReadOnly="false" EditMode="DataGridEditMode.Form"
+                             StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges"
+                             Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual"
+                Filterable="true" QuickFilter="quickFilter">
                     <ToolBarContent>
                         <MudText Typo="Typo.h6">Order Details</MudText>
                         <MudSpacer />
@@ -35,12 +35,11 @@
                     </ToolBarContent>
                     <Columns>
                         <SelectColumn T="OrderDetailsDataModel"/>
-                        <PropertyColumn Property="x => x.OrderDetails.Id" Title="Id" Sortable="false" Filterable="false"/>
-                        <PropertyColumn Property="x => x.Artifact.Name" Title="Artifact Name"/>
-                        <PropertyColumn Property="x => x.OrderDetails.Quantity" Title="Quantity"/>
-                        <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" />
-                        <PropertyColumn Property="x => x.OrderDetails.Quantity" Title="Total Quantity"/>
-                        <TemplateColumn Hidden="@(isCellEditMode || readOnly || editTriggerRowClick)" CellClass="d-flex justify-end">
+                        <PropertyColumn Property="x => x.Id" Title="Id" Sortable="false" Filterable="false" IsEditable="false" />
+                        <PropertyColumn Property="x => x.Artifact.Name" Title="Artifact Name" IsEditable="false"/>
+                        <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" IsEditable="false"/>
+                        <PropertyColumn Property="x => x.Quantity" Title="Total Quantity" IsEditable="true"/>
+                        <TemplateColumn CellClass="d-flex justify-end">
                             <CellTemplate>
                                 <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit"
                                                OnClick="@context.Actions.StartEditingItemAsync" />
@@ -63,19 +62,13 @@ else
 
     private UpdateOrderModel updatedOrder = new();
     private OrderModel order;
-    private UserModel user;
     private List<OrderDetailsDataModel> orderDetails;
+    private List<string> events = new();
 
     private string searchText = "";
-    private string userFullName = "";
-
     private decimal totalPrice = 0;
     private int totalItems = 0;
-
     private bool isLoading = true;
-    private bool readOnly;
-    private bool isCellEditMode;
-    private bool editTriggerRowClick;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,9 +77,6 @@ else
 
         await LoadOrderDetailsAsync();
         await CalculatePriceAndItems();
-
-        user = await UserEndpoint.GetUserByIdAsync(order.UserId);
-        userFullName = $"{user?.FirstName} {user?.LastName}";
 
         isLoading = false;
     }
@@ -127,7 +117,7 @@ else
                 uniqueArtifacts[item.Artifact.Id] = 0;
             }
 
-            uniqueArtifacts[item.Artifact.Id] += item.OrderDetails.Quantity;
+            uniqueArtifacts[item.Artifact.Id] += item.Quantity;
         }
 
         foreach (var kvp in uniqueArtifacts)
@@ -147,24 +137,39 @@ else
 
         foreach (var item in orderDetails)
         {
-            list.Add(item.OrderDetails);
+            var details = new OrderDetailsModel
+            {
+                Id = item.Id,
+                ArtifactId = item.ArtifactId,
+                OrderId = item.OrderId,
+                Quantity = item.Quantity
+            };
+
+            list.Add(details);
         }
 
         return list;
     }
 
-    private async Task UpdateOrderAsync(OrderDetailsDataModel orderDetailsData)
+    private void StartedEditingItem(OrderDetailsDataModel item)
     {
-        if (IsUpdateAvailable() is false)
-        {
-            return;
-        }
+        events.Insert(0, $"Event = StartedEditingItem, Data = {JsonSerializer.Serialize(item)}");
+    }
+
+    private void CanceledEditingItem(OrderDetailsDataModel item)
+    {
+        events.Insert(0, $"Event = CanceledEditingItem, Data = {JsonSerializer.Serialize(item)}");
+    }
+
+    private async Task CommittedItemChanges(OrderDetailsDataModel item)
+    {
+        events.Insert(0, $"Event = CommittedItemChanges, Data = {JsonSerializer.Serialize(item)}");
 
         var orderDetails = GetOrderDetailsList();
-        var details = orderDetails.FirstOrDefault(x => x.Id == orderDetailsData.OrderDetails.Id);
+        var details = orderDetails.FirstOrDefault(x => x.Id == item.Id);
         orderDetails.Remove(details);
 
-        details.Quantity = orderDetailsData.OrderDetails.Quantity;
+        details.Quantity = item.Quantity;
         orderDetails.Add(details);
 
         var request = new OrderRequestModel()
@@ -174,23 +179,6 @@ else
             };
 
         await OrderEndpoint.UpdateOrderAsync(request);
-    }
-
-    private async Task DeleteOrderAsync()
-    {
-        await OrderEndpoint.DeleteOrderAsync(order);
-        ClosePage();
-    }
-
-    private bool IsUpdateAvailable()
-    {
-        if (updatedOrder.IsCanceled != order.IsCanceled ||
-            updatedOrder.IsComplete != order.IsComplete)
-        {
-            return true;
-        }
-
-        return false;
     }
 
     private Func<OrderDetailsDataModel, bool> quickFilter => x =>
