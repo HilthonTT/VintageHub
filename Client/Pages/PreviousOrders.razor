@@ -7,6 +7,72 @@
 
 <PageTitle>My Previous Orders</PageTitle>
 
+@if (isLoading is false)
+{
+    <MudGrid Class="mt-3 mb-5">
+        <MudItem xs="12">
+            <div class="d-flex justify-content-between">
+                <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
+                    My Previous Orders
+                </MudText>
+                <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
+            </div>
+        </MudItem>
+        <MudDivider Class="mb-3" />
+        <MudItem xs="12">
+            @if (orders is not null)
+            {
+                <MudDataGrid T="OrderDataModel" Items="orders" Filterable="true" SortMode="SortMode.Multiple" ReadOnly="false"
+                             Hideable="true" Bordered="true" Hover="true" Striped="true" QuickFilter="quickFilter"
+                             EditTrigger="DataGridEditTrigger.Manual" CommittedItemChanges="UpdateOrderAsync">
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">Orders</MudText>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
+                    </ToolBarContent>
+                    <Columns>
+                        <SelectColumn T="OrderDataModel" />
+                        <PropertyColumn Property="x => x.Id" Title="Id" Sortable="false" Filterable="false" IsEditable="false" />
+                        <PropertyColumn Property="x => x.UserFullName" Title="Buyer" IsEditable="false" />
+                        <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" IsEditable="false" />
+                        <PropertyColumn Property="x => x.DateOrdered" Title="Date Ordered" IsEditable="false" />
+                        <PropertyColumn Property="x => x.IsComplete" Title="Completed" IsEditable="true">
+                            <EditTemplate>
+                                <MudCheckBox @bind-Checked="@context.Item.IsComplete" Color="Color.Primary" Label="Completed" />
+                            </EditTemplate>
+                        </PropertyColumn>
+                        <PropertyColumn Property="x => x.IsCanceled" Title="Canceled" IsEditable="true">
+                            <EditTemplate>
+                                <MudCheckBox @bind-Checked="@context.Item.IsCanceled" Color="Color.Primary" Label="Canceled" />
+                            </EditTemplate>
+                        </PropertyColumn>
+                        <TemplateColumn>
+                            <CellTemplate>
+                                <MudStack Row="true">
+                                    <MudButton OnClick="() => LoadOrderDetailsPage(context.Item)" Size="Size.Small"
+                                               Variant="Variant.Filled" Color="Color.Primary">
+                                        Open Order
+                                    </MudButton>
+                                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit"
+                                                   OnClick="@context.Actions.StartEditingItemAsync" />
+                                </MudStack>
+                            </CellTemplate>
+                        </TemplateColumn>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="OrderDataModel" />
+                    </PagerContent>
+                </MudDataGrid>
+            }
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <LoadingTemplate />
+}
+
 @code {
     private UserModel loggedInUser;
     private ObservableCollection<OrderDataModel> orders;
@@ -27,7 +93,7 @@
         Navigation.NavigateTo("/");
     }
 
-    private void LoadOrderDetails(OrderDataModel order)
+    private void LoadOrderDetailsPage(OrderDataModel order)
     {
         Navigation.NavigateTo($"/Order/Details/{order.Id}");
     }
@@ -53,14 +119,14 @@
         orders.Remove(order);
 
         var updatedOrder = new OrderModel
-        {
-            Id = order.Id,
-            UserId = order.UserId,
-            TotalPrice = order.TotalPrice,
-            IsCanceled = order.IsCanceled,
-            IsComplete = order.IsComplete,
-            DateOrdered = order.DateOrdered,
-        };
+            {
+                Id = order.Id,
+                UserId = order.UserId,
+                TotalPrice = order.TotalPrice,
+                IsCanceled = order.IsCanceled,
+                IsComplete = order.IsComplete,
+                DateOrdered = order.DateOrdered,
+            };
 
         var orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(updatedOrder.Id);
         var request = new OrderRequestModel(updatedOrder, orderDetails);
