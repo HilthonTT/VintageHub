@@ -18,7 +18,7 @@
             </MudAlert>
         }
         <MudItem xs="12">
-            <EditForm Model="review" OnValidSubmit="CreateReviewAsync" EditContext="editContext">
+            <EditForm Model="review" OnValidSubmit="CreateReviewAsync">
                 <DataAnnotationsValidator />
                 <MudCard>
                     <MudCardHeader>
@@ -41,6 +41,9 @@
                                               Required="true" Variant="Variant.Outlined"
                                               RequiredError="The title is required." 
                                               Clearable="true"/>
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => review.Title"/>
+                                </MudText>
                             </MudItem>
                             <MudDivider Class="mt-5 mb-7"/>
                             <MudItem>
@@ -48,12 +51,18 @@
                                               Required="true" Lines="2" Variant="Variant.Outlined"
                                               RequiredError="The description is required." 
                                               Clearable="true"/>
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => review.Description"/>
+                                </MudText>
                             </MudItem>
                         </MudItem>
                         <MudDivider Class="mt-3 mb-3"/>
                         <MudText Typo="Typo.subtitle1">Your Rating.</MudText>
                         <MudItem xs="12">
                             <MudRating SelectedValue="(int)review.Rating" Size="Size.Large" MaxValue="5"></MudRating>
+                            <MudText Color="Color.Error">
+                                <ValidationMessage For="() => review.Rating"/>
+                            </MudText>
                         </MudItem>
                     </MudCardContent>
                     <MudCardActions>
@@ -76,7 +85,6 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private EditContext editContext;
     private CreateReviewModel review = new();
     private UserModel loggedInUser;
     private ArtifactModel artifact;
