@@ -21,8 +21,9 @@
         <MudItem xs="12">
             @if (orders is not null)
             {
-                <MudDataGrid Items="orders" Filterable="true" SortMode="SortMode.Multiple"
-                             Hideable="true" Bordered="true" Hover="true" Striped="true" QuickFilter="quickFilter">
+                <MudDataGrid T="OrderDataModel" Items="orders" Filterable="true" SortMode="SortMode.Multiple" ReadOnly="false"
+                             Hideable="true" Bordered="true" Hover="true" Striped="true" QuickFilter="quickFilter"
+                             EditTrigger="DataGridEditTrigger.Manual" CommittedItemChanges="UpdateOrderAsync">
                     <ToolBarContent>
                         <MudText Typo="Typo.h6">Orders</MudText>
                         <MudSpacer />
@@ -31,19 +32,29 @@
                     </ToolBarContent>
                     <Columns>
                         <SelectColumn T="OrderDataModel" />
-                        <PropertyColumn Property="x => x.Order.Id" Title="Id" Sortable="false" Filterable="false" />
-                        <PropertyColumn Property="x => x.UserFullName" Title="Buyer" />
-                        <PropertyColumn Property="x => x.Order.TotalPrice" Title="Total Price &euro;" />
-                        <PropertyColumn Property="x => x.Order.DateOrdered" Title="Date Ordered" />
-                        <PropertyColumn Property="x => x.Order.IsComplete" Title="Completed" />
-                        <PropertyColumn Property="x => x.Order.IsCanceled" Title="Canceled" />
+                        <PropertyColumn Property="x => x.Id" Title="Id" Sortable="false" Filterable="false" IsEditable="false"/>
+                        <PropertyColumn Property="x => x.UserFullName" Title="Buyer" IsEditable="false" />
+                        <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" IsEditable="false" />
+                        <PropertyColumn Property="x => x.DateOrdered" Title="Date Ordered" IsEditable="false" />
+                        <PropertyColumn Property="x => x.IsComplete" Title="Completed" IsEditable="true">
+                            <EditTemplate>
+                                <MudCheckBox @bind-Checked="@context.Item.IsComplete" Color="Color.Primary" Label="Completed"/>
+                            </EditTemplate>
+                        </PropertyColumn>
+                        <PropertyColumn Property="x => x.IsCanceled" Title="Canceled" IsEditable="true">
+                            <EditTemplate>
+                                <MudCheckBox @bind-Checked="@context.Item.IsCanceled" Color="Color.Primary" Label="Canceled"/>
+                            </EditTemplate>
+                        </PropertyColumn>
                         <TemplateColumn>
                             <CellTemplate>
                                 <MudStack Row="true">
-                                    <MudButton OnClick="() => LoadOrderDetailsPage(context.Item.Order)" Size="Size.Small"
+                                    <MudButton OnClick="() => LoadOrderDetailsPage(context.Item)" Size="Size.Small"
                                                Variant="Variant.Filled" Color="Color.Primary">
                                         Open Order
                                     </MudButton>
+                                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit"
+                                                   OnClick="@context.Actions.StartEditingItemAsync" />
                                 </MudStack>
                             </CellTemplate>
                         </TemplateColumn>
@@ -77,7 +88,7 @@ else
         Navigation.NavigateTo("/");
     }
 
-    private void LoadOrderDetailsPage(OrderModel order)
+    private void LoadOrderDetailsPage(OrderDataModel order)
     {
         Navigation.NavigateTo($"/Admin/OrderDetails/{order.Id}");
     }
@@ -96,6 +107,24 @@ else
         }
 
         orders = list.ToList();
+    }
+
+    private async Task UpdateOrderAsync(OrderDataModel order)
+    {
+        var updatedOrder = new OrderModel()
+            {
+                Id = order.Id,
+                TotalPrice = order.TotalPrice,
+                DateOrdered = order.DateOrdered,
+                IsCanceled = order.IsCanceled,
+                IsComplete = order.IsComplete,
+                UserId = order.UserId,
+            };
+
+        var orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(updatedOrder.Id);
+        var request = new OrderRequestModel(updatedOrder, orderDetails);
+
+        await OrderEndpoint.UpdateOrderAsync(request);
     }
 
     private Func<OrderDataModel, bool> quickFilter => x =>
