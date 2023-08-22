@@ -189,11 +189,7 @@ else
         details.Quantity = item.Quantity;
         orderDetails.Add(details);
 
-        var request = new OrderRequestModel()
-            {
-                Order = order,
-                OrderDetails = orderDetails,
-            };
+        var request = new OrderRequestModel(order, orderDetails);
 
         await OrderEndpoint.UpdateOrderAsync(request);
     }

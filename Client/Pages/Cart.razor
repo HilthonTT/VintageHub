@@ -197,11 +197,7 @@
             var newOrder = GetOrder();
             var orderDetails = GetOrderDetails();
 
-            var request = new OrderRequestModel()
-                {
-                    Order = newOrder,
-                    OrderDetails = orderDetails,
-                };
+            var request = new OrderRequestModel(newOrder, orderDetails);
 
             shoppingCart.CartItems.Clear();
             await ShoppingCartStorage.SaveShoppingCartAsync(shoppingCart);

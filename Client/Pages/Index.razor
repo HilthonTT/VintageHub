@@ -41,7 +41,7 @@
         <MudGrid>
             @if (artifacts is not null)
             {
-                <MudVirtualize Items="artifacts?.Take(5).ToList()" Context="a">
+                <MudVirtualize Items="artifacts?.Take(6).ToList()" Context="a">
                     <ArtifactTemplate @key="a.Id" Artifact="a"/>
                 </MudVirtualize>
             }
@@ -102,7 +102,8 @@
     {
         try
         {
-            artifacts = await ArtifactEndpoint.GetAllArtifactsAsync();
+            await LoadArtifactsAsync();
+
             categories = await CategoryEndpoint.GetAllCategoriesAsync();
             eras = await EraEndpoint.GetAllErasAsync();
             loggedInUser = await UserVerifier.LoadAndVerifyUserAsync();
@@ -116,5 +117,14 @@
     private void LoadListingPage()
     {
         Navigation.NavigateTo("/Listing");
+    }
+
+
+    private async Task LoadArtifactsAsync()
+    {
+        var rnd = new Random();
+
+        var artifactList = await ArtifactEndpoint.GetAllArtifactsAsync();
+        artifacts = artifactList.OrderBy(_ => rnd.Next()).ToList();
     }
 }
