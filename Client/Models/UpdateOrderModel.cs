@@ -1,6 +1,6 @@
 ﻿using Client.Library.Models;
 
-namespace VintageHub.Client.Models.Form;
+namespace VintageHub.Client.Models;
 
 public class UpdateOrderModel
 {

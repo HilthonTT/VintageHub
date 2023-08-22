@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VintageHub.Client.Models.Form;
+namespace VintageHub.Client.Models;
 
 public class CreateReviewModel
 {

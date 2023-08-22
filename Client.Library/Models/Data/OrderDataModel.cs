@@ -1,12 +1,12 @@
 ﻿using Client.Library.Models;
 
-namespace VintageHub.Client.Models.Data;
+namespace Client.Library.Models.Data;
 
 public class OrderDataModel
 {
     public OrderDataModel()
     {
-        
+
     }
 
     public OrderDataModel(OrderModel order)

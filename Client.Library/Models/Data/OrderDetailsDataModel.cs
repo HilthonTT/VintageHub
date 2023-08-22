@@ -1,6 +1,6 @@
 ﻿using Client.Library.Models;
 
-namespace VintageHub.Client.Models.Data;
+namespace Client.Library.Models.Data;
 
 public class OrderDetailsDataModel
 {
@@ -14,7 +14,7 @@ public class OrderDetailsDataModel
 
     public OrderDetailsDataModel()
     {
-        
+
     }
 
     public int Id { get; set; }
