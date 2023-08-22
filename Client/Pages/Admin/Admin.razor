@@ -1,0 +1,126 @@
+﻿@page "/Admin"
+@inject IArtifactEndpoint ArtifactEndpoint
+@inject NavigationManager Navigation
+@attribute [Authorize(Policy = "Admin")]
+
+<MudGrid Class="mt-3 mb-5">
+    <MudItem xs="12" sm="6" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Height="220px">
+            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTooltip Text="Create an artifact">
+                    <MudFab OnClick="LoadCreateArtifactPage" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Article"
+                            IconSize="Size.Large" Size="Size.Large" Label="Create an artifact" />
+                </MudTooltip>
+                <MudImage Src="images/artifact.png" Height="120"
+                          Class="rounded-lg" Elevation="25" Alt="Artifact" />
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 220px;">
+            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTooltip Text="Create a vendor">
+                    <MudFab OnClick="LoadCreateVendorPage" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Article"
+                            IconSize="Size.Large" Size="Size.Large" Label="Create a vendor" />
+                </MudTooltip>
+                <MudImage Src="images/vendor.png" Height="120"
+                          Class="rounded-lg" Elevation="25" Alt="Vendor" />
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 220px;">
+            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTooltip Text="Order listing">
+                    <MudFab OnClick="LoadOrderListingPage" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Article"
+                            IconSize="Size.Large" Size="Size.Large" Label="Order listing" />
+                </MudTooltip>
+                <MudImage Src="images/order-listing.png" Height="120"
+                          Class="rounded-lg" Elevation="25" Alt="Order listing fish" />
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;">
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h5" Class="fw-bold text-uppercase text-decoration-underline">
+                            Admin Guidelines
+                        </MudText>
+                        <MudDivider Class="mt-3 mb-3" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body1">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Nullam commodo nulla ac eros lacinia, in lacinia metus luctus.
+                            Sed eget quam at dui vestibulum rhoncus a eget justo.
+                            Sed vitae elit id nunc aliquam volutpat in a arcu.
+                        </MudText>
+                    </MudItem>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12">
+                <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;">
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h5" Class="fw-bold text-uppercase text-decoration-underline">
+                            General Guidelines
+                        </MudText>
+                        <MudDivider Class="mt-3 mb-3" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body1">
+                            Fusce fermentum facilisis felis, in ullamcorper lectus fermentum a.
+                            Sed id elit nec nisl malesuada vehicula eu nec dui.
+                            Integer nec quam vel urna bibendum feugiat.
+                            Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.
+                        </MudText>
+                    </MudItem>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%">
+            @if (artifacts is not null)
+            {
+                <MudCarousel Class="mud-width-full" ItemsSource="@artifacts" Style="height:100%;"
+                             ShowArrows="true" ShowBullets="false" EnableSwipeGesture="true" AutoCycle="true">
+                    <ItemTemplate>
+                        <div class="d-flex flex-column flex-column justify-center" style="height:100%">
+                            <ArtifactCarouselTemplate Artifact="@context"/>
+                        </div>
+                    </ItemTemplate>
+                </MudCarousel>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private List<ArtifactModel> artifacts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var rnd = new Random();
+
+        var artifactList = await ArtifactEndpoint.GetAllArtifactsAsync();
+
+        artifacts = artifactList.OrderBy(_ => rnd.Next()).ToList();
+    }
+
+    private void LoadCreateArtifactPage()
+    {
+        Navigation.NavigateTo("/Admin/Artifact/Create");
+    }
+
+    private void LoadCreateVendorPage()
+    {
+        Navigation.NavigateTo("/Admin/Vendor/Create");
+    }
+
+    private void LoadOrderListingPage()
+    {
+        Navigation.NavigateTo("/Admin/OrderListing");
+    }
+}

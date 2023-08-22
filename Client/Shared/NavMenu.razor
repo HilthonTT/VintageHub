@@ -2,6 +2,12 @@
 @inject NavigationManager Navigation
 
 <MudAppBar Color="Color.Dark">
+    <AuthorizeView Policy="Admin">
+        <MudButton OnClick="LoadAdminPage"
+                   StartIcon="@Icons.Material.Filled.AdminPanelSettings" Color="Color.Error">
+            Admin
+        </MudButton>
+    </AuthorizeView>
     <AuthorizeView>
         <Authorized>
             <MudButton OnClick="LoadHomePage" StartIcon="@Icons.Material.Filled.Home">
@@ -72,5 +78,10 @@
     private void LoadListingPage()
     {
         Navigation.NavigateTo("/Listing");
+    }
+
+    private void LoadAdminPage()
+    {
+        Navigation.NavigateTo("/Admin");
     }
 }

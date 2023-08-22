@@ -1,0 +1,33 @@
+﻿@inject IImageEndpoint ImageEndpoint
+@inject NavigationManager Navigation
+
+<div class="d-flex flex-column flex-column justify-center" style="height:100%">
+    <MudImage Class="mx-auto rounded-lg" Src="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))" Width="350" Height="300"
+              Elevation="25" Alt="@Artifact.Name" />
+    <MudItem Class="mx-auto mt-2">
+        <MudTooltip Text="Open Details">
+            <MudFab OnClick="LoadArtifactPage" Label="Open Details"
+                    Color="Color.Primary" StartIcon="@Icons.Material.Filled.OpenInBrowser">
+                @Artifact.Name
+            </MudFab>
+        </MudTooltip>
+    </MudItem>
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public ArtifactModel Artifact { get; set; }
+
+    private string imageSource = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        imageSource = await ImageEndpoint.GetImageAsync(Artifact.ImageId);
+    }
+
+    private void LoadArtifactPage()
+    {
+        Navigation.NavigateTo($"/Artifact/{Artifact.Id}");
+    }
+}
