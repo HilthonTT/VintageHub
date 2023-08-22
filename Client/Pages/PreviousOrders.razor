@@ -1,0 +1,85 @@
+﻿@page "/Order/Previous"
+@inject IUserEndpoint UserEndpoint
+@inject IOrderEndpoint OrderEndpoint
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+<PageTitle>My Previous Orders</PageTitle>
+
+@code {
+    private UserModel loggedInUser;
+    private ObservableCollection<OrderDataModel> orders;
+
+    private string searchText = "";
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+        await LoadOrdersAsync();
+
+        isLoading = false;
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void LoadOrderDetails(OrderDataModel order)
+    {
+        Navigation.NavigateTo($"/Order/Details/{order.Id}");
+    }
+
+    private async Task LoadOrdersAsync()
+    {
+        var orderList = await OrderEndpoint.GetAllOrdersAsync();
+        var list = new List<OrderDataModel>();
+
+        foreach (var o in orderList)
+        {
+            var data = new OrderDataModel(o);
+            data.User = loggedInUser;
+
+            list.Add(data);
+        }
+
+        orders = new(list);
+    }
+
+    private async Task UpdateOrderAsync(OrderDataModel order)
+    {
+        orders.Remove(order);
+
+        var updatedOrder = new OrderModel
+        {
+            Id = order.Id,
+            UserId = order.UserId,
+            TotalPrice = order.TotalPrice,
+            IsCanceled = order.IsCanceled,
+            IsComplete = order.IsComplete,
+            DateOrdered = order.DateOrdered,
+        };
+
+        var orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(updatedOrder.Id);
+        var request = new OrderRequestModel(updatedOrder, orderDetails);
+
+        await OrderEndpoint.UpdateOrderAsync(request);
+    }
+
+    private Func<OrderDataModel, bool> quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            return true;
+        }
+
+        if (x.UserFullName.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
+    };
+}
