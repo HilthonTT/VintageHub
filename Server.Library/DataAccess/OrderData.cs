@@ -222,6 +222,21 @@ public class OrderData : IOrderData
                 await _sql.SaveDataInTransactionAsync(orderDetailsSp, parameters);
             }
 
+
+            decimal totalPrice = 0;
+
+            foreach (var item in orderDetails)
+            {
+                var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>
+                    ("dbo.spArtifact_GetById", new { Id = item.ArtifactId });
+                totalPrice += (artifact.Price * item.Quantity);
+            }
+
+            order.TotalPrice = totalPrice;
+            object orderParams = new { order.Id, order.TotalPrice, order.IsCanceled, order.IsComplete };
+
+            await _sql.SaveDataInTransactionAsync("dbo.spOrder_Update", orderParams);
+
             _sql.CommitTransaction();
 
             RemoveOrderCache(order.Id);

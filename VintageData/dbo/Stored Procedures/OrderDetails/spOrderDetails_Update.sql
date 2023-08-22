@@ -9,5 +9,7 @@ BEGIN
 	SET [Quantity] = @Quantity
 	WHERE Id = @Id;
 
+	SELECT @Id AS 'SelectedId'
+
 	RETURN 0;
 END
