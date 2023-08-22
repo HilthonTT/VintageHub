@@ -25,8 +25,8 @@
             {
                 <MudDataGrid T="OrderDetailsDataModel" Items="orderDetails" ReadOnly="false" EditMode="DataGridEditMode.Form"
                              StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges"
-                             Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual"
-                Filterable="true" QuickFilter="quickFilter">
+                             Bordered="true" Striped="true" EditTrigger="DataGridEditTrigger.Manual"
+                             Filterable="true" QuickFilter="quickFilter" Hover="true" Hideable="true" SortMode="SortMode.Multiple">
                     <ToolBarContent>
                         <MudText Typo="Typo.h6">Order Details</MudText>
                         <MudSpacer />
@@ -48,6 +48,24 @@
                     </Columns>
                 </MudDataGrid>
             }
+            <MudExpansionPanels Style="flex:1" Class="mt-5">
+                <MudExpansionPanel Text="Show Events">
+                    @foreach (string message in events)
+                    {
+                        <MudText Typo="@Typo.body2">@message</MudText>
+                    }
+                    @if (events.Count > 0)
+                    {
+                        <div class="d-flex">
+                            <MudSpacer />
+                            <MudButton Class="mt-3" ButtonType="ButtonType.Button"
+                                       Variant="Variant.Filled" OnClick="@(() => events.Clear())">
+                                Clear
+                            </MudButton>
+                        </div>
+                    }
+                </MudExpansionPanel>
+            </MudExpansionPanels>
         </MudItem>
     </MudGrid>
 }
