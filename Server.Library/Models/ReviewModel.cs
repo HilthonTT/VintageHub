@@ -10,11 +10,11 @@ public class ReviewModel
     public int ArtifactId { get; set; }
 
     [Required]
-    [StringLength(50)]
+    [StringLength(100)]
     public string Title { get; set; }
 
     [Required]
-    [StringLength(256)]
+    [StringLength(500)]
     public string Description { get; set; }
 
     [Required]

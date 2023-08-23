@@ -4,11 +4,11 @@ public class ArtifactModel
     public int Id { get; set; }
 
     [Required]
-    [StringLength(50)]
+    [StringLength(100)]
     public string Name { get; set; }
 
     [Required]
-    [StringLength(256)]
+    [StringLength(1000)]
     public string Description { get; set; }
 
     public string ImageId { get; set; } = "";

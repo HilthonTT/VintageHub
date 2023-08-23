@@ -5,11 +5,11 @@ namespace VintageHub.Client.Models;
 public class CreateArtifactModel
 {
     [Required(ErrorMessage = "Please provide the artifact's name.")]
-    [StringLength(50, ErrorMessage = "The artifact's name must not exceed 50 characters.")]
+    [StringLength(100, ErrorMessage = "The artifact's name must not exceed 100 characters.")]
     public string Name { get; set; }
 
     [Required(ErrorMessage = "Please provide the artifact's description.")]
-    [StringLength(256, ErrorMessage = "The artifact's description must not exceed 256 characters.")]
+    [StringLength(1000, ErrorMessage = "The artifact's description must not exceed 1000 characters.")]
     public string Description { get; set; }
 
     [Display(Name = "Image")]
