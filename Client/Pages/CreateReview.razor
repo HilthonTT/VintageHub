@@ -1,5 +1,6 @@
 ﻿@page "/Artifact/{Id:int}/Review"
 @inject IArtifactEndpoint ArtifactEndpoint
+@inject IImageEndpoint ImageEndpoint
 @inject IReviewEndpoint ReviewEndpoint
 @inject IUserEndpoint UserEndpoint
 @inject AuthenticationStateProvider AuthProvider
@@ -8,7 +9,14 @@
 
 <PageTitle>Create A Review</PageTitle>
 
-@if (isCreatingReview is false)
+@if (noArtifact)
+{
+    <MudAlert Severity="Severity.Error" CloseIcon="@Icons.Material.Filled.Close"
+              CloseIconClicked="ClosePage">
+        No Artifact found with this ID.
+    </MudAlert>
+}
+else if (isCreatingReview is false)
 {
     <MudGrid Class="mt-3">
         @if (string.IsNullOrWhiteSpace(errorMessage) is false)
@@ -21,6 +29,8 @@
             <EditForm Model="review" OnValidSubmit="CreateReviewAsync">
                 <DataAnnotationsValidator />
                 <MudCard>
+                    <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
+                                  Height="200" />
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText >
@@ -31,7 +41,7 @@
                             </MudText>
                         </CardHeaderContent>
                         <CardHeaderActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="RedirectArtifactPage" />
                         </CardHeaderActions>
                     </MudCardHeader>
                     <MudCardContent>
@@ -89,15 +99,30 @@ else
     private UserModel loggedInUser;
     private ArtifactModel artifact;
     private string errorMessage = "";
+    private string imageSource = "";
     private bool isCreatingReview = false;
+    private bool noArtifact = false;
 
     protected override async Task OnInitializedAsync()
     {
-        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
         artifact = await ArtifactEndpoint.GetArtifactByIdAsync(Id);
+
+        if (artifact is null)
+        {
+            noArtifact = true;
+            return;
+        }
+
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+        imageSource = await ImageEndpoint.GetImageAsync(artifact.ImageId);
     }
 
     private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void RedirectArtifactPage()
     {
         Navigation.NavigateTo($"/Artifact/{Id}");
     }
@@ -142,6 +167,6 @@ else
 
         review = new();
         isCreatingReview = false;
-        ClosePage();
+        RedirectArtifactPage();
     }
 }
