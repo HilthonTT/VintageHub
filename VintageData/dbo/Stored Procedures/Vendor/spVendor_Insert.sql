@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[spVendor_Insert]
 	@OwnerUserId INT,
-	@Name NVARCHAR(50),
-	@Description NVARCHAR(256),
+	@Name NVARCHAR(100),
+	@Description NVARCHAR(1000),
 	@ImageId NVARCHAR(MAX),
 	@DateFounded DATETIME2
 AS

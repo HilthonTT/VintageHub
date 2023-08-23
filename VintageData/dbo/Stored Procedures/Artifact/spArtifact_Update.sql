@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[spArtifact_Update]
 	@Id INT,
-	@Name NVARCHAR(50),
-	@Description NVARCHAR(500),
+	@Name NVARCHAR(100),
+	@Description NVARCHAR(1000),
 	@ImageId NVARCHAR(MAX),
 	@Quantity INT,
 	@Rating DECIMAL(18,4),

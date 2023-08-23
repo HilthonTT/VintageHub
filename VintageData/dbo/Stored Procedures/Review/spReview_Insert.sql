@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[spReview_Insert]
 	@UserId INT,
 	@ArtifactId INT,
-	@Title NVARCHAR(50),
-	@Description NVARCHAR(256),
+	@Title NVARCHAR(100),
+	@Description NVARCHAR(1000),
 	@Rating DECIMAL(18,4)
 AS
 BEGIN

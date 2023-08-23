@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[spCategory_Update]
 	@Id INT,
-	@Name NVARCHAR(50),
-	@Description NVARCHAR(256)
+	@Name NVARCHAR(100),
+	@Description NVARCHAR(500)
 AS
 BEGIN
 	SET NOCOUNT ON;

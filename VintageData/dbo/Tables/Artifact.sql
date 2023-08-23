@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Artifact]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [Name] NVARCHAR(50) NOT NULL, 
-    [Description] NVARCHAR(256) NOT NULL, 
+    [Name] NVARCHAR(100) NOT NULL, 
+    [Description] NVARCHAR(1000) NOT NULL, 
     [ImageId] NVARCHAR(MAX) NOT NULL, 
     [Quantity] INT NOT NULL, 
     [Rating] DECIMAL(18,4) NOT NULL, 
