@@ -1,7 +1,7 @@
 ﻿@page "/Cart"
 @inject IShoppingCartStorage ShoppingCartStorage
 @inject IUserEndpoint UserEndpoint
-@inject IOrderEndpoint OrderEndpoint
+@inject ISessionStorageService SessionStorage
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @attribute [Authorize]
@@ -15,60 +15,69 @@
     </MudAlert>
 }
 
-<MudGrid Class="mt-3">
-    <MudItem xs="9">
-        @if (shoppingCart?.CartItems?.Count <= 0)
-        {
-            <MudAlert Severity="Severity.Normal" Variant="Variant.Filled" Elevation="3">
-                <MudText>
-                    It seems you do not have any items in your shopping cart list.
-                </MudText>
-                <MudText>
-                    Please add items to your shopping cart list.
-                </MudText>
-            </MudAlert>
-        }
-        else
-        {
-            <MudGrid>
-                <MudVirtualize Items="GetCombinedCartItems()" Context="c" OverscanCount="5">
-                    <ShoppingCartItemTemplate @key="@c.Artifact.Id" CartItem="c"
-                                              RemoveEvent="() =>  RemoveFromCartAsync(c)" />
-                </MudVirtualize>
-            </MudGrid>
-        }
-    </MudItem>
-    <MudItem xs="3">
-        <MudGrid>
-            <MudItem xs="12">
-                <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
-                    <MudIcon Icon="@Icons.Material.Filled.ShoppingCart"/> Shopping Cart
-                </MudText>
-                <MudDivider Class="mt-3 mb-3"/>
-            </MudItem>
-            <MudItem xs="12">
-                <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
-                    Information
-                </MudText>
-                <MudDivider />
-                <MudItem xs="12">
-                    <MudText>You have a total of @totalItems items in your cart.</MudText>
-                    <MudItem>
-                        <MudText Color="Color.Default">The total price is: </MudText>
-                        <MudText Color="Color.Error" Class="mt-1">@totalPrice &euro;</MudText>
+@if (isLoading is false)
+{
+    <MudGrid Class="mt-3">
+        <MudItem xs="9">
+            @if (shoppingCart?.CartItems?.Count <= 0)
+            {
+                <MudAlert Severity="Severity.Normal" Variant="Variant.Filled" Elevation="3">
+                    <MudText>
+                        It seems you do not have any items in your shopping cart list.
+                    </MudText>
+                    <MudText>
+                        Please add items to your shopping cart list.
+                    </MudText>
+                </MudAlert>
+            }
+            else
+            {
+                <MudGrid>
+                    <MudVirtualize Items="GetCombinedCartItems()" Context="c" OverscanCount="5">
+                        <ShoppingCartItemTemplate @key="@c.Artifact.Id" CartItem="c"
+                                                  RemoveEvent="() =>  RemoveFromCartAsync(c)" />
+                    </MudVirtualize>
+                </MudGrid>
+            }
+        </MudItem>
+        <MudItem xs="3">
+            <MudPaper Class="p-1">
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
+                            <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" /> Shopping Cart
+                        </MudText>
+                        <MudDivider Class="mt-3 mb-3" />
                     </MudItem>
-                </MudItem>
-                <MudDivider Class="mt-3 mb-3"/>
-                <MudItem xs="12">
-                    <MudButton OnClick="CheckoutAsync" Variant="Variant.Filled" Color="Color.Primary"
-                               StartIcon="@Icons.Material.Filled.ShoppingCartCheckout" Disabled="!CanCheckout()">
-                        Check out
-                    </MudButton>
-                </MudItem>
-            </MudItem>
-        </MudGrid>
-    </MudItem>
-</MudGrid>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
+                            Information
+                        </MudText>
+                        <MudDivider />
+                        <MudItem xs="12">
+                            <MudText>You have a total of @totalItems items in your cart.</MudText>
+                            <MudItem>
+                                <MudText Color="Color.Default">The total price is: </MudText>
+                                <MudText Color="Color.Error" Class="mt-1">@totalPrice &euro;</MudText>
+                            </MudItem>
+                        </MudItem>
+                        <MudDivider Class="mt-3 mb-3" />
+                        <MudItem xs="12">
+                            <MudButton OnClick="CheckoutAsync" Variant="Variant.Filled" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.ShoppingCartCheckout" Disabled="!CanCheckout()">
+                                Check out
+                            </MudButton>
+                        </MudItem>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <LoadingTemplate />
+}
 
 @code {
     private UserModel loggedInUser = new();
@@ -77,13 +86,15 @@
     private decimal totalPrice = 0;
     private int totalItems = 0;
     private string errorMessage = "";
+    private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
         shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
         CalculatePriceAndItems();
 
-        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+        isLoading = false;
     }
 
     private void CalculatePriceAndItems()
@@ -132,36 +143,6 @@
         return combinedCartItems;
     }
 
-    private OrderModel GetOrder()
-    {
-        return new OrderModel()
-        {
-            UserId = loggedInUser.Id,
-            TotalPrice = totalPrice,
-            IsCanceled = false,
-            IsComplete = false,
-            DateOrdered = DateTime.UtcNow,
-        };
-    }
-
-    private List<OrderDetailsModel> GetOrderDetails()
-    {
-        var orderDetails = new List<OrderDetailsModel>();
-
-        foreach (var item in shoppingCart.CartItems)
-        {
-            var details = new OrderDetailsModel
-                {
-                    ArtifactId = item.Artifact.Id,
-                    Quantity = item.Quantity,
-                };
-
-            orderDetails.Add(details);
-        }
-
-        return orderDetails;
-    }
-
     private bool CanCheckout()
     {
         if (shoppingCart?.CartItems?.Count <= 0 || loggedInUser is null)
@@ -190,23 +171,11 @@
             return;
         }
 
-        try
-        {
-            errorMessage = "";
+        var guid = new Guid();
+        string stringifiedGuid = guid.ToString();
 
-            var newOrder = GetOrder();
-            var orderDetails = GetOrderDetails();
+        await SessionStorage.SetItemAsStringAsync("CheckoutGuid", stringifiedGuid);
 
-            var request = new OrderRequestModel(newOrder, orderDetails);
-
-            shoppingCart.CartItems.Clear();
-            await ShoppingCartStorage.SaveShoppingCartAsync(shoppingCart);
-
-            await OrderEndpoint.InsertOrderAsync(request);
-        }
-        catch (Exception ex)
-        {
-            errorMessage = ex.Message;
-        }
+        Navigation.NavigateTo($"/Checkout/{stringifiedGuid}");
     }
 }
