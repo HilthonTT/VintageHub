@@ -1,4 +1,5 @@
 ﻿@inject IUserEndpoint UserEndpoint
+@inject NavigationManager Navigation
 
 <MudCard Outlined="true" Class="mb-3">
     <MudCardContent>
@@ -14,12 +15,21 @@
             </MudItem>
         </MudGrid>
     </MudCardContent>
+    <MudCardActions>
+        <MudButton StartIcon="@Icons.Material.Filled.AdsClick" OnClick="LoadReviewPage">
+            View Details
+        </MudButton>
+    </MudCardActions>
 </MudCard>
 
 @code {
     [Parameter]
     [EditorRequired]
     public ReviewModel Review { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public ArtifactModel Artifact { get; set; }
 
     private UserModel reviewer;
     private string reviewerFullName = "";
@@ -28,5 +38,10 @@
     {
         reviewer = await UserEndpoint.GetUserByIdAsync(Review.UserId);
         reviewerFullName = $"{reviewer?.FirstName} {reviewer?.LastName}";
+    }
+
+    private void LoadReviewPage()
+    {
+        Navigation.NavigateTo($"/Artifact/{Artifact.Id}/Review/{Review.Id}");
     }
 }

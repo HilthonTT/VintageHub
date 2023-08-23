@@ -35,7 +35,7 @@
                                             </MudButton>
                                         </MudText>
                                     </div>
-                                    <button @onclick="ClosePage" class="btn btn-close btn-close-white"></button>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
                                 </div>
                             </MudItem>
                         </MudCardHeader>
@@ -82,11 +82,10 @@
                             <MudDivider />
                         </MudItem>
                         <MudItem xs="12" Class="mt-3">
-
-                            @if (reviews is not null)
+                            @if (reviews is not null && artifact is not null)
                             {
                                 <MudVirtualize Items="reviews" Context="r" OverscanCount="10">
-                                    <ReviewTemplate @key="r.Id" Review="r" />
+                                    <ReviewTemplate @key="r.Id" Review="r" Artifact="artifact"/>
                                 </MudVirtualize>
                             }
                         </MudItem>

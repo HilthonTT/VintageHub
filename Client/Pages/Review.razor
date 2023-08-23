@@ -1,0 +1,29 @@
+﻿@page "/Artifact/{ArtifactId:int}/Review/{ReviewId:int}"
+@inject IReviewEndpoint ReviewEndpoint
+@inject IArtifactEndpoint ArtifactEndpoint
+@inject NavigationManager Navigation
+
+@code {
+    [Parameter]
+    public int ArtifactId { get; set; }
+
+    [Parameter]
+    public int ReviewId { get; set; }
+
+    private ReviewModel review;
+    private ArtifactModel artifact;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        review = await ReviewEndpoint.GetReviewByIdAsync(ReviewId);
+        artifact = await ArtifactEndpoint.GetArtifactByIdAsync(ArtifactId);
+
+        isLoading = false;
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+}
