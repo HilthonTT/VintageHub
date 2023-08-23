@@ -9,6 +9,7 @@ namespace VintageHub.Server.Controllers;
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
 public class ImageController : ControllerBase
 {
+    private const int MaxFileSize = 1024 * 1024 * 5; // represents 5MB
     private readonly IImageData _imageData;
     private readonly ILogger<ImageController> _logger;
 
@@ -29,6 +30,11 @@ public class ImageController : ControllerBase
             if (imageFile is null || imageFile.Length == 0)
             {
                 return BadRequest("Image file is required.");
+            }
+
+            if (imageFile.Length > MaxFileSize)
+            {
+                return BadRequest("Image Size is too large.");
             }
 
             using var imageStream = imageFile.OpenReadStream();
@@ -53,7 +59,8 @@ public class ImageController : ControllerBase
                 return BadRequest("The Object Identifier must be provided.");
             }
 
-            return await _imageData.GetImageAsync(objectId);
+            string imageUrl = await _imageData.GetImageAsync(objectId);
+            return Ok(imageUrl);
         }
         catch (Exception ex)
         {
