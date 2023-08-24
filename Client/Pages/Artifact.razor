@@ -26,7 +26,7 @@
                                     <div class="d-flex">
                                         <MudAvatar>
                                             <MudImage Src="@(string.IsNullOrWhiteSpace(vendorImageSource)? "https://dummyimage.com/600x400/000/fff": vendorImageSource)"
-                                                      Alt="@vendor?.Name" />
+                                                      Alt="@vendor?.Name"/>
                                         </MudAvatar>
                                         <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
                                             Vendor:
@@ -43,7 +43,7 @@
                             <MudGrid Justify="Justify.Center">
                                 <MudItem xs="12" Class="text-center">
                                     <MudImage Src="@(string.IsNullOrWhiteSpace(artifactImageSource) ? "https://dummyimage.com/600x400/000/fff": artifactImageSource)"
-                                              Alt="@artifact?.Name" />
+                                              Alt="@artifact?.Name" Width="500" Height="500"/>
                                 </MudItem>
                                 @if (artifact is not null)
                                 {

@@ -1,7 +1,50 @@
 ﻿@page "/Artifact/{ArtifactId:int}/Review/{ReviewId:int}"
 @inject IReviewEndpoint ReviewEndpoint
-@inject IArtifactEndpoint ArtifactEndpoint
+@inject IUserEndpoint UserEndpoint
 @inject NavigationManager Navigation
+
+@if (isLoading)
+{
+    <LoadingTemplate />
+}
+else if (review is null)
+{
+    <MudAlert Severity="Severity.Error" ShowCloseIcon="true"
+              CloseIcon="@Icons.Material.Filled.Close">
+        404 - Not Found.
+    </MudAlert>
+}
+else
+{
+    <MudGrid Class="mt-3 mb-5">
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="11">             
+                            <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
+                                @review.Title
+                            </MudText>
+                            <MudText Typo="Typo.subtitle1">
+                                Written by: @writerFullName
+                            </MudText>
+                            <MudRating SelectedValue="review.Rating" ReadOnly="true" />
+                            <MudDivider Class="mt-3 mb-3" />
+                            <MudText Typo="Typo.body1" Class="text-break">
+                                @review.Description
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <div class="d-flex justify-content-end">
+                                <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
+                            </div>
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
 
 @code {
     [Parameter]
@@ -11,19 +54,22 @@
     public int ReviewId { get; set; }
 
     private ReviewModel review;
-    private ArtifactModel artifact;
+    private UserModel writer;
     private bool isLoading = true;
+    private string writerFullName = "";
 
     protected override async Task OnInitializedAsync()
     {
         review = await ReviewEndpoint.GetReviewByIdAsync(ReviewId);
-        artifact = await ArtifactEndpoint.GetArtifactByIdAsync(ArtifactId);
+        writer = await UserEndpoint.GetUserByIdAsync(review.UserId);
+
+        writerFullName = $"{writer?.FirstName} {writer?.LastName}";
 
         isLoading = false;
     }
 
     private void ClosePage()
     {
-        Navigation.NavigateTo("/");
+        Navigation.NavigateTo($"/Artifact/{ArtifactId}");
     }
 }
