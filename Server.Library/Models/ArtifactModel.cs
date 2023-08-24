@@ -11,6 +11,7 @@ public class ArtifactModel
     [StringLength(1000)]
     public string Description { get; set; }
 
+    [Display(Name = "Image Id")]
     public string ImageId { get; set; } = "";
 
     [Required]
@@ -24,6 +25,9 @@ public class ArtifactModel
     public decimal Price { get; set; }
 
     [Required]
+    public decimal DiscountAmount { get; set; }
+
+    [Required]
     public int VendorId { get; set; }
 
     [Required]
@@ -34,4 +38,13 @@ public class ArtifactModel
 
     [Required]
     public bool Availability { get; set; }
+
+    public decimal FinalPrice => GetFinalPrice();
+
+    private decimal GetFinalPrice()
+    {
+        decimal discountedPrice = Price - DiscountAmount;
+
+        return discountedPrice < 0 ? 0 : discountedPrice;
+    }
 }

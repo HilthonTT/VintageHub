@@ -7,6 +7,7 @@
     [Quantity] INT NOT NULL, 
     [Rating] DECIMAL(18,4) NOT NULL, 
     [Price] MONEY NOT NULL, 
+    [DiscountAmount] MONEY NOT NULL DEFAULT 0, 
     [VendorId] INT NOT NULL, 
     [CategoryId] INT NOT NULL, 
     [EraId] INT NOT NULL, 

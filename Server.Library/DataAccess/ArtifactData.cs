@@ -21,27 +21,27 @@ public class ArtifactData : IArtifactData
         return $"dbo.spArtifact_{operation}";
     }
 
-    private static object GetInsertParameters(ArtifactModel artifact)
+    private static DynamicParameters GetInsertParameters(ArtifactModel artifact)
     {
-        return new
-        {
-            artifact.Name,
-            artifact.Description,
-            artifact.ImageId,
-            artifact.Quantity,
-            artifact.Rating,
-            artifact.Price,
-            artifact.VendorId,
-            artifact.CategoryId,
-            artifact.EraId,
-            artifact.Availability,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("Name", artifact.Name);
+        parameters.Add("Description", artifact.Description);
+        parameters.Add("ImageId", artifact.ImageId);
+        parameters.Add("Quantity", artifact.Quantity);
+        parameters.Add("Rating", artifact.Rating);
+        parameters.Add("DiscountAmount", artifact.DiscountAmount);
+        parameters.Add("Price", artifact.Price);
+        parameters.Add("VendorId", artifact.VendorId);
+        parameters.Add("CategoryId", artifact.CategoryId);
+        parameters.Add("EraId", artifact.EraId);
+        parameters.Add("Availability", artifact.Availability);
+
+        return parameters;
     }
 
     private void RemoveArtifactCache(int id)
     {
         string idKey = CacheNamePrefix + id;
-
         _cache.Remove(idKey);
     }
 
