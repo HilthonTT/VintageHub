@@ -47,7 +47,6 @@
                         <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
                             <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" /> Shopping Cart
                         </MudText>
-                        <MudDivider Class="mt-3 mb-3" />
                     </MudItem>
                     <MudItem xs="12">
                         <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
@@ -171,7 +170,13 @@ else
             return;
         }
 
-        var guid = new Guid();
+        byte[] guidBytes = new byte[16];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(guidBytes);
+        }
+
+        var guid = new Guid(guidBytes);
         string stringifiedGuid = guid.ToString();
 
         await SessionStorage.SetItemAsStringAsync("CheckoutGuid", stringifiedGuid);

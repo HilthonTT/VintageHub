@@ -12,13 +12,13 @@
 @if (noArtifact)
 {
     <MudAlert Severity="Severity.Error" CloseIcon="@Icons.Material.Filled.Close"
-              CloseIconClicked="ClosePage">
+              CloseIconClicked="ClosePage" ShowCloseIcon="true">
         No Artifact found with this ID.
     </MudAlert>
 }
 else if (isCreatingReview is false)
 {
-    <MudGrid Class="mt-3">
+    <MudGrid Class="mt-3 mb-5">
         @if (string.IsNullOrWhiteSpace(errorMessage) is false)
         {
             <MudAlert Severity="Severity.Error" Elevation="3">
@@ -33,7 +33,7 @@ else if (isCreatingReview is false)
                                   Height="200" />
                     <MudCardHeader>
                         <CardHeaderContent>
-                            <MudText >
+                            <MudText>
                                 <div class="d-flex">
                                     <MudText Color="Color.Default" Typo="Typo.h6" Class="mx-1">Make A Review for </MudText>
                                     <MudText Color="Color.Primary" Typo="Typo.h6">'@artifact?.Name'</MudText>
@@ -55,7 +55,6 @@ else if (isCreatingReview is false)
                                     <ValidationMessage For="() => review.Title"/>
                                 </MudText>
                             </MudItem>
-                            <MudDivider Class="mt-5 mb-7"/>
                             <MudItem>
                                 <MudTextField @bind-Value="review.Description" T="string" Label="Review Description"
                                               Required="true" Lines="2" Variant="Variant.Outlined"

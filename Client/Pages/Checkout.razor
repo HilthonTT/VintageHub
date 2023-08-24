@@ -1,4 +1,4 @@
-﻿@page "/Checkout"
+﻿@page "/Checkout/{Guid}"
 @inject IShoppingCartStorage ShoppingCartStorage
 @inject ISessionStorageService SessionStorage
 @inject IUserEndpoint UserEndpoint
@@ -12,11 +12,172 @@
 }
 else if (isAllowed)
 {
-
+    <MudGrid Class="mt-3 mb-5">
+        @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+        {
+            <MudAlert Severity="Severity.Error" Elevation="3">
+                @errorMessage
+            </MudAlert>
+        }
+        <MudItem xs="9">
+            <EditForm Model="payment" OnValidSubmit="ConfirmOrderAsync">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6" Class="text-uppercase fw-bold">
+                                <MudIcon Icon="@Icons.Material.Filled.CreditCard" />
+                                Checkout
+                            </MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="payment.CreditCardNumber"
+                                              Required="true" Label="Credit Card Number" Clearable="true"
+                                              Variant="Variant.Outlined" HelperText="Please enter a valid credit card number" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.CreditCardNumber" />
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="payment.CardholderName"
+                                              Required="true" Label="Cardholder Name" Clearable="true"
+                                              Variant="Variant.Outlined" HelperText="Cardholder name is required" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.CardholderName" />
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudNumericField @bind-Value="payment.ExpirationMonth"
+                                                 Required="true" Label="Expiration Month" Clearable="true"
+                                                 Variant="Variant.Outlined" HelperText="Please select a valid expiration month" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.ExpirationMonth"/>
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudNumericField @bind-Value="payment.ExpirationYear"
+                                                 Required="true" Label="Expiration Year" Clearable="true"
+                                                 Variant="Variant.Outlined" HelperText="Please select a valid expiration year" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.ExpirationYear" />
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="payment.CVV"
+                                              Required="true" Label="CVV" Clearable="true"
+                                              Variant="Variant.Outlined" HelperText="Please enter a valid CVV code" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.CVV" />
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="payment.BillingAddress"
+                                              Required="true" Label="Billing Address" Clearable="true"
+                                              Variant="Variant.Outlined" HelperText="Please enter a billing address" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.BillingAddress" />
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="payment.City"
+                                              Required="true" Label="City" Clearable="true"
+                                              Variant="Variant.Outlined" HelperText="Please enter a city" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.City" />
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="payment.State"
+                                              Required="true" Label="State" Clearable="true"
+                                              Variant="Variant.Outlined" HelperText="Please enter a state" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.State" />
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="payment.PostalCode"
+                                              Required="true" Label="Postal Code" Clearable="true"
+                                              Variant="Variant.Outlined" HelperText="Please enter a valid postal code" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.PostalCode" />
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="payment.Country"
+                                              Required="true" Label="Country" Clearable="true"
+                                              Variant="Variant.Outlined" HelperText="Please enter a country" />
+                                <MudText Color="Color.Error">
+                                    <ValidationMessage For="() => payment.Country" />
+                                </MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Color="Color.Primary" Variant="Variant.Outlined" ButtonType="ButtonType.Submit">
+                            Confirm purchase
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+                <MudExpansionPanels Style="flex:1" Class="mt-5">
+                    <MudExpansionPanel Text="Show Events">
+                        @foreach (string message in events)
+                        {
+                            <MudText Typo="@Typo.body2" Class="text-break">
+                                @message
+                            </MudText>
+                        }
+                        @if (events.Count > 0)
+                        {
+                            <div class="d-flex">
+                                <MudSpacer />
+                                <MudButton Class="mt-3" ButtonType="ButtonType.Button"
+                                           Variant="Variant.Filled" OnClick="@(() => events.Clear())">
+                                    Clear
+                                </MudButton>
+                            </div>
+                        }
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+            </EditForm>
+        </MudItem>
+        <MudItem xs="3">
+            <MudPaper Class="p-2">
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
+                            <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" /> Shopping Cart
+                        </MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
+                            Information
+                        </MudText>
+                        <MudDivider />
+                        <MudItem xs="12">
+                            <MudItem>
+                                <MudText Color="Color.Default">The total price is: </MudText>
+                                <MudText Color="Color.Error" Class="mt-1">@totalPrice &euro;</MudText>
+                            </MudItem>
+                        </MudItem>
+                        <MudDivider Class="mt-3 mb-3" />
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
 }
 else
 {
-    
+    <MudAlert Severity="Severity.Error" CloseIcon="@Icons.Material.Filled.Close"
+              CloseIconClicked="ClosePage" ShowCloseIcon="true">
+        You are not allowed to view this page.
+    </MudAlert>
 }
 
 @code {
@@ -24,6 +185,7 @@ else
     public string Guid { get; set; }
 
     private CreditCardPaymentModel payment = new();
+    private List<string> events = new();
     private UserModel loggedInUser;
     private ShoppingCartModel shoppingCart;
     private string errorMessage = "";
@@ -33,6 +195,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        payment.ExpirationYear = DateTime.UtcNow.Year;
+        payment.ExpirationMonth = DateTime.UtcNow.Month;
+
         loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
         shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
         CalculatePrice();
@@ -63,6 +228,7 @@ else
         }
 
         totalPrice = price;
+        payment.PaymentAmount = totalPrice;
     }
 
     private void ClosePage()
@@ -128,6 +294,8 @@ else
         {
             errorMessage = "";
 
+            string jsonifiedPayment = JsonSerializer.Serialize(payment);
+            events.Add($"Payment confirmed. \n {jsonifiedPayment}");
 
             var newOrder = GetOrder();
             var orderDetails = GetOrderDetails();
@@ -138,6 +306,8 @@ else
             await ShoppingCartStorage.SaveShoppingCartAsync(shoppingCart);
 
             await OrderEndpoint.InsertOrderAsync(request);
+
+            ClosePage();
         }
         catch
         {
