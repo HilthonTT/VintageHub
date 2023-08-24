@@ -3,7 +3,7 @@
 	@ArtifactId INT,
 	@Title NVARCHAR(100),
 	@Description NVARCHAR(1000),
-	@Rating DECIMAL(18,4)
+	@Rating INT
 AS
 BEGIN
 	SET NOCOUNT ON;

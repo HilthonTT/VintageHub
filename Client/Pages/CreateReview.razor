@@ -69,7 +69,7 @@ else if (isCreatingReview is false)
                         <MudDivider Class="mt-3 mb-3"/>
                         <MudText Typo="Typo.subtitle1">Your Rating.</MudText>
                         <MudItem xs="12">
-                            <MudRating SelectedValue="(int)review.Rating" Size="Size.Large" MaxValue="5"></MudRating>
+                            <MudRating SelectedValue="review.Rating" Size="Size.Large" MaxValue="5"></MudRating>
                             <MudText Color="Color.Error">
                                 <ValidationMessage For="() => review.Rating"/>
                             </MudText>

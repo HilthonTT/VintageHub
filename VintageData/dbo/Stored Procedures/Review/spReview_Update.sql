@@ -2,7 +2,7 @@
 	@Id INT,
 	@Title NVARCHAR(50),
 	@Description NVARCHAR(256),
-	@Rating DECIMAL(18,4)
+	@Rating INT
 AS
 BEGIN
 	SET NOCOUNT ON;

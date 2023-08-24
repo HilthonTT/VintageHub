@@ -6,5 +6,5 @@ public class ReviewModel
     public int ArtifactId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
-    public double Rating { get; set; }
+    public int Rating { get; set; }
 }

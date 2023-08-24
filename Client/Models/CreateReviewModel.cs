@@ -14,5 +14,5 @@ public class CreateReviewModel
 
     [Required(ErrorMessage = "You must provide the review's rating.")]
     [Range(0, 5, ErrorMessage = "Your rating must not be above 5.")]
-    public double Rating { get; set; }
+    public int Rating { get; set; }
 }
