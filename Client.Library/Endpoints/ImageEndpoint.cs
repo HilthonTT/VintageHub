@@ -1,10 +1,4 @@
-﻿using Client.Library.Endpoints.Interfaces;
-using Client.Library.LocalStorage.Interfaces;
-using Client.Library.Models.Cache;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-
-namespace Client.Library.Endpoints;
+﻿namespace Client.Library.Endpoints;
 public class ImageEndpoint : IImageEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);

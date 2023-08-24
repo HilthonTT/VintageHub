@@ -1,7 +1,4 @@
-﻿using Client.Library.LocalStorage.Interfaces;
-using Client.Library.Models;
-
-namespace Client.Library.LocalStorage;
+﻿namespace Client.Library.LocalStorage;
 public class ShoppingCartStorage : IShoppingCartStorage
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromDays(14);

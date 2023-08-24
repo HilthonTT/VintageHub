@@ -1,10 +1,4 @@
-﻿using Client.Library.Endpoints.Interfaces;
-using Client.Library.LocalStorage.Interfaces;
-using Client.Library.Models;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using System.Net.Http.Json;
-
-namespace Client.Library.Endpoints;
+﻿namespace Client.Library.Endpoints;
 public class EraEndpoint : IEraEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);

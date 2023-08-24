@@ -1,6 +1,4 @@
-﻿using Client.Library.Models;
-
-namespace Client.Library.Models.Data;
+﻿namespace Client.Library.Models.Data;
 
 public class OrderDetailsDataModel
 {

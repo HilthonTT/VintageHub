@@ -1,7 +1,5 @@
-﻿using Client.Library.Models.Interfaces;
-
-namespace Client.Library.Models;
-public class ShoppingCartModel : IShoppingCartModel
+﻿namespace Client.Library.Models;
+public class ShoppingCartModel
 {
     public List<CartItemModel> CartItems { get; set; } = new();
 }
