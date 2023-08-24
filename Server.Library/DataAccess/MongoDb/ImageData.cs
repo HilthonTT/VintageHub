@@ -40,6 +40,8 @@ public class ImageData : IImageData
 
     public async Task DeleteImageAsync(string objectId)
     {
+        _cache.Remove(objectId);
+
         await _connection.Bucket.DeleteAsync(objectId);
     }
 }

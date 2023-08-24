@@ -20,13 +20,13 @@ public class CategoryData : ICategoryData
         return $"dbo.spCategory_{operation}";
     }
 
-    private static object GetInsertParams(CategoryModel category)
+    private static DynamicParameters GetInsertParams(CategoryModel category)
     {
-        return new
-        {
-            category.Name,
-            category.Description,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("Name", category.Name);
+        parameters.Add("Description", category.Description);
+        
+        return parameters;
     }
 
     private void RemoveCategoryCache(int id)
@@ -41,7 +41,7 @@ public class CategoryData : ICategoryData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetAll");
-            object parameters = new { };
+            var parameters = new DynamicParameters();
 
             output = await _sql.LoadDataAsync<CategoryModel, dynamic>(
                 storedProcedure, parameters);
@@ -59,7 +59,7 @@ public class CategoryData : ICategoryData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetById");
-            object parameters = new { Id = id };
+            var parameters = ParameterHelper.GetIdParameters(id);
 
             output = await _sql.LoadFirstOrDefaultAsync<CategoryModel, dynamic>(
                 storedProcedure, parameters);
@@ -73,7 +73,7 @@ public class CategoryData : ICategoryData
     public async Task<int> InsertCategoryAsync(CategoryModel category)
     {
         string storedProcedure = GetStoredProcedure("Insert");
-        object parameters = GetInsertParams(category);
+        var parameters = GetInsertParams(category);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
@@ -92,7 +92,7 @@ public class CategoryData : ICategoryData
         RemoveCategoryCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { Id = id };
+        var parameters = ParameterHelper.GetIdParameters(id);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

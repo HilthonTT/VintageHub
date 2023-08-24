@@ -30,46 +30,62 @@ public class OrderData : IOrderData
         return $"dbo.spOrderDetails_{operation}";
     }
 
-    private static object GetOrderInsertParams(OrderModel order)
+    private static DynamicParameters GetOrderIdParameters(int orderId)
     {
-        return new
-        {
-            order.UserId,
-            order.TotalPrice,
-            order.IsComplete,
-            order.IsCanceled,
-            order.DateOrdered,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("OrderId", orderId);
+
+        return parameters;
     }
 
-    private static object GetOrderDetailsInsertParams(OrderDetailsModel orderDetails)
+    private static DynamicParameters GetUserIdParameters(int userId)
     {
-        return new
-        {
-            orderDetails.OrderId,
-            orderDetails.ArtifactId,
-            orderDetails.Quantity,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("UserId", userId);
+
+        return parameters;
     }
 
-    private static object GetOrderUpdateParams(OrderModel order)
+    private static DynamicParameters GetOrderInsertParams(OrderModel order)
     {
-        return new
-        {
-            order.Id,
-            order.TotalPrice,
-            order.IsComplete,
-            order.IsCanceled,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("UserId", order.UserId);
+        parameters.Add("TotalPrice", order.TotalPrice);
+        parameters.Add("IsComplete", order.IsComplete);
+        parameters.Add("IsCanceled", order.IsCanceled);
+        parameters.Add("DateOrdered", order.DateOrdered);
+
+        return parameters;
     }
 
-    private static object GetOrderDetailsUpdateParams(OrderDetailsModel orderDetails)
+    private static DynamicParameters GetOrderDetailsInsertParams(OrderDetailsModel orderDetails)
     {
-        return new
-        {
-            orderDetails.Id,
-            orderDetails.Quantity,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("OrderId", orderDetails.OrderId);
+        parameters.Add("ArtifactId", orderDetails.ArtifactId);
+        parameters.Add("Quantity", orderDetails.Quantity);
+
+        return parameters;
+    }
+
+    private static DynamicParameters GetOrderUpdateParams(OrderModel order)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", order.Id);
+        parameters.Add("TotalPrice", order.TotalPrice);
+        parameters.Add("IsComplete", order.IsComplete);
+        parameters.Add("IsCanceled", order.IsCanceled);
+
+        return parameters;
+    }
+
+    private static DynamicParameters GetOrderDetailsUpdateParams(OrderDetailsModel orderDetails)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", orderDetails.Id);
+        parameters.Add("TotalPrice", orderDetails.Quantity);
+
+        return parameters;
     }
 
     private void RemoveOrderCache(int id)
@@ -83,7 +99,7 @@ public class OrderData : IOrderData
         foreach (var item in orderDetails)
         {
             var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>(
-                "dbo.spArtifact_GetById", new { Id = item.ArtifactId });
+                "dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(item.ArtifactId));
 
             if (artifact is not null)
             {
@@ -105,7 +121,7 @@ public class OrderData : IOrderData
         if (output is null)
         {
             string storedProcedure = GetOrderStoredProcedure("GetAll");
-            object parameters = new { };
+            var parameters = new DynamicParameters();
 
             output = await _sql.LoadDataAsync<OrderModel, dynamic>(
                 storedProcedure, parameters);
@@ -123,7 +139,7 @@ public class OrderData : IOrderData
         if (output is null)
         {
             string storedProcedure = GetOrderStoredProcedure("GetByUserId");
-            object parameters = new { UserId = userId };
+            var parameters = GetUserIdParameters(userId);
 
             output = await _sql.LoadDataAsync<OrderModel, dynamic>(
                 storedProcedure, parameters);
@@ -141,7 +157,7 @@ public class OrderData : IOrderData
         if (output is null)
         {
             string storedProcedure = GetOrderDetailsStoredProcedure("GetByOrderId");
-            object parameters = new { OrderId = orderId };
+            var parameters = GetOrderIdParameters(orderId);
 
             output = await _sql.LoadDataAsync<OrderDetailsModel, dynamic>(
                 storedProcedure, parameters);
@@ -159,7 +175,7 @@ public class OrderData : IOrderData
         if (output is null)
         {
             string storedProcedure = GetOrderStoredProcedure("GetById");
-            object parameters = new { Id = id };
+            var parameters = ParameterHelper.GetIdParameters(id);
 
             output = await _sql.LoadFirstOrDefaultAsync<OrderModel, dynamic>(
                 storedProcedure, parameters);
@@ -184,8 +200,7 @@ public class OrderData : IOrderData
             foreach (var item in orderDetails)
             {
                 item.OrderId = orderId;
-
-                object parameters = GetOrderDetailsInsertParams(item);
+                var parameters = GetOrderDetailsInsertParams(item);
 
                 await _sql.SaveDataInTransactionAsync(orderDetailsSp, parameters);
             }
@@ -217,23 +232,21 @@ public class OrderData : IOrderData
             string orderDetailsSp = GetOrderDetailsStoredProcedure("Update");
             foreach (var item in orderDetails)
             {
-                object parameters = GetOrderDetailsUpdateParams(item);
-
+                var parameters = GetOrderDetailsUpdateParams(item);
                 await _sql.SaveDataInTransactionAsync(orderDetailsSp, parameters);
             }
 
-
             decimal totalPrice = 0;
-
             foreach (var item in orderDetails)
             {
                 var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>
-                    ("dbo.spArtifact_GetById", new { Id = item.ArtifactId });
-                totalPrice += (artifact.Price * item.Quantity);
+                    ("dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(item.ArtifactId));
+                totalPrice += artifact.Price * item.Quantity;
             }
 
             order.TotalPrice = totalPrice;
-            object orderParams = new { order.Id, order.TotalPrice, order.IsCanceled, order.IsComplete };
+
+            var orderParams = GetOrderUpdateParams(order);
 
             await _sql.SaveDataInTransactionAsync("dbo.spOrder_Update", orderParams);
 

@@ -20,13 +20,13 @@ public class EraData : IEraData
         return $"dbo.spEra_{operation}";
     }
 
-    private static object GetInsertParams(EraModel era)
+    private static DynamicParameters GetInsertParams(EraModel era)
     {
-        return new
-        {
-            era.Name,
-            era.Description,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("Name", era.Name);
+        parameters.Add("Description", era.Description);
+
+        return parameters;
     }
 
     private void RemoveEraCache(int id)
@@ -41,7 +41,7 @@ public class EraData : IEraData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetAll");
-            object parameters = new { };
+            var parameters = new DynamicParameters();
 
             output = await _sql.LoadDataAsync<EraModel, dynamic>(
                 storedProcedure, parameters);
@@ -59,7 +59,7 @@ public class EraData : IEraData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetById");
-            object parameters = new { Id = id };
+            var parameters = ParameterHelper.GetIdParameters(id);
 
             output = await _sql.LoadFirstOrDefaultAsync<EraModel, dynamic>(
                 storedProcedure, parameters);
@@ -73,7 +73,7 @@ public class EraData : IEraData
     public async Task<int> InsertEraAsync(EraModel era)
     {
         string storedProcedure = GetStoredProcedure("Insert");
-        object parameters = GetInsertParams(era);
+        var parameters = GetInsertParams(era);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
@@ -92,7 +92,7 @@ public class EraData : IEraData
         RemoveEraCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { Id = id };
+        var parameters = ParameterHelper.GetIdParameters(id);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

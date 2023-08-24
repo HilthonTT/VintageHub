@@ -24,27 +24,35 @@ public class ReviewData : IReviewData
         return $"dbo.spReview_{operation}";
     }
 
-    private static object GetInsertParams(ReviewModel review)
+    private static DynamicParameters GetArtifactIdParameters(int artifactId)
     {
-        return new
-        {
-            review.UserId,
-            review.ArtifactId,
-            review.Title,
-            review.Description,
-            review.Rating,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("ArtifactId", artifactId);
+
+        return parameters;
     }
 
-    private static object GetUpdateParams(ReviewModel review)
+    private static DynamicParameters GetInsertParams(ReviewModel review)
     {
-        return new
-        {
-            review.Id,
-            review.Title,
-            review.Description,
-            review.Rating,
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("UserId", review.UserId);
+        parameters.Add("ArtifactId", review.ArtifactId);
+        parameters.Add("Title", review.Title);
+        parameters.Add("Description", review.Description);
+        parameters.Add("Rating", review.Rating);
+
+        return parameters;
+    }
+
+    private static DynamicParameters GetUpdateParams(ReviewModel review)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", review.Id);
+        parameters.Add("Title", review.Title);
+        parameters.Add("Description", review.Description);
+        parameters.Add("Rating", review.Rating);
+
+        return parameters;
     }
 
     private void RemoveReviewCache(int id)
@@ -60,7 +68,7 @@ public class ReviewData : IReviewData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetById");
-            object parameters = new { Id = id };
+            var parameters = ParameterHelper.GetIdParameters(id);
 
             output = await _sql.LoadFirstOrDefaultAsync<ReviewModel, dynamic>(
                 storedProcedure, parameters);
@@ -78,7 +86,7 @@ public class ReviewData : IReviewData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetByArtifactId");
-            object parameters = new { ArtifactId = artifactId };
+            var parameters = GetArtifactIdParameters(artifactId);
 
             output = await _sql.LoadDataAsync<ReviewModel, dynamic>(
                 storedProcedure, parameters);
@@ -103,14 +111,14 @@ public class ReviewData : IReviewData
 
             // Load all reviews for the associated artifact
             var reviews = await _sql.LoadDataInTransactionAsync<ReviewModel, dynamic>(
-                getAllSp, new { review.ArtifactId });
+                getAllSp, GetArtifactIdParameters(review.ArtifactId));
 
             // Calculate the new average rating based on all the reviews
             double newAverageRating = reviews.Average(r => r.Rating);
 
             // Load the artifact to update its rating
             var artifactToUpdate = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>(
-                "dbo.spArtifact_GetById", new { Id = review.ArtifactId });
+                "dbo.spArtifact_GetById", GetArtifactIdParameters(review.ArtifactId));
 
             // Save the updated artifact back to the database
 
@@ -151,7 +159,7 @@ public class ReviewData : IReviewData
 
             // Update the artifact's rating
             var artifactToUpdate = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>(
-                "dbo.spArtifact_GetById", new { Id = review.ArtifactId });
+                "dbo.spArtifact_GetById", GetArtifactIdParameters(review.ArtifactId));
 
             artifactToUpdate.Rating = newAverageRating;
 
@@ -175,7 +183,7 @@ public class ReviewData : IReviewData
         RemoveReviewCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { Id = id };
+        var parameters = ParameterHelper.GetIdParameters(id);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

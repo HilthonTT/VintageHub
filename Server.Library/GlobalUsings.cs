@@ -8,3 +8,4 @@ global using Microsoft.Data.SqlClient;
 global using Microsoft.Extensions.Configuration;
 global using System.Data;
 global using System.ComponentModel.DataAnnotations;
+global using Server.Library.DataAccess.Helpers;

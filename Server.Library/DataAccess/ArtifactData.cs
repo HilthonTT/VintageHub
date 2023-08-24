@@ -21,6 +21,14 @@ public class ArtifactData : IArtifactData
         return $"dbo.spArtifact_{operation}";
     }
 
+    private static DynamicParameters GetVendorIdParameters(int vendorId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("VendorId", vendorId);
+
+        return parameters;
+    }
+
     private static DynamicParameters GetInsertParameters(ArtifactModel artifact)
     {
         var parameters = new DynamicParameters();
@@ -51,7 +59,7 @@ public class ArtifactData : IArtifactData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetAll");
-            object parameters = new { };
+            object parameters = new DynamicParameters();
 
             output = await _sql.LoadDataAsync<ArtifactModel, dynamic>(
                 storedProcedure, parameters);
@@ -69,7 +77,7 @@ public class ArtifactData : IArtifactData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetByVendorId");
-            object parameters = new { VendorId = vendorId };
+            var parameters = GetVendorIdParameters(vendorId);
 
             output = await _sql.LoadDataAsync<ArtifactModel, dynamic>(
                 storedProcedure, parameters);
@@ -87,7 +95,7 @@ public class ArtifactData : IArtifactData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetById");
-            object parameters = new { Id = id };
+            var parameters = ParameterHelper.GetIdParameters(id);
 
             output = await _sql.LoadFirstOrDefaultAsync<ArtifactModel, dynamic>(
                 storedProcedure, parameters);
@@ -101,7 +109,7 @@ public class ArtifactData : IArtifactData
     public async Task<int> InsertArtifactAsync(ArtifactModel artifact)
     {
         string storedProcedure = GetStoredProcedure("Insert");
-        object parameters = GetInsertParameters(artifact);
+        var parameters = GetInsertParameters(artifact);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
@@ -120,7 +128,7 @@ public class ArtifactData : IArtifactData
         RemoveArtifactCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { Id = id };
+        var parameters = ParameterHelper.GetIdParameters(id);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

@@ -20,30 +20,38 @@ public class UserData : IUserData
         return $"dbo.spUser_{operation}";
     }
 
-    private static object GetInsertParameters(UserModel user)
+    private static DynamicParameters GetOidParameters(string oid)
     {
-        return new
-        {
-            user.ObjectIdentifier,
-            user.FirstName,
-            user.LastName,
-            user.DisplayName,
-            user.EmailAddress,
-            user.Address
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("ObjectIdentifier", oid);
+
+        return parameters;
     }
 
-    private static object GetUpdateParameters(UserModel user)
+    private static DynamicParameters GetInsertParameters(UserModel user)
     {
-        return new
-        {
-            user.Id,
-            user.FirstName,
-            user.LastName,
-            user.DisplayName,
-            user.EmailAddress,
-            user.Address
-        };
+        var parameters = new DynamicParameters();
+        parameters.Add("ObjectIdentifier", user.ObjectIdentifier);
+        parameters.Add("FirstName", user.FirstName);
+        parameters.Add("LastName", user.LastName);
+        parameters.Add("DisplayName", user.DisplayName);
+        parameters.Add("EmailAddress", user.EmailAddress);
+        parameters.Add("Address", user.Address);
+
+        return parameters;
+    }
+
+    private static DynamicParameters GetUpdateParameters(UserModel user)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", user.Id);
+        parameters.Add("FirstName", user.FirstName);
+        parameters.Add("LastName", user.LastName);
+        parameters.Add("DisplayName", user.DisplayName);
+        parameters.Add("EmailAddress", user.EmailAddress);
+        parameters.Add("Address", user.Address);
+
+        return parameters;
     }
 
     private void RemoveUserCache(UserModel user)
@@ -61,7 +69,7 @@ public class UserData : IUserData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetAll");
-            object parameters = new { };
+            var parameters = new DynamicParameters();
 
             output = await _sql.LoadDataAsync<UserModel, dynamic>(storedProcedure, parameters);
 
@@ -78,7 +86,7 @@ public class UserData : IUserData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetById");
-            object parameters = new { Id = id };
+            var parameters = ParameterHelper.GetIdParameters(id);
 
             output = await _sql.LoadFirstOrDefaultAsync<UserModel, dynamic>(
                 storedProcedure, parameters);
@@ -96,7 +104,7 @@ public class UserData : IUserData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetByOid");
-            object parameters = new { ObjectIdentifier = oid };
+            var parameters = GetOidParameters(oid);
 
             output = await _sql.LoadFirstOrDefaultAsync<UserModel, dynamic>(
                 storedProcedure, parameters);
@@ -122,7 +130,7 @@ public class UserData : IUserData
         RemoveUserCache(user);
 
         string storedProcedure = GetStoredProcedure("Update");
-        object parameters = GetUpdateParameters(user);
+        var parameters = GetUpdateParameters(user);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
@@ -133,7 +141,7 @@ public class UserData : IUserData
         RemoveUserCache(user);
 
         string storedProcedure = GetStoredProcedure("Delete");
-        object parameters = new { user.Id };
+        var parameters = ParameterHelper.GetIdParameters(id);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
