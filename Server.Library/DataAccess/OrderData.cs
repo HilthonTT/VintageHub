@@ -115,6 +115,33 @@ public class OrderData : IOrderData
         }
     }
 
+    private async Task<decimal> CalculatePriceAsync(List<OrderDetailsModel> orderDetails)
+    {
+        decimal price = 0;
+
+        var uniqueArtifacts = new Dictionary<int, int>();
+
+        foreach (var item in orderDetails)
+        {
+            if (uniqueArtifacts.ContainsKey(item.ArtifactId) is false)
+            {
+                uniqueArtifacts[item.ArtifactId] = 0;
+            }
+
+            uniqueArtifacts[item.ArtifactId] += item.Quantity;
+        }
+
+        foreach (var kvp in uniqueArtifacts)
+        {
+            var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>("dbo.spGetById",
+                ParameterHelper.GetIdParameters(kvp.Value));
+
+            price += (decimal)artifact.Price * kvp.Value;
+        }
+
+        return price;
+    }
+
     public async Task<List<OrderModel>> GetAllOrdersAsync()
     {
         var output = _cache.Get<List<OrderModel>>(CacheName);
@@ -192,6 +219,9 @@ public class OrderData : IOrderData
         {
             _sql.StartTransaction();
 
+            // Verify total price
+            order.TotalPrice = await CalculatePriceAsync(orderDetails);
+
             string orderSp = GetOrderStoredProcedure("Insert");
             object orderParameters = GetOrderInsertParams(order);
             int orderId = await _sql.SaveDataInTransactionAsync(orderSp, orderParameters);
@@ -224,6 +254,9 @@ public class OrderData : IOrderData
         try
         {
             _sql.StartTransaction();
+
+            // Verify total price
+            order.TotalPrice = await CalculatePriceAsync(orderDetails);
 
             string orderSp = GetOrderStoredProcedure("Update");
             object orderParameters = GetOrderUpdateParams(order);
