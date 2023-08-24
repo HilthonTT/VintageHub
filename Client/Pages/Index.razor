@@ -6,7 +6,7 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Home - VintageHub</PageTitle>
 
 @if (string.IsNullOrWhiteSpace(errorMessage) is false)
 {
@@ -22,9 +22,43 @@
         </MudAvatar>
         <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Vintage Hub</MudText>
     </MudItem>
+    <MudItem xs="12" Class="mt-2">
+        <MudPaper Class="pa-3 rounded" Elevation="5">
+            <MudGrid>
+                <MudItem xs="6">
+                    <div class="d-flex justify-content-start">
+                        <MudStack Row="true" Spacing="3">
+                            <MudButton StartIcon="@Icons.Material.Filled.List"
+                                       OnClick="LoadWishListPage">
+                                Wish List
+                            </MudButton>
+                        </MudStack>
+                    </div>
+                </MudItem>
+                <MudItem xs="6">
+                    <div class="d-flex justify-content-end">
+                        <MudStack Row="true" Spacing="3">
+                            <MudButton StartIcon="@Icons.Material.Filled.Discount"
+                                       OnClick="LoadDiscountPage">
+                                Discounts
+                            </MudButton>
+                            <MudButton StartIcon="@Icons.Material.Filled.Shop"
+                                       OnClick="LoadOrdersPage">
+                                My Orders
+                            </MudButton>
+                            <MudButton StartIcon="@Icons.Material.Filled.DesignServices"
+                                       OnClick="LoadCustomerServicePage">
+                                Customer Service
+                            </MudButton>
+                        </MudStack>
+                    </div>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
 </MudGrid>
 
-<MudGrid Class="mt-8" Spacing="5">
+<MudGrid Class="mt-5" Spacing="5">
     <MudItem xs="12">
         <div class="d-flex justify-content-between">
             <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">Artifacts</MudText>
@@ -42,7 +76,7 @@
             @if (artifacts is not null)
             {
                 <MudVirtualize Items="artifacts?.Take(6).ToList()" Context="a">
-                    <ArtifactTemplate @key="a.Id" Artifact="a"/>
+                    <ArtifactTemplate @key="a.Id" Artifact="a" />
                 </MudVirtualize>
             }
         </MudGrid>
@@ -63,7 +97,7 @@
             @if (categories is not null)
             {
                 <MudVirtualize Items="categories" Context="c" OverscanCount="10">
-                    <CategoryTemplate @key="c.Id" Category="c"/>
+                    <CategoryTemplate @key="c.Id" Category="c" />
                 </MudVirtualize>
             }
         </MudGrid>
@@ -84,7 +118,7 @@
             @if (eras is not null)
             {
                 <MudVirtualize Items="eras" Context="e" OverscanCount="10">
-                    <EraTemplate @key="e.Id" Era="e"/>
+                    <EraTemplate @key="e.Id" Era="e" />
                 </MudVirtualize>
             }
         </MudGrid>
@@ -119,6 +153,25 @@
         Navigation.NavigateTo("/Listing");
     }
 
+    private void LoadWishListPage()
+    {
+        Navigation.NavigateTo("/Wishlist");
+    }
+
+    private void LoadDiscountPage()
+    {
+        Navigation.NavigateTo("/Discounts");
+    }
+
+    private void LoadOrdersPage()
+    {
+        Navigation.NavigateTo("/Order/Previous");
+    }
+
+    private void LoadCustomerServicePage()
+    {
+        Navigation.NavigateTo("/CustomerServices");
+    }
 
     private async Task LoadArtifactsAsync()
     {
