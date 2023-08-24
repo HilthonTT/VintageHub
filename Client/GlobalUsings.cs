@@ -1,0 +1,17 @@
+﻿global using Blazored.LocalStorage;
+global using Blazored.SessionStorage;
+global using Client.Library.Endpoints.Interfaces;
+global using Client.Library.Endpoints;
+global using Client.Library.LocalStorage.Interfaces;
+global using Client.Library.LocalStorage;
+global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+global using System.Web;
+global using VintageHub.Client.Authentication.Interfaces;
+global using VintageHub.Client.Authentication;
+global using MudBlazor.Services;
+global using Microsoft.AspNetCore.Components.Web;
+global using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+global using VintageHub.Client;
+global using System.ComponentModel.DataAnnotations;
+global using Client.Library.Models;
+global using Microsoft.AspNetCore.Components.Authorization;

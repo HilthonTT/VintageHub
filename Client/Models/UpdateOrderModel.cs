@@ -1,6 +1,4 @@
-﻿using Client.Library.Models;
-
-namespace VintageHub.Client.Models;
+﻿namespace VintageHub.Client.Models;
 
 public class UpdateOrderModel
 {

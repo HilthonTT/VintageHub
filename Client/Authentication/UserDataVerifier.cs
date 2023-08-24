@@ -1,9 +1,4 @@
-﻿using Client.Library.Endpoints.Interfaces;
-using Client.Library.Models;
-using Microsoft.AspNetCore.Components.Authorization;
-using VintageHub.Client.Authentication.Interfaces;
-
-namespace VintageHub.Client.Authentication;
+﻿namespace VintageHub.Client.Authentication;
 
 public class UserDataVerifier : IUserDataVerifier
 {

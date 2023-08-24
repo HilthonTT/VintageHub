@@ -1,16 +1,4 @@
-﻿using Blazored.LocalStorage;
-using Blazored.SessionStorage;
-using Client.Library.Endpoints.Interfaces;
-using Client.Library.Endpoints;
-using Client.Library.LocalStorage.Interfaces;
-using Client.Library.LocalStorage;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using System.Web;
-using VintageHub.Client.Authentication.Interfaces;
-using VintageHub.Client.Authentication;
-using MudBlazor.Services;
-
-namespace VintageHub.Client;
+﻿namespace VintageHub.Client;
 
 public static class RegisterServices
 {

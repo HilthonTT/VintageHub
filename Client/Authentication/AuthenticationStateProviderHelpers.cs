@@ -1,8 +1,4 @@
-﻿using Client.Library.Endpoints.Interfaces;
-using Client.Library.Models;
-using Microsoft.AspNetCore.Components.Authorization;
-
-namespace VintageHub.Client.Authentication;
+﻿namespace VintageHub.Client.Authentication;
 
 public static class AuthenticationStateProviderHelpers
 {
