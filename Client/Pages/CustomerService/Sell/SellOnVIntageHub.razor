@@ -1,0 +1,109 @@
+﻿@page "/CustomerServices/Sell-On-Vintage-Hub"
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+<PageTitle>Sell On Vintage Hub</PageTitle>
+
+<MudGrid Class="mt-3 mb-5">
+    <MudItem xs="12">
+        <MudText Typo="Typo.body2">
+            Customer Service 
+            <MudIcon Icon="@Icons.Material.Filled.ArrowRight" />
+            Sell on VintageHub.com
+        </MudText>
+    </MudItem>
+    <MudItem xs="12">
+        <div class="d-flex justify-content-between">
+            <div>
+                <MudText Typo="Typo.h5" GutterBottom="true" Class="fw-bold text-uppercase">
+                    Sell On Vintage Hub
+                </MudText>
+            </div>
+            <MudIconButton OnClick="ClosePage" Icon="@Icons.Material.Filled.Close"/>
+        </div>
+        <MudDivider Class="mt-3 mb-3" />
+    </MudItem>
+    <MudItem xs="12">
+        <MudGrid>
+            <MudItem xs="6">
+                <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="10">
+                                <MudText Typo="Typo.h6">
+                                    Professional Account
+                                </MudText>
+                                <MudText Typo="Typo.body1">
+                                    For all partners of VintageHub.com
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="2">
+                                <div class="d-flex justify-content-end">
+                                    <MudFab OnClick="LoadProfessionalAccountPage" Color="Color.Secondary"
+                                            StartIcon="@Icons.Material.Filled.ArrowRight" />
+                                </div>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="6">
+                <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="10">
+                                <MudText Typo="Typo.h6">
+                                    Stop selling my artifacts on VintageHub.com
+                                </MudText>
+                                <MudText Typo="Typo.body1">
+                                    VintageHub.com will stop selling the artifacts on your request.
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="2">
+                                <div class="d-flex justify-content-end">
+                                    <MudFab OnClick="LoadStopSettingArticles" Color="Color.Secondary"
+                                            StartIcon="@Icons.Material.Filled.ArrowRight" />
+                                </div>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+    <MudItem xs="12">
+        <MudPaper Class="pa-5">
+            <MudItem>
+                <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
+                    Contact us
+                </MudText>
+            </MudItem>
+            <MudItem>
+                <MudStack Row>
+                    <MudButton Color="Color.Primary" Variant="Variant.Text">
+                        Email us
+                    </MudButton>
+                </MudStack>
+            </MudItem>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void LoadProfessionalAccountPage()
+    {
+        string url = "/CustomerServices/Sell-On-Vintage-Hub/Professsional-Account";
+        Navigation.NavigateTo(url);
+    }
+
+    private void LoadStopSettingArticles()
+    {
+        string url = "/CustomerServices/Sell-On-Vintage-Hub/Stop-Selling-Artifacts";
+        Navigation.NavigateTo(url);
+    }
+}

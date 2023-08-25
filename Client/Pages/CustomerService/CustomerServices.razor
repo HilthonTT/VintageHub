@@ -6,9 +6,12 @@
 
 <MudGrid Class="mt-3 mb-5">
     <MudItem xs="12">
-        <MudText Typo="Typo.h5" GutterBottom="true" Class="fw-bold text-uppercase">
-            Customer Services
-        </MudText>
+        <div class="d-flex justify-content-between">
+            <MudText Typo="Typo.h5" GutterBottom="true" Class="fw-bold text-uppercase">
+                Customer Services
+            </MudText>
+            <MudIconButton OnClick="ClosePage" Icon="@Icons.Material.Filled.Close" />
+        </div>
         <MudDivider Class="mt-3 mb-3"/>
         <MudItem>
             <MudText Typo="Typo.h6">
@@ -68,6 +71,11 @@
 </MudGrid>
 
 @code {
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
     private void LoadSellOnVintageHubPage()
     {
         Navigation.NavigateTo("/CustomerServices/Sell-On-Vintage-Hub");
