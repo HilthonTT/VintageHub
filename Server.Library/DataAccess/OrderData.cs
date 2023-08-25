@@ -136,10 +136,28 @@ public class OrderData : IOrderData
             var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>("dbo.spGetById",
                 ParameterHelper.GetIdParameters(kvp.Value));
 
-            price += (decimal)artifact.Price * kvp.Value;
+            price += artifact.Price * kvp.Value;
         }
 
         return price;
+    }
+
+    private async Task<bool> OrderNotPossibleAsync(List<OrderDetailsModel> orderDetails)
+    {
+        foreach (var o in orderDetails)
+        {
+            var artifact = await _sql.LoadFirstOrDefaultAsync<ArtifactModel, dynamic>(
+                "dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(o.ArtifactId));
+
+            if (o.Quantity > artifact.Quantity)
+            {
+                _logger.LogError("Error while inserting order: {error}",
+                    "Order details has more quantity of artifact than the artifact has.");
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public async Task<List<OrderModel>> GetAllOrdersAsync()
@@ -217,6 +235,11 @@ public class OrderData : IOrderData
     {
         try
         {
+            if (await OrderNotPossibleAsync(orderDetails))
+            {
+                return 0;
+            }
+
             _sql.StartTransaction();
 
             // Verify total price
@@ -253,6 +276,11 @@ public class OrderData : IOrderData
     {
         try
         {
+            if (await OrderNotPossibleAsync(orderDetails))
+            {
+                return 0;
+            }
+
             _sql.StartTransaction();
 
             // Verify total price
