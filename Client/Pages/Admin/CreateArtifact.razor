@@ -77,6 +77,16 @@
                                             <ValidationMessage For="() => artifact.Price" />
                                         </MudText>
                                     </MudItem>
+
+                                    <MudItem xs="12">
+                                        <MudNumericField @bind-Value="artifact.DiscountAmount" Label="Discount Amount" Required="true"
+                                                         Variant="Variant.Outlined" Clearable="true"
+                                                         HelperText="Please enter the amount that you want to deduct current artifact price in euros." />
+                                        <MudText Color="Color.Error">
+                                            <ValidationMessage For="() => artifact.DiscountAmount" />
+                                        </MudText>
+                                    </MudItem>
+
                                     <MudItem xs="6">
                                         <MudSelect @bind-Value="artifact.CategoryId" Variant="Variant.Outlined"
                                                    Label="Select the suited category for the artifact.">
