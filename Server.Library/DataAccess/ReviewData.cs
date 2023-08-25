@@ -70,8 +70,7 @@ public class ReviewData : IReviewData
             string storedProcedure = GetStoredProcedure("GetById");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<ReviewModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadFirstOrDefaultAsync<ReviewModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -88,8 +87,7 @@ public class ReviewData : IReviewData
             string storedProcedure = GetStoredProcedure("GetByArtifactId");
             var parameters = GetArtifactIdParameters(artifactId);
 
-            output = await _sql.LoadDataAsync<ReviewModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<ReviewModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -106,26 +104,26 @@ public class ReviewData : IReviewData
             string insertSp = GetStoredProcedure("Insert");
             string getAllSp = GetStoredProcedure("GetByArtifactId");
 
-            object parameters = GetInsertParams(review);
+            var parameters = GetInsertParams(review);
             int reviewId = await _sql.SaveDataInTransactionAsync(insertSp, parameters);
 
             // Load all reviews for the associated artifact
-            var reviews = await _sql.LoadDataInTransactionAsync<ReviewModel, dynamic>(
+            var reviews = await _sql.LoadDataInTransactionAsync<ReviewModel>(
                 getAllSp, GetArtifactIdParameters(review.ArtifactId));
 
             // Calculate the new average rating based on all the reviews
             double newAverageRating = reviews.Average(r => r.Rating);
 
             // Load the artifact to update its rating
-            var artifactToUpdate = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>(
-                "dbo.spArtifact_GetById", GetArtifactIdParameters(review.ArtifactId));
+            var artifactToUpdate = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel>(
+                "dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(review.ArtifactId));
 
             // Save the updated artifact back to the database
 
             artifactToUpdate.Rating = newAverageRating;
 
             await _sql.SaveDataInTransactionAsync(
-                "dbo.spArtifact_Update", artifactToUpdate);
+                "dbo.spArtifact_Update", ParameterHelper.GetArtifactUpdateParameters(artifactToUpdate));
 
             _sql.CommitTransaction();
 
@@ -147,24 +145,24 @@ public class ReviewData : IReviewData
 
             string updateSp = GetStoredProcedure("Update");
             string getById = GetStoredProcedure("GetByArtifactId");
-            object parameters = GetUpdateParams(review);
+            var parameters = GetUpdateParams(review);
 
             await _sql.SaveDataInTransactionAsync(updateSp, parameters);
 
-            var updatedReviews = await _sql.LoadDataInTransactionAsync<ReviewModel, dynamic>(
-                getById, new { review.ArtifactId });
+            var updatedReviews = await _sql.LoadDataInTransactionAsync<ReviewModel>(
+                getById, GetArtifactIdParameters(review.ArtifactId));
 
             // Calculate the new average rating
             double newAverageRating = updatedReviews.Average(r => r.Rating);
 
             // Update the artifact's rating
-            var artifactToUpdate = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>(
-                "dbo.spArtifact_GetById", GetArtifactIdParameters(review.ArtifactId));
+            var artifactToUpdate = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel>(
+                "dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(review.ArtifactId));
 
             artifactToUpdate.Rating = newAverageRating;
 
             await _sql.SaveDataInTransactionAsync(
-                "dbo.spArtifact_Update", artifactToUpdate);
+                "dbo.spArtifact_Update", ParameterHelper.GetArtifactUpdateParameters(artifactToUpdate));
 
             _sql.CommitTransaction();
 

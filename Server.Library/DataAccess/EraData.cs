@@ -29,6 +29,16 @@ public class EraData : IEraData
         return parameters;
     }
 
+    private static DynamicParameters GetUpdateParams(EraModel era)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", era.Id);
+        parameters.Add("Name", era.Name);
+        parameters.Add("Description", era.Description);
+
+        return parameters;
+    }
+
     private void RemoveEraCache(int id)
     {
         string idKey = CacheNamePrefix + id;
@@ -43,8 +53,7 @@ public class EraData : IEraData
             string storedProcedure = GetStoredProcedure("GetAll");
             var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<EraModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<EraModel>(storedProcedure, parameters);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -61,8 +70,7 @@ public class EraData : IEraData
             string storedProcedure = GetStoredProcedure("GetById");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<EraModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadFirstOrDefaultAsync<EraModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -83,8 +91,9 @@ public class EraData : IEraData
         RemoveEraCache(era.Id);
 
         string storedProcedure = GetStoredProcedure("Update");
+        var parameters = GetUpdateParams(era);
 
-        return await _sql.SaveDataAsync(storedProcedure, era);
+        return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
 
     public async Task<int> DeleteEraAsync(int id)

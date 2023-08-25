@@ -29,6 +29,16 @@ public class CategoryData : ICategoryData
         return parameters;
     }
 
+    private static DynamicParameters GetUpdateParams(CategoryModel category)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", category.Id);
+        parameters.Add("Name", category.Name);
+        parameters.Add("Description", category.Description);
+
+        return parameters;
+    }
+
     private void RemoveCategoryCache(int id)
     {
         string idKey = CacheNamePrefix + id;
@@ -43,8 +53,7 @@ public class CategoryData : ICategoryData
             string storedProcedure = GetStoredProcedure("GetAll");
             var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<CategoryModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<CategoryModel>(storedProcedure, parameters);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -61,8 +70,7 @@ public class CategoryData : ICategoryData
             string storedProcedure = GetStoredProcedure("GetById");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<CategoryModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadFirstOrDefaultAsync<CategoryModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -83,8 +91,9 @@ public class CategoryData : ICategoryData
         RemoveCategoryCache(category.Id);
 
         string storedProcedure = GetStoredProcedure("Update");
+        var parameters = GetUpdateParams(category);
 
-        return await _sql.SaveDataAsync(storedProcedure, category);
+        return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
 
     public async Task<int> DeleteCategoryAsync(int id)

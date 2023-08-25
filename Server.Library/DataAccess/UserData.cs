@@ -71,7 +71,7 @@ public class UserData : IUserData
             string storedProcedure = GetStoredProcedure("GetAll");
             var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<UserModel, dynamic>(storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<UserModel>(storedProcedure, parameters);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -88,8 +88,7 @@ public class UserData : IUserData
             string storedProcedure = GetStoredProcedure("GetById");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<UserModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadFirstOrDefaultAsync<UserModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -106,8 +105,7 @@ public class UserData : IUserData
             string storedProcedure = GetStoredProcedure("GetByOid");
             var parameters = GetOidParameters(oid);
 
-            output = await _sql.LoadFirstOrDefaultAsync<UserModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadFirstOrDefaultAsync<UserModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -120,7 +118,7 @@ public class UserData : IUserData
         _cache.Remove(CacheName);
 
         string storedProcedure = GetStoredProcedure("Insert");
-        object parameters = GetInsertParameters(user);
+        var parameters = GetInsertParameters(user);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

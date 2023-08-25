@@ -59,10 +59,9 @@ public class ArtifactData : IArtifactData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetAll");
-            object parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<ArtifactModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<ArtifactModel>(storedProcedure, parameters);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -79,8 +78,7 @@ public class ArtifactData : IArtifactData
             string storedProcedure = GetStoredProcedure("GetByVendorId");
             var parameters = GetVendorIdParameters(vendorId);
 
-            output = await _sql.LoadDataAsync<ArtifactModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<ArtifactModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -97,8 +95,7 @@ public class ArtifactData : IArtifactData
             string storedProcedure = GetStoredProcedure("GetById");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<ArtifactModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadFirstOrDefaultAsync<ArtifactModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -119,8 +116,9 @@ public class ArtifactData : IArtifactData
         RemoveArtifactCache(artifact.Id);
 
         string storedProcedure = GetStoredProcedure("Update");
+        var parameters = ParameterHelper.GetArtifactUpdateParameters(artifact);
 
-        return await _sql.SaveDataAsync(storedProcedure, artifact);
+        return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
 
     public async Task<int> DeleteArtifactAsync(int id)

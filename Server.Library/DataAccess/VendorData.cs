@@ -61,8 +61,7 @@ public class VendorData : IVendorData
             string storedProcedure = GetStoredProcedure("GetAll");
             var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<VendorModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<VendorModel>(storedProcedure, parameters);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -79,8 +78,7 @@ public class VendorData : IVendorData
             string storedProcedure = GetStoredProcedure("GetById");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<VendorModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadFirstOrDefaultAsync<VendorModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -97,8 +95,7 @@ public class VendorData : IVendorData
             string storedProcedure = GetStoredProcedure("GetByOwnerId");
             var parameters = GetOwnerIdParamters(ownerUserId);
 
-            output = await _sql.LoadDataAsync<VendorModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<VendorModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -118,8 +115,9 @@ public class VendorData : IVendorData
     {
         RemoveVendorCache(vendor.Id, vendor);
         string storedProcedure = GetStoredProcedure("Update");
+        var parameters = ParameterHelper.GetVendorUpdateParameters(vendor);
 
-        return await _sql.SaveDataAsync(storedProcedure, vendor);
+        return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
 
     public async Task<int> DeleteVendorAsync(int id)

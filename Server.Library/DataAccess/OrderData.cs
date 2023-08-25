@@ -98,7 +98,7 @@ public class OrderData : IOrderData
     {
         foreach (var item in orderDetails)
         {
-            var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>(
+            var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel>(
                 "dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(item.ArtifactId));
 
             if (artifact is not null)
@@ -110,7 +110,8 @@ public class OrderData : IOrderData
                     artifact.Quantity = 0;
                 }
 
-                await _sql.SaveDataInTransactionAsync("dbo.spArtifact_Update", artifact);
+                await _sql.SaveDataInTransactionAsync(
+                    "dbo.spArtifact_Update", ParameterHelper.GetArtifactUpdateParameters(artifact));
             }
         }
     }
@@ -133,7 +134,7 @@ public class OrderData : IOrderData
 
         foreach (var kvp in uniqueArtifacts)
         {
-            var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>("dbo.spGetById",
+            var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel>("dbo.spGetById",
                 ParameterHelper.GetIdParameters(kvp.Value));
 
             price += artifact.Price * kvp.Value;
@@ -146,7 +147,7 @@ public class OrderData : IOrderData
     {
         foreach (var o in orderDetails)
         {
-            var artifact = await _sql.LoadFirstOrDefaultAsync<ArtifactModel, dynamic>(
+            var artifact = await _sql.LoadFirstOrDefaultAsync<ArtifactModel>(
                 "dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(o.ArtifactId));
 
             if (o.Quantity > artifact.Quantity)
@@ -168,8 +169,7 @@ public class OrderData : IOrderData
             string storedProcedure = GetOrderStoredProcedure("GetAll");
             var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<OrderModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<OrderModel>(storedProcedure, parameters);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -186,8 +186,7 @@ public class OrderData : IOrderData
             string storedProcedure = GetOrderStoredProcedure("GetByUserId");
             var parameters = GetUserIdParameters(userId);
 
-            output = await _sql.LoadDataAsync<OrderModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<OrderModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -204,8 +203,7 @@ public class OrderData : IOrderData
             string storedProcedure = GetOrderDetailsStoredProcedure("GetByOrderId");
             var parameters = GetOrderIdParameters(orderId);
 
-            output = await _sql.LoadDataAsync<OrderDetailsModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadDataAsync<OrderDetailsModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -222,8 +220,7 @@ public class OrderData : IOrderData
             string storedProcedure = GetOrderStoredProcedure("GetById");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<OrderModel, dynamic>(
-                storedProcedure, parameters);
+            output = await _sql.LoadFirstOrDefaultAsync<OrderModel>(storedProcedure, parameters);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -246,7 +243,7 @@ public class OrderData : IOrderData
             order.TotalPrice = await CalculatePriceAsync(orderDetails);
 
             string orderSp = GetOrderStoredProcedure("Insert");
-            object orderParameters = GetOrderInsertParams(order);
+            var orderParameters = GetOrderInsertParams(order);
             int orderId = await _sql.SaveDataInTransactionAsync(orderSp, orderParameters);
 
             string orderDetailsSp = GetOrderDetailsStoredProcedure("Insert");
@@ -287,7 +284,7 @@ public class OrderData : IOrderData
             order.TotalPrice = await CalculatePriceAsync(orderDetails);
 
             string orderSp = GetOrderStoredProcedure("Update");
-            object orderParameters = GetOrderUpdateParams(order);
+            var orderParameters = GetOrderUpdateParams(order);
             await _sql.SaveDataInTransactionAsync(orderSp, orderParameters);
 
             string orderDetailsSp = GetOrderDetailsStoredProcedure("Update");
@@ -300,7 +297,7 @@ public class OrderData : IOrderData
             decimal totalPrice = 0;
             foreach (var item in orderDetails)
             {
-                var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel, dynamic>
+                var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel>
                     ("dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(item.ArtifactId));
                 totalPrice += artifact.Price * item.Quantity;
             }
@@ -330,7 +327,7 @@ public class OrderData : IOrderData
         RemoveOrderCache(id);
 
         string storedProcedure = GetOrderStoredProcedure("Delete");
-        object parameters = new { Id = id };
+        var parameters = ParameterHelper.GetIdParameters(id);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

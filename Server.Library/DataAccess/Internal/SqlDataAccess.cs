@@ -42,7 +42,7 @@ public class SqlDataAccess : ISqlDataAccess
         _isClosed = true;
     }
 
-    public async Task<List<T>> LoadDataAsync<T, U>(string storedProcedure, U parameters)
+    public async Task<List<T>> LoadDataAsync<T>(string storedProcedure, DynamicParameters parameters)
     {
         string connectionString = GetConnectionString();
 
@@ -53,7 +53,7 @@ public class SqlDataAccess : ISqlDataAccess
         return rows.ToList();
     }
 
-    public async Task<T> LoadFirstOrDefaultAsync<T, U>(string storedProcedure, U parameters)
+    public async Task<T> LoadFirstOrDefaultAsync<T>(string storedProcedure, DynamicParameters parameters)
     {
         string connectionString = GetConnectionString();
 
@@ -64,7 +64,7 @@ public class SqlDataAccess : ISqlDataAccess
         return row;
     }
 
-    public async Task<int> SaveDataAsync<T>(string storedProcedure, T parameters)
+    public async Task<int> SaveDataAsync(string storedProcedure, DynamicParameters parameters)
     {
         string connectionString = GetConnectionString();
 
@@ -87,7 +87,7 @@ public class SqlDataAccess : ISqlDataAccess
         _isClosed = false;
     }
 
-    public async Task<int> SaveDataInTransactionAsync<T>(string storedProcedure, T parameters)
+    public async Task<int> SaveDataInTransactionAsync(string storedProcedure, DynamicParameters parameters)
     {
         using var multi = await _connection.QueryMultipleAsync(storedProcedure, parameters,
             commandType: CommandType.StoredProcedure, transaction: _transaction);
@@ -95,7 +95,7 @@ public class SqlDataAccess : ISqlDataAccess
         return await multi.ReadSingleAsync<int>();
     }
 
-    public async Task<List<T>> LoadDataInTransactionAsync<T, U>(string storedProcedure, U parameters)
+    public async Task<List<T>> LoadDataInTransactionAsync<T>(string storedProcedure, DynamicParameters parameters)
     {
         var rows = await _connection.QueryAsync<T>(storedProcedure, parameters,
             commandType: CommandType.StoredProcedure, transaction: _transaction);
@@ -103,7 +103,7 @@ public class SqlDataAccess : ISqlDataAccess
         return rows.ToList();
     }
 
-    public async Task<T> LoadFirstOrDefaultInTransactionAsync<T, U>(string storedProcedure, U parameters)
+    public async Task<T> LoadFirstOrDefaultInTransactionAsync<T>(string storedProcedure, DynamicParameters parameters)
     {
         var row = await _connection.QueryFirstOrDefaultAsync<T>(storedProcedure, parameters,
             commandType: CommandType.StoredProcedure, transaction: _transaction);
