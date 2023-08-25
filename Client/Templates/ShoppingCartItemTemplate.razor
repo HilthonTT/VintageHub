@@ -40,10 +40,10 @@
     private string imageSource = "";
     private decimal totalPrice = 0;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         CalculateTotalPrice();
-        imageSource = await ImageEndpoint.GetImageAsync(CartItem.Artifact.ImageId);
+        imageSource = ImageEndpoint.GetImage(CartItem.Artifact.ImageId);
     }
 
     private async Task RemoveFromCartAsync()

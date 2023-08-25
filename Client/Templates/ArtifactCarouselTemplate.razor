@@ -21,9 +21,9 @@
 
     private string imageSource = "";
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        imageSource = await ImageEndpoint.GetImageAsync(Artifact.ImageId);
+        imageSource = ImageEndpoint.GetImage(Artifact.ImageId);
     }
 
     private void LoadArtifactPage()

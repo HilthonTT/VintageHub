@@ -50,7 +50,8 @@ public class ImageController : ControllerBase
     }
 
     [HttpGet("{objectId}")]
-    public async Task<ActionResult<string>> GetImageAsync(string objectId)
+    [AllowAnonymous]
+    public async Task<IActionResult> GetImage(string objectId)
     {
         try
         {
@@ -59,8 +60,15 @@ public class ImageController : ControllerBase
                 return BadRequest("The Object Identifier must be provided.");
             }
 
-            string imageUrl = await _imageData.GetImageAsync(objectId);
-            return Ok(imageUrl);
+            byte[] imageData = await _imageData.GetImageAsync(objectId);
+            if (imageData is null)
+            {
+                return NotFound();
+            }
+
+            Response.Headers.Add("Content-Type", "image/jpeg");
+
+            return File(imageData, "image/jpeg");
         }
         catch (Exception ex)
         {

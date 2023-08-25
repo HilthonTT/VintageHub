@@ -113,7 +113,7 @@ else
         }
 
         loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
-        imageSource = await ImageEndpoint.GetImageAsync(artifact.ImageId);
+        imageSource = ImageEndpoint.GetImage(artifact.ImageId);
     }
 
     private void ClosePage()

@@ -2,6 +2,6 @@
 public interface IImageData
 {
     Task DeleteImageAsync(string objectId);
-    Task<string> GetImageAsync(string objectId);
+    Task<byte[]> GetImageAsync(string objectId);
     Task<string> UploadImageAsync(Stream imageStream);
 }

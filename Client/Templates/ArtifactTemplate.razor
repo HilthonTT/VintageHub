@@ -36,11 +36,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        imageSource = await ImageEndpoint.GetImageAsync(Artifact.ImageId);
-        if (string.IsNullOrWhiteSpace(imageSource) is false)
-        {
-            StateHasChanged();
-        }
+        imageSource = ImageEndpoint.GetImage(Artifact.ImageId);
 
         vendor = await VendorEndpoint.GetVendorByIdAsync(Artifact.VendorId);
     }

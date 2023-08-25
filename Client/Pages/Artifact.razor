@@ -159,7 +159,7 @@ else
 
         if (artifact is not null)
         {
-            artifactImageSource = await ImageEndpoint.GetImageAsync(artifact.ImageId) ?? "";
+            artifactImageSource = ImageEndpoint.GetImage(artifact.ImageId);
 
             category = await CategoryEndpoint.GetCategoryByIdAsync(artifact.CategoryId);
             era = await EraEndpoint.GetEraByIdAsync(artifact.EraId);
@@ -173,7 +173,7 @@ else
     {
         vendor = await VendorEndpoint.GetVendorByIdAsync(artifact.VendorId);
 
-        vendorImageSource = await ImageEndpoint.GetImageAsync(vendor.ImageId) ?? "";
+        vendorImageSource = ImageEndpoint.GetImage(vendor.ImageId);
     }
 
     private async Task LoadRandomArtifactsAsync()

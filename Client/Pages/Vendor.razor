@@ -172,7 +172,7 @@ else
         vendor = await VendorEndpoint.GetVendorByIdAsync(Id);
         if (vendor is not null)
         {
-            imageSource = await ImageEndpoint.GetImageAsync(vendor.ImageId);
+            imageSource = ImageEndpoint.GetImage(vendor.ImageId);
         }
 
         await LoadFilterStateAsync();

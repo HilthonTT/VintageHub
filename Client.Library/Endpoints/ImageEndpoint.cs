@@ -41,33 +41,17 @@ public class ImageEndpoint : IImageEndpoint
         return "";
     }
 
-    public async Task<string> GetImageAsync(string objectId)
+    public string GetImage(string objectId)
     {
         try
         {
-            var cachedImages = await _localStorage.GetAsync<List<ImageModel>>(CacheName);
-            cachedImages ??= new();
-
-            var cachedImage = cachedImages.FirstOrDefault(image => image.ObjectIdentifier == objectId);
-
-            if (cachedImage is null)
+            string baseAddress = _httpClient.BaseAddress.ToString();
+            if (string.IsNullOrWhiteSpace(objectId))
             {
-                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{objectId}");
-                response.EnsureSuccessStatusCode();
-
-                string imageUrl = await response.Content.ReadAsStringAsync();
-
-                if (imageUrl.Contains("<!DOCTYPE html>"))
-                {
-                    imageUrl = "";
-                }
-
-                cachedImage = new ImageModel(objectId, imageUrl);
-                cachedImages.Add(cachedImage);
-                await _localStorage.SetAsync(CacheName, cachedImages, CacheTimeSpan);
+                return "https://dummyimage.com/600x400/000/fff";
             }
 
-            return cachedImage.Url;
+            return $"{baseAddress}{ApiEndpointUrl}/{objectId}";
         }
         catch (AccessTokenNotAvailableException ex)
         {

@@ -33,7 +33,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        imageSource = await ImageEndpoint.GetImageAsync(Artifact.ImageId);
+        imageSource = ImageEndpoint.GetImage(Artifact.ImageId);
         vendor = await VendorEndpoint.GetVendorByIdAsync(Artifact.VendorId);
     }
 

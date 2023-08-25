@@ -24,13 +24,12 @@ public class ImageData : IImageData
         return objectId.ToString();
     }
 
-    public async Task<string> GetImageAsync(string objectId)
+    public async Task<byte[]> GetImageAsync(string objectId)
     {
-        var output = _cache.Get<string>(objectId);
+        var output = _cache.Get<byte[]>(objectId);
         if (output is null)
         {
-            byte[] imageBytes = await _connection.Bucket.DownloadAsBytesAsync(new ObjectId(objectId));
-            output = $"data:image/jpg;base64,{Convert.ToBase64String(imageBytes)}";
+            output = await _connection.Bucket.DownloadAsBytesAsync(new ObjectId(objectId));
 
             _cache.Set(objectId, output, CacheTimeSpan);
         }
