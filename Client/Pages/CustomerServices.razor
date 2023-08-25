@@ -1,0 +1,80 @@
+﻿@page "/CustomerServices"
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+<PageTitle>Customer Services</PageTitle>
+
+<MudGrid Class="mt-3 mb-5">
+    <MudItem xs="12">
+        <MudText Typo="Typo.h5" GutterBottom="true" Class="fw-bold text-uppercase">
+            Customer Services
+        </MudText>
+        <MudDivider Class="mt-3 mb-3"/>
+        <MudItem>
+            <MudText Typo="Typo.h6">
+                Find your the answer to your questions here.
+            </MudText>
+            <MudText Typo="Typo.body1">
+                All the subjects in a blink of an eye!
+            </MudText>
+        </MudItem>       
+    </MudItem>
+    <MudItem xs="12" Class="mt-3">
+        <MudGrid Spacing="2">
+            <MudItem xs="6">
+                <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudAvatar Size="Size.Large" Color="Color.Dark">
+                                    <MudIcon Icon="@Icons.Material.Filled.Sell"
+                                             Size="Size.Large" Color="Color.Secondary" />
+                                </MudAvatar>
+                            </MudItem>
+                            <MudItem xs="10">
+                                <div class="d-flex justify-content-between">
+                                    <MudText Class="mt-auto mb-auto fw-bold">Sell on VintageHub.com</MudText>
+                                    <MudFab OnClick="LoadSellOnVintageHubPage" Color="Color.Secondary"
+                                            StartIcon="@Icons.Material.Filled.ArrowRight" />
+                                </div>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="6">
+                <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudAvatar Size="Size.Large" Color="Color.Dark">
+                                    <MudIcon Icon="@Icons.Material.Filled.Support"
+                                             Size="Size.Large" Color="Color.Secondary" />
+                                </MudAvatar>
+                            </MudItem>
+                            <MudItem xs="10">
+                                <div class="d-flex justify-content-between">
+                                    <MudText Class="mt-auto mb-auto fw-bold">Call Support</MudText>
+                                    <MudFab OnClick="CallSupport" Color="Color.Secondary"
+                                            StartIcon="@Icons.Material.Filled.ArrowRight" />
+                                </div>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private void LoadSellOnVintageHubPage()
+    {
+        Navigation.NavigateTo("/CustomerServices/Sell-On-Vintage-Hub");
+    }
+
+    private void CallSupport()
+    {
+        Navigation.NavigateTo("/CustomerServices/Call-Support");
+    }
+}
