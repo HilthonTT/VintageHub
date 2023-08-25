@@ -63,7 +63,17 @@ public class ImageController : ControllerBase
             byte[] imageData = await _imageData.GetImageAsync(objectId);
             if (imageData is null)
             {
-                return NotFound();
+                using var httpClient = new HttpClient();
+                var response = await httpClient.GetAsync("https://dummyimage.com/600x400/000/fff");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    imageData = await response.Content.ReadAsByteArrayAsync();
+                }
+                else
+                {
+                    return StatusCode(500, "Error fetching default image.");
+                }
             }
 
             Response.Headers.Add("Content-Type", "image/jpeg");
