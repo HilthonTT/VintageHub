@@ -1,0 +1,181 @@
+﻿@page "/CustomerServices/Call-Support"
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+<PageTitle>Call Support</PageTitle>
+
+<MudGrid Class="mt-3 mb-5">
+    <MudItem xs="12">
+        <MudText Typo="Typo.body2">
+            Customer Service
+            <MudIcon Icon="@Icons.Material.Filled.ArrowRight" />
+            Call Support
+        </MudText>
+    </MudItem>
+    <MudItem xs="12">
+        <div class="d-flex justify-content-between">
+            <div>
+                <MudText Typo="Typo.h5" GutterBottom="true" Class="fw-bold text-uppercase">
+                    Call Support
+                </MudText>
+            </div>
+            <MudIconButton OnClick="ClosePage" Icon="@Icons.Material.Filled.Close" />
+        </div>
+        <MudDivider Class="mt-3 mb-3" />
+    </MudItem>
+    <MudItem xs="12">
+        <MudGrid Spacing="2">
+            <MudItem xs="6">
+                <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudAvatar Size="Size.Large" Color="Color.Dark">
+                                    <MudIcon Icon="@Icons.Material.Filled.Build"
+                                             Size="Size.Large" Color="Color.Secondary" />
+                                </MudAvatar>
+                            </MudItem>
+                            <MudItem xs="10">
+                                <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
+                                     <MudText>
+                                         Technical Support
+                                     </MudText>
+                                     <MudText Color="Color.Primary">
+                                         888-888-888
+                                     </MudText>
+                                 </MudStack>
+                             </MudItem>
+                         </MudGrid>
+                     </MudCardContent>
+                 </MudCard>
+             </MudItem>
+             <MudItem xs="6">
+                 <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudAvatar Size="Size.Large" Color="Color.Dark">
+                                    <MudIcon Icon="@Icons.Material.Filled.Headset"
+                                             Size="Size.Large" Color="Color.Secondary" />
+                                </MudAvatar>
+                            </MudItem>
+                            <MudItem xs="10">
+                                <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
+                                     <MudText>
+                                         Customer Service
+                                     </MudText>
+                                     <MudText Color="Color.Primary">
+                                         777-777-777
+                                     </MudText>
+                                 </MudStack>
+                             </MudItem>
+                         </MudGrid>
+                     </MudCardContent>
+                 </MudCard>
+             </MudItem>
+             <MudItem xs="6">
+                 <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudAvatar Size="Size.Large" Color="Color.Dark">
+                                    <MudIcon Icon="@Icons.Material.Filled.LocalShipping"
+                                             Size="Size.Large" Color="Color.Secondary" />
+                                </MudAvatar>
+                            </MudItem>
+                            <MudItem xs="10">
+                                <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
+                                     <MudText>
+                                         Shipping Assistance
+                                     </MudText>
+                                     <MudText Color="Color.Primary">
+                                         555-555-555
+                                     </MudText>
+                                 </MudStack>
+                             </MudItem>
+                         </MudGrid>
+                     </MudCardContent>
+                 </MudCard>
+             </MudItem>
+             <MudItem xs="6">
+                 <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudAvatar Size="Size.Large" Color="Color.Dark">
+                                    <MudIcon Icon="@Icons.Material.Filled.Reply"
+                                             Size="Size.Large" Color="Color.Secondary" />
+                                </MudAvatar>
+                            </MudItem>
+                            <MudItem xs="10">
+                                <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
+                                     <MudText>
+                                         Returns and Refunds
+                                     </MudText>
+                                     <MudText Color="Color.Primary">
+                                         444-444-444
+                                     </MudText>
+                                 </MudStack>
+                             </MudItem>
+                         </MudGrid>
+                     </MudCardContent>
+                 </MudCard>
+             </MudItem>
+             <MudItem xs="6">
+                 <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudAvatar Size="Size.Large" Color="Color.Dark">
+                                    <MudIcon Icon="@Icons.Material.Filled.Info"
+                                             Size="Size.Large" Color="Color.Secondary" />
+                                </MudAvatar>
+                            </MudItem>
+                            <MudItem xs="10">
+                                <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
+                                     <MudText>
+                                         Product Information
+                                     </MudText>
+                                     <MudText Color="Color.Primary">
+                                         333-333-333
+                                     </MudText>
+                                 </MudStack>
+                             </MudItem>
+                         </MudGrid>
+                     </MudCardContent>
+                 </MudCard>
+             </MudItem>
+             <MudItem xs="6">
+                 <MudCard Outlined>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudAvatar Size="Size.Large" Color="Color.Dark">
+                                    <MudIcon Icon="@Icons.Material.Filled.Build"
+                                             Size="Size.Large" Color="Color.Secondary" />
+                                </MudAvatar>
+                            </MudItem>
+                            <MudItem xs="10">
+                                <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
+                                     <MudText>
+                                         Technical Assistance
+                                     </MudText>
+                                     <MudText Color="Color.Primary">
+                                         222-222-222
+                                     </MudText>
+                                 </MudStack>
+                             </MudItem>
+                         </MudGrid>
+                     </MudCardContent>
+                 </MudCard>
+             </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

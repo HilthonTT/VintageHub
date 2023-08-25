@@ -8,6 +8,13 @@
 
 <MudGrid Class="mt-3 mb-5">
     <MudItem xs="12">
+        <MudText Typo="Typo.body2">
+            Customer Service
+            <MudIcon Icon="@Icons.Material.Filled.ArrowRight" />
+            Send A Professional Account request
+        </MudText>
+    </MudItem>
+    <MudItem xs="12">
         @if (string.IsNullOrWhiteSpace(message) is false)
         {
             <MudAlert Severity="Severity.Error" Elevation="3" Class="mb-3">

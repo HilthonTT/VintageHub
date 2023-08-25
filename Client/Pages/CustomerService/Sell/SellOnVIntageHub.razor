@@ -7,7 +7,7 @@
 <MudGrid Class="mt-3 mb-5">
     <MudItem xs="12">
         <MudText Typo="Typo.body2">
-            Customer Service 
+            Customer Service
             <MudIcon Icon="@Icons.Material.Filled.ArrowRight" />
             Sell on VintageHub.com
         </MudText>
@@ -19,7 +19,7 @@
                     Sell On Vintage Hub
                 </MudText>
             </div>
-            <MudIconButton OnClick="ClosePage" Icon="@Icons.Material.Filled.Close"/>
+            <MudIconButton OnClick="ClosePage" Icon="@Icons.Material.Filled.Close" />
         </div>
         <MudDivider Class="mt-3 mb-3" />
     </MudItem>
@@ -72,18 +72,12 @@
         </MudGrid>
     </MudItem>
     <MudItem xs="12">
-        <MudPaper Class="pa-5">
+        <MudPaper Class="pa-2">
             <MudItem>
-                <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
+                <MudButton OnClick="LoadCallSupportPage" Color="Color.Secondary"
+                           Variant="Variant.Text" Class="fw-bold text-uppercase h4">
                     Contact us
-                </MudText>
-            </MudItem>
-            <MudItem>
-                <MudStack Row>
-                    <MudButton Color="Color.Primary" Variant="Variant.Text">
-                        Email us
-                    </MudButton>
-                </MudStack>
+                </MudButton>
             </MudItem>
         </MudPaper>
     </MudItem>
@@ -93,6 +87,11 @@
     private void ClosePage()
     {
         Navigation.NavigateTo("/");
+    }
+
+    private void LoadCallSupportPage()
+    {
+        Navigation.NavigateTo("/CustomerServices/Call-Support");
     }
 
     private void LoadProfessionalAccountPage()
