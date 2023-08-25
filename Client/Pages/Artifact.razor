@@ -60,7 +60,7 @@
                                             <div class="d-flex">
                                                 <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity" />
                                                 <MudButton OnClick="AddToCart" StartIcon="@Icons.Material.Filled.AddShoppingCart"
-                                                           Color="Color.Error">
+                                                           Color="Color.Error" Disabled="!canAddToCart">
                                                     Add To Cart
                                                 </MudButton>
                                             </div>
@@ -128,6 +128,7 @@ else
     private string vendorImageSource = "";
     private string errorMessage = "";
     private bool isLoading = true;
+    private bool canAddToCart = false;
     private List<ArtifactModel> randomArtifacts;
     private List<ReviewModel> reviews;
     private VendorModel vendor;
@@ -135,12 +136,14 @@ else
     private UserModel loggedInUser;
     private CategoryModel category;
     private EraModel era;
+    private ShoppingCartModel shoppingCart;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+            shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
 
             await LoadArtifactAsync();
             await LoadRandomArtifactsAsync();
@@ -159,6 +162,8 @@ else
 
         if (artifact is not null)
         {
+            artifact.Quantity = GetArtifactQuantity(artifact);
+            canAddToCart = CanAddToCart(artifact);
             artifactImageSource = ImageEndpoint.GetImage(artifact.ImageId);
 
             category = await CategoryEndpoint.GetCategoryByIdAsync(artifact.CategoryId);
@@ -219,11 +224,47 @@ else
         Navigation.NavigateTo($"/Vendor/{vendor.Id}");
     }
 
+    private bool CanAddToCart(ArtifactModel artifact)
+    {
+        var item = shoppingCart.CartItems.FirstOrDefault(x => x.Artifact.Id == artifact.Id);
+
+        if (item is not null || artifact.Quantity <= 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private int GetArtifactQuantity(ArtifactModel artifact)
+    {
+        if (shoppingCart is null)
+        {
+            return artifact.Quantity;
+        }
+
+        int itemCount = shoppingCart.CartItems.Where(x => x.Artifact.Id == artifact.Id).Count();
+
+        artifact.Quantity -= itemCount;
+
+        if (artifact.Quantity < 0)
+        {
+            artifact.Quantity = 0;
+        }
+
+        return artifact.Quantity;
+    }
+
     private async Task AddToCart()
     {
         if (loggedInUser is null)
         {
             Navigation.NavigateToLogin("authentication/login");
+        }
+
+        if (canAddToCart is false)
+        {
+            return;
         }
 
         artifact.Quantity -= selectedQuantity;
@@ -234,7 +275,6 @@ else
             Quantity = selectedQuantity,
         };
 
-        var shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
         shoppingCart.CartItems.Add(newCartItem);
 
         await ShoppingCartStorage.SaveShoppingCartAsync(shoppingCart);

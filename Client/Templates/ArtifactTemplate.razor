@@ -11,10 +11,11 @@
             <MudText Typo="Typo.h5">@Artifact?.Name</MudText>
             <MudText Typo="Typo.body2">@Artifact?.Description</MudText>
             <MudDivider Class="mt-3 mb-3" />
+            <MudText Typo="Typo.body1">Price: @Artifact?.Price.ToString("0.####") &euro;</MudText>
             <MudText Typo="Typo.body2">This artifact is sold by: @vendor?.Name</MudText>
         </MudCardContent>
         <MudCardActions>
-            <MudButton OnClick="AddToCartAsync" Variant="Variant.Text"
+            <MudButton OnClick="AddToCartAsync" Variant="Variant.Text" Disabled="!canAddToCart"
                        Color="Color.Error" StartIcon="@Icons.Material.Filled.AddShoppingCart">
                 Add to Cart
             </MudButton>
@@ -32,13 +33,17 @@
     public ArtifactModel Artifact { get; set; }
 
     private VendorModel vendor;
+    private ShoppingCartModel shoppingCart;
     private string imageSource = "";
+    private bool canAddToCart = false;
 
     protected override async Task OnInitializedAsync()
     {
         imageSource = ImageEndpoint.GetImage(Artifact.ImageId);
-
         vendor = await VendorEndpoint.GetVendorByIdAsync(Artifact.VendorId);
+        shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
+
+        canAddToCart = CanAddToCart();
     }
 
     private void OpenDetails()
@@ -46,10 +51,26 @@
         Navigation.NavigateTo($"/Artifact/{Artifact.Id}");
     }
 
+    private bool CanAddToCart()
+    {
+        var item = shoppingCart.CartItems.FirstOrDefault(x => x.Artifact.Id == Artifact.Id);
+
+        if (item is not null || Artifact.Quantity <= 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private async Task AddToCartAsync()
     {
-        var shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
+        if (canAddToCart is false || shoppingCart is null)
+        {
+            return;
+        }
 
+        canAddToCart = false;
         var newCartItem = new CartItemModel
             {
                 Artifact = Artifact,
