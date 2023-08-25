@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Client.Library\Client.Library.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\CustomerService\Support\" />
+  </ItemGroup>
+
 </Project>
