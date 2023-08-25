@@ -141,6 +141,8 @@
             categories = await CategoryEndpoint.GetAllCategoriesAsync();
             eras = await EraEndpoint.GetAllErasAsync();
             loggedInUser = await UserVerifier.LoadAndVerifyUserAsync();
+
+            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -160,7 +162,17 @@
 
     private void LoadDiscountPage()
     {
-        Navigation.NavigateTo("/Discounts");
+        var uriBuilder = new UriBuilder(Navigation.ToAbsoluteUri("/Listing"));
+
+        var queryParameters = new Dictionary<string, string>
+            {
+                ["filterDiscounts"] = true.ToString(),
+            };
+
+        string queryString = string.Join("&", queryParameters.Select(kv => $"{kv.Key}={kv.Value}"));
+        uriBuilder.Query = queryString;
+
+        Navigation.NavigateTo(uriBuilder.Uri.ToString());
     }
 
     private void LoadOrdersPage()

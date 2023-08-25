@@ -54,7 +54,7 @@
                                     <MudItem xs="12">
                                         <MudTextField @bind-Value="artifact.Description" Label="Artifact Description"
                                                       Lines="2" Required="true" Variant="Variant.Outlined" Clearable="true"
-                                                      HelperText="Describe your artifact in 256 characters."/>
+                                                      HelperText="Describe your artifact in 1000 characters."/>
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.Description" />
                                         </MudText>
@@ -305,6 +305,7 @@ else
             Description = artifact.Description,
             Quantity = artifact.Quantity,
             Price = artifact.Price,
+            DiscountAmount = artifact.DiscountAmount,
             CategoryId = artifact.CategoryId,
             VendorId = artifact.VendorId,
             ImageId = "",

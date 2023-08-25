@@ -140,11 +140,13 @@ else
     private bool showAllEras = false;
     private bool sortByPrice = false;
     private bool isLoading = true;
+    private bool filterDiscounts = false;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadFilterStateAsync();
         await FilterArtifactsAsync();
+
 
         await LoadCategoriesAsync();
         await LoadErasAsync();
@@ -198,6 +200,10 @@ else
         sortByPrice = queryParameters["sortByPrice"] is not null
             ? sortByPrice = bool.Parse(queryParameters["sortByPrice"])
             : sortByPrice = await SessionStorage.GetItemAsync<bool>(nameof(sortByPrice));
+
+        filterDiscounts = queryParameters["filterDiscounts"] is not null
+            ? filterDiscounts = bool.Parse(queryParameters["filterDiscounts"])
+            : filterDiscounts = await SessionStorage.GetItemAsync<bool>(nameof(filterDiscounts));
     }
 
     private async Task SaveFilterStateAsync()
@@ -207,6 +213,7 @@ else
         await SessionStorage.SetItemAsync(nameof(selectedCategory), selectedCategory);
         await SessionStorage.SetItemAsync(nameof(selectedRating), selectedRating);
         await SessionStorage.SetItemAsync(nameof(sortByPrice), sortByPrice);
+        await SessionStorage.SetItemAsync(nameof(filterDiscounts), filterDiscounts);
     }
 
     private async Task FilterArtifactsAsync()
@@ -216,6 +223,11 @@ else
         if (string.IsNullOrWhiteSpace(searchText) is false)
         {
             output = output.Where(a => a.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        if (filterDiscounts)
+        {
+            output = output.Where(a => a.DiscountAmount > 0).ToList();
         }
 
         if (selectedEra is not null)

@@ -39,7 +39,7 @@
 
     private void OpenDetails()
     {
-        Navigation.NavigateTo($"/Artifact/{Artifact.Id}");
+        Navigation.NavigateTo($"/Artifact/{Artifact.Id}", true);
     }
 
     private async Task AddToCartAsync()
