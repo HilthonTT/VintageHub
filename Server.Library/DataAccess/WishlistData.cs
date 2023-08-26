@@ -30,6 +30,14 @@ public class WishlistData : IWishlistData
         return parameters;
     }
 
+    private static DynamicParameters GetUserIdParameters(int userId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("UserId", userId);
+
+        return parameters;
+    }
+
     private void RemoveWishlistCache(int id)
     {
         string idKey = CacheNamePrefix + id;
@@ -43,7 +51,7 @@ public class WishlistData : IWishlistData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetArtifacts");
-            var parameters = new DynamicParameters();
+            var parameters = GetUserIdParameters(userId);
 
             output = await _sql.LoadDataAsync<ArtifactModel>(storedProcedure, parameters);
             _cache.Set(key, output, CacheTimeSpan);
@@ -59,7 +67,7 @@ public class WishlistData : IWishlistData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetByUserId");
-            var parameters = new DynamicParameters();
+            var parameters = GetUserIdParameters(userId);
 
             output = await _sql.LoadDataAsync<WishlistModel>(storedProcedure, parameters);
             _cache.Set(key, output, CacheTimeSpan);
