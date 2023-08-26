@@ -74,6 +74,7 @@
     <Folder Include="dbo\Scripts\Order" />
     <Folder Include="dbo\Scripts\OrderDetails" />
     <Folder Include="dbo\Scripts\Review" />
+    <Folder Include="dbo\Stored Procedures\Wishlist" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Category.sql" />
@@ -132,6 +133,10 @@
     <Build Include="dbo\Scripts\User\Index_User_Oid.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByOwnerId.sql" />
+    <Build Include="dbo\Tables\Wishlist.sql" />
+    <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_GetArtifacts.sql" />
+    <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Locations\VintageData.publish.xml" />
