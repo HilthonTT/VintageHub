@@ -42,5 +42,6 @@ public static class RegisterServices
         builder.Services.AddTransient<IReviewData, ReviewData>();
         builder.Services.AddTransient<IUserData, UserData>();
         builder.Services.AddTransient<IVendorData, VendorData>();
+        builder.Services.AddTransient<IWishlistData, WishlistData>();
     }
 }
