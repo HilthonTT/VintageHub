@@ -65,5 +65,6 @@ public static class RegisterServices
         builder.Services.AddTransient<IReviewEndpoint, ReviewEndpoint>();
         builder.Services.AddTransient<IUserEndpoint, UserEndpoint>();
         builder.Services.AddTransient<IVendorEndpoint, VendorEndpoint>();
+        builder.Services.AddTransient<IWishlistEndpoint, WishlistEndpoint>();
     }
 }
