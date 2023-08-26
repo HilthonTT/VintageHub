@@ -8,3 +8,8 @@ global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.ResponseCompression;
 global using Server.Library.DataAccess.MongoDb;
 global using Server.Library.DataAccess.MongoDb.Interfaces;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.Identity.Web.Resource;
+global using Server.Library.Models;
+global using VintageHub.Server.Models;

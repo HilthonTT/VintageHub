@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
-
-namespace VintageHub.Server.Controllers;
+﻿namespace VintageHub.Server.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
