@@ -38,10 +38,21 @@ public class WishlistData : IWishlistData
         return parameters;
     }
 
-    private void RemoveWishlistCache(int id)
+    private void RemoveWishlistCache(int userId)
     {
-        string idKey = CacheNamePrefix + id;
+        string idKey = CacheNamePrefix + userId;
         _cache.Remove(idKey);
+
+        idKey = CacheNameUserPrefix + userId;
+        _cache.Remove(idKey);
+    }
+
+    private async Task<WishlistModel> GetWishlistByIdAsync(int id)
+    {
+        string storedProcedure = GetStoredProcedure("GetById");
+        var parameters = ParameterHelper.GetIdParameters(id);
+
+        return await _sql.LoadFirstOrDefaultAsync<WishlistModel>(storedProcedure, parameters);
     }
 
     public async Task<List<ArtifactModel>> GetAllArtifactsInWishlistAsync(int userId)
@@ -78,7 +89,7 @@ public class WishlistData : IWishlistData
 
     public async Task<int> InsertWishlistAsync(WishlistModel wishlist)
     {
-        RemoveWishlistCache(wishlist.Id);
+        RemoveWishlistCache(wishlist.UserId);
 
         string storedProcedure = GetStoredProcedure("Insert");
         var parameters = GetInsertParameters(wishlist);
@@ -88,7 +99,8 @@ public class WishlistData : IWishlistData
 
     public async Task<int> DeleteWishlistAsync(int id)
     {
-        RemoveWishlistCache(id);
+        var wishlist = await GetWishlistByIdAsync(id);
+        RemoveWishlistCache(wishlist.UserId);
 
         string storedProcedure = GetStoredProcedure("Delete");
         var parameters = ParameterHelper.GetIdParameters(id);

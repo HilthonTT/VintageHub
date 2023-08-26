@@ -5,6 +5,15 @@
 
 <MudItem xs="4">
     <MudCard Class="m-2">
+        @if (RemoveEvent.HasDelegate)
+        {
+            <MudCardHeader>
+                <CardHeaderContent />
+                <CardHeaderActions>
+                    <MudIconButton OnClick="RemoveAsync" Icon="@Icons.Material.Filled.Close" />
+                </CardHeaderActions>
+            </MudCardHeader>
+        }
         <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
                       Height="200" alt="@Artifact?.Name" />
         <MudCardContent>
@@ -31,6 +40,9 @@
     [Parameter]
     [EditorRequired]
     public ArtifactModel Artifact { get; set; }
+
+    [Parameter]
+    public EventCallback<ArtifactModel> RemoveEvent { get; set; }
 
     private VendorModel vendor;
     private ShoppingCartModel shoppingCart;
@@ -61,6 +73,11 @@
         }
 
         return true;
+    }
+
+    private async Task RemoveAsync()
+    {
+        await RemoveEvent.InvokeAsync(Artifact);
     }
 
     private async Task AddToCartAsync()

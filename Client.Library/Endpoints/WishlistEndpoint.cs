@@ -63,6 +63,8 @@ public class WishlistEndpoint : IWishlistEndpoint
                 output = await response.Content.ReadFromJsonAsync<List<WishlistModel>>();
                 await _localStorage.SetAsync(CacheNameUser, output, CacheTimeSpan);
             }
+
+            return output;
         }
         catch (AccessTokenNotAvailableException ex)
         {

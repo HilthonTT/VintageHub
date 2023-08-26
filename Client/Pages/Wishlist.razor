@@ -1,0 +1,120 @@
+﻿@page "/Wishlist"
+@inject IWishlistEndpoint WishlistEndpoint
+@inject IUserEndpoint UserEndpoint
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+<PageTitle>Wishlist</PageTitle>
+
+@if (isLoading is false)
+{
+    <MudGrid Class="mt-3 mb-5">
+        <MudItem xs="9">
+            @if (artifacts?.Count <= 0)
+            {
+                <MudAlert Severity="Severity.Normal" Variant="Variant.Filled" Elevation="3">
+                    <MudText>
+                        Your wishlist is empty.
+                    </MudText>
+                    <MudText>
+                        You can view artifact pages and add them into your wishlist.
+                    </MudText>
+                </MudAlert>
+            }
+            else
+            {
+                <MudGrid>
+                    <MudVirtualize Items="artifacts" Context="a" OverscanCount="5">
+                        <ArtifactTemplate @key="a.Id" Artifact="a" RemoveEvent="RemoveFromWishlistAsync" />
+                    </MudVirtualize>
+                </MudGrid>
+            }
+        </MudItem>
+        <MudItem xs="3">
+            <MudPaper Class="p-1">
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
+                            <MudIcon Icon="@Icons.Material.Filled.List" /> Wishlist
+                        </MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
+                            Information
+                        </MudText>
+                        <MudDivider />
+                        <MudItem xs="12">
+                            <MudText>You have a total of @artifacts?.Count artifacts in your wishlist.</MudText>
+                        </MudItem>
+                        <MudDivider Class="mt-3 mb-3" />
+                        <MudItem xs="12">
+                            <MudButton OnClick="ClearWishlistAsync" Variant="Variant.Filled" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.ClearAll" Disabled="IsDisabled()">
+                                Clear Wishlist
+                            </MudButton>
+                        </MudItem>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <LoadingTemplate />
+}
+
+@code {
+    private UserModel loggedInUser;
+    private List<ArtifactModel> artifacts;
+    private List<WishlistModel> wishlists;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
+        artifacts = await WishlistEndpoint.GetAllArtifactsInWishlistAsync(loggedInUser.Id);
+        wishlists = await WishlistEndpoint.GetAllWishlistsAsync(loggedInUser.Id);
+
+        isLoading = false;
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private bool IsDisabled()
+    {
+        if (artifacts?.Count <= 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private async Task RemoveFromWishlistAsync(ArtifactModel artifact)
+    {
+        var removedWishlist = wishlists.FirstOrDefault(w => w.ArtifactId == artifact.Id);
+        var removedArtifact = artifacts.FirstOrDefault(a => a.Id == artifact.Id);
+
+        wishlists.Remove(removedWishlist);
+        artifacts.Remove(removedArtifact);
+
+        await WishlistEndpoint.DeleteWishlistasync(removedWishlist);
+    }
+
+    private async Task ClearWishlistAsync()
+    {
+        isLoading = true;
+        foreach (var w in wishlists)
+        {
+            await WishlistEndpoint.DeleteWishlistasync(w);
+        }
+
+        wishlists.Clear();
+        isLoading = false;
+    }
+}

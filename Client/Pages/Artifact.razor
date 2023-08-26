@@ -7,6 +7,7 @@
 @inject IVendorEndpoint VendorEndpoint
 @inject IReviewEndpoint ReviewEndpoint
 @inject IShoppingCartStorage ShoppingCartStorage
+@inject IWishlistEndpoint WishlistEndpoint
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @attribute [Authorize]
@@ -15,8 +16,14 @@
 
 @if (isLoading is false)
 {
-    <MudGrid>
+    <MudGrid Class="mb-3 mt-5">
         <MudItem xs="9">
+            @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+            {
+                <MudAlert Severity="Severity.Error" Class="mb-3">
+                    @errorMessage
+                </MudAlert>
+            }
             <MudGrid>
                 <MudItem xs="12">
                     <MudCard Elevation="5">
@@ -26,7 +33,7 @@
                                     <div class="d-flex">
                                         <MudAvatar>
                                             <MudImage Src="@(string.IsNullOrWhiteSpace(vendorImageSource)? "https://dummyimage.com/600x400/000/fff": vendorImageSource)"
-                                                      Alt="@vendor?.Name"/>
+                                                      Alt="@vendor?.Name" />
                                         </MudAvatar>
                                         <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
                                             Vendor:
@@ -43,7 +50,7 @@
                             <MudGrid Justify="Justify.Center">
                                 <MudItem xs="12" Class="text-center">
                                     <MudImage Src="@(string.IsNullOrWhiteSpace(artifactImageSource) ? "https://dummyimage.com/600x400/000/fff": artifactImageSource)"
-                                              Alt="@artifact?.Name" Width="500" Height="500"/>
+                                              Alt="@artifact?.Name" Width="500" Height="500" />
                                 </MudItem>
                                 @if (artifact is not null)
                                 {
@@ -55,17 +62,25 @@
                                         <MudText Typo="Typo.subtitle1">Total Price: @artifact?.FinalPrice.ToString("0.####") &euro;</MudText>
                                     </MudItem>
                                     <MudItem xs="12">
-                                        <div class="d-flex justify-content-between">
-                                            <MudRating SelectedValue="(int)artifact?.Rating" ReadOnly="true"/>
-                                            <div class="d-flex">
-                                                <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity" />
-                                                <MudButton OnClick="AddToCart" StartIcon="@Icons.Material.Filled.AddShoppingCart"
-                                                           Color="Color.Error" Disabled="!canAddToCart">
-                                                    Add To Cart
+                                        <MudItem>
+                                            <div class="d-flex justify-content-end">
+                                                <MudButton OnClick="AddToWishlistAsync" StartIcon="@Icons.Material.Filled.List"
+                                                           Color="Color.Secondary" Disabled="!canAddToWishlist">
+                                                    Add To Wishlist
                                                 </MudButton>
                                             </div>
-                                        </div>
-                                    </MudItem>
+                                        </MudItem>
+                                        <div class="d-flex justify-content-between">
+                                            <MudRating SelectedValue="(int)artifact?.Rating" ReadOnly="true" />
+                                            <MudStack Row>
+                                             <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity" />
+                                             <MudButton OnClick="AddToCartAsync" StartIcon="@Icons.Material.Filled.AddShoppingCart"
+                                                        Color="Color.Error" Disabled="!canAddToCart">
+                                                 Add To Cart
+                                             </MudButton>
+                                         </MudStack>
+                                     </div>
+                                 </MudItem>
                                 }
                             </MudGrid>
                         </MudCardContent>
@@ -86,7 +101,7 @@
                             @if (reviews is not null && artifact is not null)
                             {
                                 <MudVirtualize Items="reviews" Context="r" OverscanCount="10">
-                                    <ReviewTemplate @key="r.Id" Review="r" Artifact="artifact"/>
+                                    <ReviewTemplate @key="r.Id" Review="r" Artifact="artifact" />
                                 </MudVirtualize>
                             }
                         </MudItem>
@@ -129,6 +144,7 @@ else
     private string errorMessage = "";
     private bool isLoading = true;
     private bool canAddToCart = false;
+    private bool canAddToWishlist = false;
     private List<ArtifactModel> randomArtifacts;
     private List<ReviewModel> reviews;
     private VendorModel vendor;
@@ -147,13 +163,13 @@ else
 
             await LoadArtifactAsync();
             await LoadRandomArtifactsAsync();
-
-            isLoading = false;
         }
         catch (Exception ex)
         {
             errorMessage = ex.Message;
         }
+
+        isLoading = false;
     }
 
     private async Task LoadArtifactAsync()
@@ -166,6 +182,7 @@ else
             canAddToCart = CanAddToCart(artifact);
             artifactImageSource = ImageEndpoint.GetImage(artifact.ImageId);
 
+            canAddToWishlist = await CanAddToWishlistAsync();
             category = await CategoryEndpoint.GetCategoryByIdAsync(artifact.CategoryId);
             era = await EraEndpoint.GetEraByIdAsync(artifact.EraId);
             reviews = await ReviewEndpoint.GetAllReviewsByArtifactId(artifact.Id);
@@ -206,12 +223,17 @@ else
 
     private void LoadAllArtifactsPage()
     {
-        Navigation.NavigateTo("Listing");
+        Navigation.NavigateTo("/Listing");
     }
 
     private void LoadCartPage()
     {
         Navigation.NavigateTo("/Cart");
+    }
+
+    private void LoadWishlistPage()
+    {
+        Navigation.NavigateTo("/Wishlist");
     }
 
     private void LoadVendorPage()
@@ -255,7 +277,44 @@ else
         return artifact.Quantity;
     }
 
-    private async Task AddToCart()
+    private async Task<bool> CanAddToWishlistAsync()
+    {
+        if (artifact is null || loggedInUser is null)
+        {
+            return false;
+        }
+
+        var wishlists = await WishlistEndpoint.GetAllWishlistsAsync(loggedInUser.Id);
+        var w = wishlists.FirstOrDefault(w => w.ArtifactId == artifact.Id);
+
+        if (w is not null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private async Task AddToWishlistAsync()
+    {
+        if (canAddToWishlist is false)
+        {
+            return;
+        }
+
+        canAddToWishlist = true;
+        var newWishlist = new WishlistModel
+        {
+            ArtifactId = artifact.Id,
+            UserId = loggedInUser.Id,
+        };
+
+        await WishlistEndpoint.InsertWishlistAsync(newWishlist);
+
+        LoadWishlistPage();
+    }
+
+    private async Task AddToCartAsync()
     {
         if (loggedInUser is null)
         {
@@ -270,10 +329,10 @@ else
         artifact.Quantity -= selectedQuantity;
 
         var newCartItem = new CartItemModel
-        {
-            Artifact = artifact,
-            Quantity = selectedQuantity,
-        };
+            {
+                Artifact = artifact,
+                Quantity = selectedQuantity,
+            };
 
         shoppingCart.CartItems.Add(newCartItem);
 
