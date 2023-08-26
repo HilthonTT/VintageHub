@@ -11,4 +11,7 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 builder.ConfigureAuthentication();
 builder.ConfigureServices();
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+
+await host.SetDefaultCultureAsync();
+await host.RunAsync();

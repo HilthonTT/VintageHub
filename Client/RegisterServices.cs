@@ -1,4 +1,7 @@
-﻿namespace VintageHub.Client;
+﻿using Microsoft.JSInterop;
+using System.Globalization;
+
+namespace VintageHub.Client;
 
 public static class RegisterServices
 {
@@ -47,6 +50,7 @@ public static class RegisterServices
 
     public static void ConfigureServices(this WebAssemblyHostBuilder builder)
     {
+        builder.Services.AddLocalization();
         builder.Services.AddMudServices();
 
         builder.Services.AddTransient<IUserDataVerifier, UserDataVerifier>();
@@ -66,5 +70,24 @@ public static class RegisterServices
         builder.Services.AddTransient<IUserEndpoint, UserEndpoint>();
         builder.Services.AddTransient<IVendorEndpoint, VendorEndpoint>();
         builder.Services.AddTransient<IWishlistEndpoint, WishlistEndpoint>();
+    }
+
+    public async static Task SetDefaultCultureAsync(this WebAssemblyHost host)
+    {
+        var jsInterop = host.Services.GetRequiredService<IJSRuntime>();
+        var result = await jsInterop.InvokeAsync<string>("blazorCulture.get");
+        CultureInfo culture;
+
+        if (result is not null)
+        {
+            culture = new CultureInfo(result);
+        }
+        else
+        {
+            culture = new CultureInfo("en-US");
+        }
+            
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
     }
 }
