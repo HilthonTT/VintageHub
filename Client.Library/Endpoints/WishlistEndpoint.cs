@@ -3,6 +3,7 @@ public class WishlistEndpoint : IWishlistEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private const string CacheName = nameof(WishlistEndpoint);
+    private const string CacheNameUser = $"{CacheName}_User";
     private const string ApiEndpointUrl = "api/Wishlist";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
@@ -15,15 +16,20 @@ public class WishlistEndpoint : IWishlistEndpoint
         _localStorage = localStorage;
     }
 
+    private async Task RemoveCacheAsync()
+    {
+        await _localStorage.RemoveAsync(CacheName);
+        await _localStorage.RemoveAsync(CacheNameUser);
+    }
+
     public async Task<List<ArtifactModel>> GetAllArtifactsInWishlistAsync(int userId)
     {
         try
         {
             var output = await _localStorage.GetAsync<List<ArtifactModel>>(CacheName);
-
             if (output is null)
             {
-                using var response = await _httpClient.GetAsync(ApiEndpointUrl);
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/artifacts/{userId}");
                 response.EnsureSuccessStatusCode();
 
                 output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
@@ -44,6 +50,32 @@ public class WishlistEndpoint : IWishlistEndpoint
         return null;
     }
 
+    public async Task<List<WishlistModel>> GetAllWishlistsAsync(int userId)
+    {
+        try
+        {
+            var output = await _localStorage.GetAsync<List<WishlistModel>>(CacheNameUser);
+            if (output is null)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{userId}");
+                response.EnsureSuccessStatusCode();
+
+                output = await response.Content.ReadFromJsonAsync<List<WishlistModel>>();
+                await _localStorage.SetAsync(CacheNameUser, output, CacheTimeSpan);
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
+    }
+
     public async Task<List<ArtifactModel>> InsertWishlistAsync(WishlistModel wishlist)
     {
         try
@@ -51,6 +83,7 @@ public class WishlistEndpoint : IWishlistEndpoint
             using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, wishlist);
             response.EnsureSuccessStatusCode();
 
+            await RemoveCacheAsync();
             return await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -71,6 +104,8 @@ public class WishlistEndpoint : IWishlistEndpoint
         {
             using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{wishlist.Id}");
             response.EnsureSuccessStatusCode();
+
+            await RemoveCacheAsync();
         }
         catch (AccessTokenNotAvailableException ex)
         {

@@ -6,6 +6,7 @@ public class WishlistData : IWishlistData
     private readonly IMemoryCache _cache;
     private const string CacheName = nameof(WishlistData);
     private const string CacheNamePrefix = $"{CacheName}_";
+    private const string CacheNameUserPrefix = $"{CacheName}_User_";
 
     public WishlistData(
         ISqlDataAccess sql,
@@ -45,6 +46,22 @@ public class WishlistData : IWishlistData
             var parameters = new DynamicParameters();
 
             output = await _sql.LoadDataAsync<ArtifactModel>(storedProcedure, parameters);
+            _cache.Set(key, output, CacheTimeSpan);
+        }
+
+        return output;
+    }
+
+    public async Task<List<WishlistModel>> GetAllWishlistsByUserIdAsync(int userId)
+    {
+        string key = CacheNameUserPrefix + userId;
+        var output = _cache.Get<List<WishlistModel>>(key);
+        if (output is null)
+        {
+            string storedProcedure = GetStoredProcedure("GetByUserId");
+            var parameters = new DynamicParameters();
+
+            output = await _sql.LoadDataAsync<WishlistModel>(storedProcedure, parameters);
             _cache.Set(key, output, CacheTimeSpan);
         }
 

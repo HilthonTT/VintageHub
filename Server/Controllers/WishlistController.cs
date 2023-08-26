@@ -14,7 +14,7 @@ public class WishlistController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("{userId}")]
+    [HttpGet("artifacts/{userId}")]
     public async Task<ActionResult<List<ArtifactModel>>> GetAllArtifactsInWishlistAsync(int userId)
     {
         try
@@ -26,6 +26,21 @@ public class WishlistController : ControllerBase
         {
             _logger.LogError("Error fetching the artifacts in the wishlist: {error}", ex.Message);
             return StatusCode(500, "Error fetching artifacts in wishlist.");
+        }
+    }
+
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<List<WishlistModel>>> GetAllWishlistAsyncByUserIdAsync(int userId)
+    {
+        try
+        {
+            var wishlists = await _wishlistData.GetAllWishlistsByUserIdAsync(userId);
+            return Ok(wishlists);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error fetching the wishlists: {error}", ex.Message);
+            return StatusCode(500, $"Error fetching wishlists of user id {userId}.");
         }
     }
 

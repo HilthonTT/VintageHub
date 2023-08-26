@@ -137,6 +137,7 @@
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_GetArtifacts.sql" />
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_GetByUserId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Locations\VintageData.publish.xml" />
