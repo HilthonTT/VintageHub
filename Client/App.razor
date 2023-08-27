@@ -3,22 +3,21 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    @if (context.User.Identity?.IsAuthenticated != true)
+                    @if (context.User.Identity?.IsAuthenticated is false)
                     {
                         <RedirectToLogin />
                     }
                     else
                     {
-                        <p role="alert">You are not authorized to access this resource.</p>
+                        <NotAllowed />
                     }
                 </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
-            <PageTitle>Not found</PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
+                <NotFound />
             </LayoutView>
         </NotFound>
     </Router>
