@@ -26,7 +26,7 @@ public class ArtifactController : ControllerBase
         {
             var artifacts = await _artifactData.GetAllArtifactsAsync();
 
-            var detailed = await _sql.GetAllDetailedArtifactsAsync();
+            var detailed = await _artifactData.GetAllArtifactsWithDetailsAsync();
 
             return Ok(artifacts);
         }

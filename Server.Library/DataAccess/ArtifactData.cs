@@ -78,9 +78,14 @@ public class ArtifactData : IArtifactData
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetAllWithDetails");
-            var parameters = new DynamicParameters();
+            
+            var vendor = new VendorModel();
+            var category = new CategoryModel();
+            var era = new EraModel();
 
-            output = await _sql.LoadDataAsync<ArtifactDisplayModel>(storedProcedure, parameters);
+            output = await _sql.LoadDetailedDataAsync<ArtifactDisplayModel>(
+                "Id", storedProcedure, vendor, category, era);
+
 
             _cache.Set(key, output, CacheTimeSpan);
         }

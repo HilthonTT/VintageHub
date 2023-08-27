@@ -1,6 +1,4 @@
-﻿using Server.Library.Models.Display;
-
-namespace Server.Library.DataAccess.Internal;
+﻿namespace Server.Library.DataAccess.Internal;
 public class SqlDataAccess : ISqlDataAccess
 {
     private const string DbName = "VintageData";
@@ -55,24 +53,86 @@ public class SqlDataAccess : ISqlDataAccess
         return rows.ToList();
     }
 
-    public async Task<List<ArtifactDisplayModel>> GetAllDetailedArtifactsAsync()
+    public async Task<List<T>> LoadDetailedDataAsync<T>(
+        string splitOnColumn, 
+        string storedProcedure, 
+        params object[] secondaryObjects)
     {
         string connectionString = GetConnectionString();
-
         using var connection = new SqlConnection(connectionString);
-        var artifacts = await connection.QueryAsync<ArtifactDisplayModel, VendorModel, CategoryModel, EraModel, ArtifactDisplayModel>(
-            "dbo.spArtifact_GetAllWithDetails",
-            (artifact, vendor, category, era) =>
+
+        var types = new List<Type> { typeof(T) };
+        types.AddRange(secondaryObjects.Select(obj => obj.GetType()));
+
+        var parameters = new DynamicParameters();
+
+        var entities = await connection.QueryAsync(
+            storedProcedure,
+            types.ToArray(), 
+            map: (objects) =>
             {
-                artifact.Vendor = vendor;
-                artifact.Category = category;
-                artifact.Era = era;
-                return artifact;
+                var primaryEntity = (T)objects[0];
+
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    var secondaryObject = objects[i];
+
+                    var propertyName = secondaryObject.GetType().Name;
+                    propertyName = propertyName.EndsWith("Model") ? propertyName.Substring(0, propertyName.Length - "Model".Length) : propertyName;
+
+                    var propertyInfo = typeof(T).GetProperty(propertyName);
+
+                    propertyInfo?.SetValue(primaryEntity, secondaryObject);
+                }
+
+                return primaryEntity;
             },
-            splitOn: "Id",
+            splitOn: splitOnColumn,
+            param: parameters,
             commandType: CommandType.StoredProcedure);
 
-        return artifacts.ToList();
+        return entities.ToList();
+    }
+
+    public async Task<T> LoadFirstOrDefaultDetailedDataAsync<T>(
+        string splitOnColumn,
+        string storedProcedure,
+        params object[] secondaryObjects)
+    {
+        string connectionString = GetConnectionString();
+        using var connection = new SqlConnection(connectionString);
+
+        var types = new List<Type> { typeof(T) };
+        types.AddRange(secondaryObjects.Select(obj => obj.GetType()));
+
+        var parameters = new DynamicParameters();
+
+        var entities = await connection.QueryAsync(
+            storedProcedure,
+            types.ToArray(),
+            map: (objects) =>
+            {
+                var primaryEntity = (T)objects[0];
+
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    var secondaryObject = objects[i];
+
+                    var propertyName = secondaryObject.GetType().Name;
+                    propertyName = propertyName.EndsWith("Model") ? propertyName.Substring(0, propertyName.Length - "Model".Length) : propertyName;
+
+                    var propertyInfo = typeof(T).GetProperty(propertyName);
+
+                    propertyInfo?.SetValue(primaryEntity, secondaryObject);
+                }
+
+                return primaryEntity;
+            },
+            splitOn: splitOnColumn,
+            param: parameters,
+            commandType: CommandType.StoredProcedure);
+
+        return entities.FirstOrDefault();
     }
 
     public async Task<T> LoadFirstOrDefaultAsync<T>(string storedProcedure, DynamicParameters parameters)
