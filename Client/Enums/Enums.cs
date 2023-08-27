@@ -9,3 +9,15 @@ public enum Rating
     FourStar,
     FiveStar
 }
+
+public enum AuthState
+{
+    CompletingLogin,
+    CompletingLogout,
+    Logging,
+    LoginFailed,
+    Logout,
+    LogoutFailed,
+    LogoutSuceeded,
+    Registering
+}

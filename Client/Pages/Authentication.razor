@@ -2,28 +2,28 @@
 
 <RemoteAuthenticatorView Action="@Action">
     <LoggingIn>
-        <Logging />
+        <AuthView AuthState="AuthState.Logging"/>
     </LoggingIn> 
     <CompletingLoggingIn>
-        <CompletingLogin />
+        <AuthView AuthState="AuthState.CompletingLogin" />
     </CompletingLoggingIn>
     <LogInFailed>
-        <LoginFailed />
+        <AuthView AuthState="AuthState.LoginFailed" />
     </LogInFailed>
     <LogOut>
-        <Logout />
+        <AuthView AuthState="AuthState.Logout" />
     </LogOut>
     <CompletingLogOut>
-        <CompletingLogout />
+        <AuthView AuthState="AuthState.CompletingLogout" />
     </CompletingLogOut>
     <LogOutFailed>
-        <LogoutFailed />
+        <AuthView AuthState="AuthState.LogoutFailed" />
     </LogOutFailed>
     <LogOutSucceeded>
-        <LogoutSucceeded />
+        <AuthView AuthState="AuthState.LogoutSuceeded" />
     </LogOutSucceeded>
     <Registering>
-        <RegisteringUser />
+        <AuthView AuthState="AuthState.Registering" />
     </Registering>
 </RemoteAuthenticatorView>
 

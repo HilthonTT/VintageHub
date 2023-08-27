@@ -1,0 +1,84 @@
+﻿<PageTitle>@GetTitle()</PageTitle>
+
+<MudGrid Justify="Justify.Center" Class="mt-10 mb-5">
+    <MudItem xs="12" role="alert" Class="mt-auto">
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="12" Class="text-center">
+                <MudText Typo="Typo.h4" Class="fw-bold text-uppercase">
+                    <MudIcon Icon="@GetIcon()" Style="font-size: 7rem"
+                             Size="Size.Large" Color="@GetColor()" />
+                </MudText>
+                <MudText Typo="Typo.h4" Class="text-uppercase" GutterBottom>
+                    @GetTitle()
+                </MudText>
+                <MudText Typo="Typo.subtitle1" Class="mt-1">
+                    @GetDescription()
+                </MudText>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public AuthState AuthState { get; set; }
+
+    private string GetTitle()
+    {
+        return AuthState switch
+        {
+            AuthState.CompletingLogin => "Completing Login",
+            AuthState.CompletingLogout => "Completing Logout",
+            AuthState.Logging => "Logging In",
+            AuthState.LoginFailed => "Login Failed",
+            AuthState.Logout => "Logout",
+            AuthState.LogoutFailed => "Logout Failed",
+            AuthState.LogoutSuceeded => "Logout Suceeded",
+            AuthState.Registering => "Registering",
+            _ => "Error",
+        };
+    }
+
+    private string GetDescription()
+    {
+        return AuthState switch
+        {
+            AuthState.CompletingLogin => "We are completing the logging, please remain patient.",
+            AuthState.CompletingLogout => "We are completing the logout, please remain patient.",
+            AuthState.Logging => "You are being logged in, please remain patient.",
+            AuthState.LoginFailed => "Oops, there seems to be an issue while logging you in. Please try again.",
+            AuthState.Logout => "You are now being logged out.",
+            AuthState.LogoutFailed => "Oops, there seems to be an issue while logging you out. Please try again.",
+            AuthState.LogoutSuceeded => "You are now logged out.",
+            AuthState.Registering => "You are now being registered, please remain patient.",
+            _ => "Oops, something went wrong."
+        };
+    }
+
+    private string GetIcon()
+    {
+        return AuthState switch
+        {
+            AuthState.CompletingLogin => Icons.Material.Filled.Computer,
+            AuthState.CompletingLogout => Icons.Material.Filled.Computer,
+            AuthState.Logging => Icons.Material.Filled.Login,
+            AuthState.LoginFailed => Icons.Material.Filled.Error,
+            AuthState.Logout => Icons.Material.Filled.Logout,
+            AuthState.LogoutFailed => Icons.Material.Filled.Error,
+            AuthState.LogoutSuceeded => Icons.Material.Filled.Logout,
+            AuthState.Registering => Icons.Material.Filled.AppRegistration,
+            _ => Icons.Material.Filled.QuestionMark,
+        };
+    }
+
+    private Color GetColor()
+    {
+        return AuthState switch
+        {
+            AuthState.LoginFailed => Color.Error,
+            AuthState.LogoutFailed => Color.Error,
+            _ => Color.Primary,
+        };
+    }
+}
