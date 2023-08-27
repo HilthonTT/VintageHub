@@ -1,4 +1,6 @@
-﻿namespace Server.Library.DataAccess;
+﻿using Server.Library.Models.Display;
+
+namespace Server.Library.DataAccess;
 public class ArtifactData : IArtifactData
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
@@ -64,6 +66,23 @@ public class ArtifactData : IArtifactData
             output = await _sql.LoadDataAsync<ArtifactModel>(storedProcedure, parameters);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
+        }
+
+        return output;
+    }
+
+    public async Task<List<ArtifactDisplayModel>> GetAllArtifactsWithDetailsAsync()
+    {
+        string key = CacheName + "Details";
+        var output = _cache.Get<List<ArtifactDisplayModel>>(key);
+        if (output is null)
+        {
+            string storedProcedure = GetStoredProcedure("GetAllWithDetails");
+            var parameters = new DynamicParameters();
+
+            output = await _sql.LoadDataAsync<ArtifactDisplayModel>(storedProcedure, parameters);
+
+            _cache.Set(key, output, CacheTimeSpan);
         }
 
         return output;

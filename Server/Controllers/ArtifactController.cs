@@ -6,13 +6,16 @@
 public class ArtifactController : ControllerBase
 {
     private readonly IArtifactData _artifactData;
+    private readonly ISqlDataAccess _sql;
     private readonly ILogger<ArtifactController> _logger;
 
     public ArtifactController(
         IArtifactData artifactData,
+        ISqlDataAccess sql,
         ILogger<ArtifactController> logger)
     {
         _artifactData = artifactData;
+        _sql = sql;
         _logger = logger;
     }
 
@@ -22,6 +25,9 @@ public class ArtifactController : ControllerBase
         try
         {
             var artifacts = await _artifactData.GetAllArtifactsAsync();
+
+            var detailed = await _sql.GetAllDetailedArtifactsAsync();
+
             return Ok(artifacts);
         }
         catch (Exception ex)

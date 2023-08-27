@@ -1,4 +1,6 @@
-﻿namespace Server.Library.DataAccess.Internal;
+﻿using Server.Library.Models.Display;
+
+namespace Server.Library.DataAccess.Internal;
 public class SqlDataAccess : ISqlDataAccess
 {
     private const string DbName = "VintageData";
@@ -51,6 +53,26 @@ public class SqlDataAccess : ISqlDataAccess
             commandType: CommandType.StoredProcedure);
 
         return rows.ToList();
+    }
+
+    public async Task<List<ArtifactDisplayModel>> GetAllDetailedArtifactsAsync()
+    {
+        string connectionString = GetConnectionString();
+
+        using var connection = new SqlConnection(connectionString);
+        var artifacts = await connection.QueryAsync<ArtifactDisplayModel, VendorModel, CategoryModel, EraModel, ArtifactDisplayModel>(
+            "dbo.spArtifact_GetAllWithDetails",
+            (artifact, vendor, category, era) =>
+            {
+                artifact.Vendor = vendor;
+                artifact.Category = category;
+                artifact.Era = era;
+                return artifact;
+            },
+            splitOn: "Id",
+            commandType: CommandType.StoredProcedure);
+
+        return artifacts.ToList();
     }
 
     public async Task<T> LoadFirstOrDefaultAsync<T>(string storedProcedure, DynamicParameters parameters)

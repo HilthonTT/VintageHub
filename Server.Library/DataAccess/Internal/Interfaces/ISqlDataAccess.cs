@@ -1,8 +1,11 @@
-﻿namespace Server.Library.DataAccess.Internal.Interfaces;
+﻿using Server.Library.Models.Display;
+
+namespace Server.Library.DataAccess.Internal.Interfaces;
 
 public interface ISqlDataAccess
 {
     void CommitTransaction();
+    Task<List<ArtifactDisplayModel>> GetAllDetailedArtifactsAsync();
     Task<List<T>> LoadDataAsync<T>(string storedProcedure, DynamicParameters parameters);
     Task<List<T>> LoadDataInTransactionAsync<T>(string storedProcedure, DynamicParameters parameters);
     Task<T> LoadFirstOrDefaultAsync<T>(string storedProcedure, DynamicParameters parameters);
