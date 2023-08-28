@@ -18,7 +18,7 @@ public class OrderController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "Admin")]
-    public async Task<ActionResult<List<OrderModel>>> GetAllOrdersAsync()
+    public async Task<ActionResult<List<OrderDisplayModel>>> GetAllOrdersAsync()
     {
         try
         {
@@ -33,7 +33,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("user/{userId}")]
-    public async Task<ActionResult<List<OrderModel>>> GetOrdersByUserIdAsync(int userId)
+    public async Task<ActionResult<List<OrderDisplayModel>>> GetOrdersByUserIdAsync(int userId)
     {
         try
         {
@@ -63,7 +63,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<OrderModel>> GetOrderByIdAsync(int id)
+    public async Task<ActionResult<OrderDisplayModel>> GetOrderByIdAsync(int id)
     {
         try
         {
@@ -79,7 +79,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<OrderModel>> InsertOrderAsync([FromBody] OrderRequestModel request)
+    public async Task<ActionResult<OrderDisplayModel>> InsertOrderAsync([FromBody] OrderRequestModel request)
     {
         if (ModelState.IsValid is false)
         {

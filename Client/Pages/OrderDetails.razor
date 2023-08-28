@@ -88,7 +88,7 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private OrderModel order;
+    private OrderDisplayModel order;
     private List<OrderDetailsDataModel> orderDetails;
     private List<string> events = new();
 
@@ -168,7 +168,7 @@ else
 
         bool isAdmin = string.IsNullOrWhiteSpace(jobTitle) is false && jobTitle == "Admin";
 
-        if (isAdmin || user?.Id == order?.UserId)
+        if (isAdmin || user?.Id == order?.User.Id)
         {
             return true;
         }
@@ -183,12 +183,12 @@ else
         foreach (var item in orderDetails)
         {
             var details = new OrderDetailsModel
-            {
-                Id = item.Id,
-                ArtifactId = item.ArtifactId,
-                OrderId = item.OrderId,
-                Quantity = item.Quantity
-            };
+                {
+                    Id = item.Id,
+                    ArtifactId = item.ArtifactId,
+                    OrderId = item.OrderId,
+                    Quantity = item.Quantity
+                };
 
             list.Add(details);
         }
@@ -217,7 +217,8 @@ else
         details.Quantity = item.Quantity;
         orderDetails.Add(details);
 
-        var request = new OrderRequestModel(order, orderDetails);
+        var newOrder = new OrderModel(order);
+        var request = new OrderRequestModel(newOrder, orderDetails);
 
         await OrderEndpoint.UpdateOrderAsync(request);
     }

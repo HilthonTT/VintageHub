@@ -17,17 +17,17 @@ public class OrderEndpoint : IOrderEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<OrderModel>> GetAllOrdersAsync()
+    public async Task<List<OrderDisplayModel>> GetAllOrdersAsync()
     {
         try
         {
-            var output = await _localStorage.GetAsync<List<OrderModel>>(CacheName);
+            var output = await _localStorage.GetAsync<List<OrderDisplayModel>>(CacheName);
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<OrderModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<OrderDisplayModel>>();
                 await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
             }
 
@@ -45,19 +45,19 @@ public class OrderEndpoint : IOrderEndpoint
         return null;
     }
 
-    public async Task<List<OrderModel>> GetOrdersByUserIdAsync(int userId)
+    public async Task<List<OrderDisplayModel>> GetOrdersByUserIdAsync(int userId)
     {
         try
         {
             string key = CacheNamePrefix + userId;
-            var output = await _localStorage.GetAsync<List<OrderModel>>(key);
+            var output = await _localStorage.GetAsync<List<OrderDisplayModel>>(key);
 
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/user/{userId}");
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<OrderModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<OrderDisplayModel>>();
                 await _localStorage.SetAsync(key, output, CacheTimeSpan);
             }
 
@@ -96,11 +96,11 @@ public class OrderEndpoint : IOrderEndpoint
         return null;
     }
 
-    public async Task<OrderModel> GetOrderByIdAsync(int id)
+    public async Task<OrderDisplayModel> GetOrderByIdAsync(int id)
     {
         try
         {
-            var cachedOrders = await _localStorage.GetAsync<List<OrderModel>>(CacheNameSingle);
+            var cachedOrders = await _localStorage.GetAsync<List<OrderDisplayModel>>(CacheNameSingle);
             cachedOrders ??= new();
 
             var cachedOrder = cachedOrders.FirstOrDefault(o => o.Id == id);
@@ -109,7 +109,7 @@ public class OrderEndpoint : IOrderEndpoint
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
-                cachedOrder = await response.Content.ReadFromJsonAsync<OrderModel>();
+                cachedOrder = await response.Content.ReadFromJsonAsync<OrderDisplayModel>();
                 cachedOrders.Add(cachedOrder);
                 await _localStorage.SetAsync(CacheNameSingle, cachedOrders, CacheTimeSpan);
             }
@@ -128,14 +128,14 @@ public class OrderEndpoint : IOrderEndpoint
         return null;
     }
 
-    public async Task<OrderModel> InsertOrderAsync(OrderRequestModel request)
+    public async Task<OrderDisplayModel> InsertOrderAsync(OrderRequestModel request)
     {
         try
         {
             using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, request);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<OrderModel>();
+            return await response.Content.ReadFromJsonAsync<OrderDisplayModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {

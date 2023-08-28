@@ -142,6 +142,9 @@
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_GetByArtifactId.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_GetByIdDetailed.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_GetByUserIdDetailed.sql" />
+    <Build Include="dbo\Stored Procedures\Order\spOrder_GetAllDetailed.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Locations\VintageData.publish.xml" />

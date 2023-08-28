@@ -21,7 +21,7 @@
         <MudItem xs="12">
             @if (orders is not null)
             {
-                <MudDataGrid T="OrderDataModel" Items="orders" Filterable="true" SortMode="SortMode.Multiple" ReadOnly="false"
+                <MudDataGrid T="OrderDisplayModel" Items="orders" Filterable="true" SortMode="SortMode.Multiple" ReadOnly="false"
                              Hideable="true" Bordered="true" Hover="true" Striped="true" QuickFilter="quickFilter"
                              EditTrigger="DataGridEditTrigger.Manual" CommittedItemChanges="UpdateOrderAsync">
                     <ToolBarContent>
@@ -31,9 +31,9 @@
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
                     </ToolBarContent>
                     <Columns>
-                        <SelectColumn T="OrderDataModel" />
+                        <SelectColumn T="OrderDisplayModel" />
                         <PropertyColumn Property="x => x.Id" Title="Id" Sortable="false" Filterable="false" IsEditable="false"/>
-                        <PropertyColumn Property="x => x.UserFullName" Title="Buyer" IsEditable="false" />
+                        <PropertyColumn Property="x => x.FullName" Title="Buyer" IsEditable="false" />
                         <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" IsEditable="false" />
                         <PropertyColumn Property="x => x.DateOrdered" Title="Date Ordered" IsEditable="false" />
                         <PropertyColumn Property="x => x.IsComplete" Title="Completed" IsEditable="true">
@@ -73,13 +73,13 @@ else
 }
 
 @code {
-    private List<OrderDataModel> orders;
+    private List<OrderDisplayModel> orders;
     private bool isLoading = true;
     private string searchText = "";
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadOrdersAsync();
+        orders = await OrderEndpoint.GetAllOrdersAsync();
         isLoading = false;
     }
 
@@ -88,28 +88,12 @@ else
         Navigation.NavigateTo("/");
     }
 
-    private void LoadOrderDetailsPage(OrderDataModel order)
+    private void LoadOrderDetailsPage(OrderDisplayModel order)
     {
         Navigation.NavigateTo($"/Order/Details/{order.Id}");
     }
 
-    private async Task LoadOrdersAsync()
-    {
-        var orderList = await OrderEndpoint.GetAllOrdersAsync();
-        var list = new List<OrderDataModel>();
-
-        foreach (var o in orderList)
-        {
-            var data = new OrderDataModel(o);
-            data.User = await UserEndpoint.GetUserByIdAsync(o.UserId);
-
-            list.Add(data);
-        }
-
-        orders = list.ToList();
-    }
-
-    private async Task UpdateOrderAsync(OrderDataModel order)
+    private async Task UpdateOrderAsync(OrderDisplayModel order)
     {
         var updatedOrder = new OrderModel()
             {
@@ -118,7 +102,7 @@ else
                 DateOrdered = order.DateOrdered,
                 IsCanceled = order.IsCanceled,
                 IsComplete = order.IsComplete,
-                UserId = order.UserId,
+                UserId = order.User.Id,
             };
 
         var orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(updatedOrder.Id);
@@ -127,14 +111,14 @@ else
         await OrderEndpoint.UpdateOrderAsync(request);
     }
 
-    private Func<OrderDataModel, bool> quickFilter => x =>
+    private Func<OrderDisplayModel, bool> quickFilter => x =>
     {
         if (string.IsNullOrWhiteSpace(searchText))
         {
             return true;
         }
 
-        if (x.UserFullName.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+        if (x.FullName.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
         {
             return true;
         }

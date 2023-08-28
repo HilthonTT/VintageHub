@@ -161,15 +161,18 @@ public class OrderData : IOrderData
         return false;
     }
 
-    public async Task<List<OrderModel>> GetAllOrdersAsync()
+    public async Task<List<OrderDisplayModel>> GetAllOrdersAsync()
     {
-        var output = _cache.Get<List<OrderModel>>(CacheName);
+        var output = _cache.Get<List<OrderDisplayModel>>(CacheName);
         if (output is null)
         {
-            string storedProcedure = GetOrderStoredProcedure("GetAll");
+            string storedProcedure = GetOrderStoredProcedure("GetAllDetailed");
             var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<OrderModel>(storedProcedure, parameters);
+            var user = new UserModel();
+
+            output = await _sql.LoadDetailedDataAsync<OrderDisplayModel>(
+                "Id", storedProcedure, parameters, user);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -177,16 +180,19 @@ public class OrderData : IOrderData
         return output;
     }
 
-    public async Task<List<OrderModel>> GetOrdersByUserIdAsync(int userId)
+    public async Task<List<OrderDisplayModel>> GetOrdersByUserIdAsync(int userId)
     {
         string key = CacheNameUserPrefix + userId;
-        var output = _cache.Get<List<OrderModel>>(key);
+        var output = _cache.Get<List<OrderDisplayModel>>(key);
         if (output is null)
         {
-            string storedProcedure = GetOrderStoredProcedure("GetByUserId");
+            string storedProcedure = GetOrderStoredProcedure("GetByUserIdDetailed");
             var parameters = GetUserIdParameters(userId);
 
-            output = await _sql.LoadDataAsync<OrderModel>(storedProcedure, parameters);
+            var user = new UserModel();
+
+            output = await _sql.LoadDetailedDataAsync<OrderDisplayModel>(
+                "Id", storedProcedure, parameters, user);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -211,16 +217,19 @@ public class OrderData : IOrderData
         return output;
     }
 
-    public async Task<OrderModel> GetOrderByIdAsync(int id)
+    public async Task<OrderDisplayModel> GetOrderByIdAsync(int id)
     {
         string key = CacheNamePrefix + id;
-        var output = _cache.Get<OrderModel>(key);
+        var output = _cache.Get<OrderDisplayModel>(key);
         if (output is null)
         {
-            string storedProcedure = GetOrderStoredProcedure("GetById");
+            string storedProcedure = GetOrderStoredProcedure("GetByIdDetailed");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<OrderModel>(storedProcedure, parameters);
+            var user = new UserModel();
+
+            output = await _sql.LoadFirstOrDefaultDetailedDataAsync<OrderDisplayModel>(
+                "Id", storedProcedure, parameters, user);
 
             _cache.Set(key, output, CacheTimeSpan);
         }

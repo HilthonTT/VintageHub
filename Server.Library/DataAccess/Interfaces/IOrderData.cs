@@ -2,10 +2,10 @@
 public interface IOrderData
 {
     Task<int> DeleteOrderAsync(int id);
-    Task<List<OrderModel>> GetAllOrdersAsync();
-    Task<OrderModel> GetOrderByIdAsync(int id);
+    Task<List<OrderDisplayModel>> GetAllOrdersAsync();
+    Task<OrderDisplayModel> GetOrderByIdAsync(int id);
     Task<List<OrderDetailsModel>> GetOrderDetailsByOrderIdAsync(int orderId);
-    Task<List<OrderModel>> GetOrdersByUserIdAsync(int userId);
+    Task<List<OrderDisplayModel>> GetOrdersByUserIdAsync(int userId);
     Task<int> InsertOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails);
     Task<int> UpdateOrderAsync(OrderModel order, List<OrderDetailsModel> orderDetails);
 }
