@@ -27,7 +27,7 @@ public class UserDataVerifier : IUserDataVerifier
         string lastName = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("family_name"))?.Value;
         string displayName = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("name"))?.Value;
         string email = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("emails"))?.Value;
-        string streetAddress = authState.User.FindFirst("streetAddress").Value;
+        string streetAddress = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("streetAddress"))?.Value;
 
         string formattedEmail = RemoveBracketsAndQuotes(email);
 
