@@ -106,7 +106,15 @@ else
             };
 
         var orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(updatedOrder.Id);
-        var request = new OrderRequestModel(updatedOrder, orderDetails);
+
+        var orders = new List<OrderDetailsModel>();
+        foreach (var o in orderDetails)
+        {
+            var newOrder = new OrderDetailsModel(o);
+            orders.Add(newOrder);
+        }
+
+        var request = new OrderRequestModel(updatedOrder, orders);
 
         await OrderEndpoint.UpdateOrderAsync(request);
     }

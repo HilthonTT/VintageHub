@@ -200,16 +200,20 @@ public class OrderData : IOrderData
         return output;
     }
 
-    public async Task<List<OrderDetailsModel>> GetOrderDetailsByOrderIdAsync(int orderId)
+    public async Task<List<OrderDetailsDisplayModel>> GetOrderDetailsByOrderIdAsync(int orderId)
     {
         string key = CacheNameDetailsPrefix + orderId;
-        var output = _cache.Get<List<OrderDetailsModel>>(key);
+        var output = _cache.Get<List<OrderDetailsDisplayModel>>(key);
         if (output is null)
         {
-            string storedProcedure = GetOrderDetailsStoredProcedure("GetByOrderId");
+            string storedProcedure = GetOrderDetailsStoredProcedure("GetByOrderIdDetails");
             var parameters = GetOrderIdParameters(orderId);
 
-            output = await _sql.LoadDataAsync<OrderDetailsModel>(storedProcedure, parameters);
+            var order = new OrderModel();
+            var artifact = new ArtifactModel();
+
+            output = await _sql.LoadDetailedDataAsync<OrderDetailsDisplayModel>(
+                "Id", storedProcedure, parameters, order, artifact);
 
             _cache.Set(key, output, CacheTimeSpan);
         }

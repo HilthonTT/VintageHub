@@ -27,7 +27,7 @@ else if (isAllowed)
         <MudItem xs="12">
             @if (orderDetails is not null)
             {
-                <MudDataGrid T="OrderDetailsDataModel" Items="orderDetails" ReadOnly="false" EditMode="DataGridEditMode.Form"
+                <MudDataGrid T="OrderDetailsDisplayModel" Items="orderDetails" ReadOnly="false" EditMode="DataGridEditMode.Form"
                              StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges"
                              Bordered="true" Striped="true" EditTrigger="DataGridEditTrigger.Manual"
                              Filterable="true" QuickFilter="quickFilter" Hover="true" Hideable="true" SortMode="SortMode.Multiple">
@@ -38,7 +38,7 @@ else if (isAllowed)
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
                     </ToolBarContent>
                     <Columns>
-                        <SelectColumn T="OrderDetailsDataModel" />
+                        <SelectColumn T="OrderDetailsDisplayModel" />
                         <PropertyColumn Property="x => x.Id" Title="Id" Sortable="false" Filterable="false" IsEditable="false" />
                         <PropertyColumn Property="x => x.Artifact.Name" Title="Artifact Name" IsEditable="false" />
                         <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" IsEditable="false" />
@@ -89,7 +89,7 @@ else
     public int Id { get; set; }
 
     private OrderDisplayModel order;
-    private List<OrderDetailsDataModel> orderDetails;
+    private List<OrderDetailsDisplayModel> orderDetails;
     private List<string> events = new();
 
     private string searchText = "";
@@ -100,30 +100,17 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        order = await OrderEndpoint.GetOrderByIdAsync(Id);
         isAllowed = await IsOwnerOrAdminAsync();
 
-        await LoadOrderDetailsAsync();
-        await CalculatePriceAndItems();
+        if (isAllowed)
+        {
+            order = await OrderEndpoint.GetOrderByIdAsync(Id);
+            orderDetails = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(Id);
+
+            await CalculatePriceAndItems();
+        }  
 
         isLoading = false;
-    }
-
-    private async Task LoadOrderDetailsAsync()
-    {
-        var orderDetailsList = await OrderEndpoint.GetOrderDetailsByOrderIdAsync(Id);
-        var list = new List<OrderDetailsDataModel>();
-
-        foreach (var o in orderDetailsList)
-        {
-            var data = new OrderDetailsDataModel(o);
-            data.Artifact = await ArtifactEndpoint.GetArtifactByIdAsync(o.ArtifactId);
-            data.TotalPrice = (decimal)o.Quantity * data.Artifact.Price;
-
-            list.Add(data);
-        }
-
-        orderDetails = list.ToList();
     }
 
     private void ClosePage()
@@ -162,7 +149,7 @@ else
     private async Task<bool> IsOwnerOrAdminAsync()
     {
         var authState = await AuthProvider.GetAuthenticationStateAsync();
-        string jobTitle = authState.User.Claims.FirstOrDefault(c => c.Value.Contains("jobTitle"))?.Value;
+        string jobTitle = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("jobTitle"))?.Value;
 
         var user = await AuthProvider.GetUserFromAuth(UserEndpoint);
 
@@ -185,8 +172,8 @@ else
             var details = new OrderDetailsModel
                 {
                     Id = item.Id,
-                    ArtifactId = item.ArtifactId,
-                    OrderId = item.OrderId,
+                    ArtifactId = item.Artifact.Id,
+                    OrderId = item.Order.Id,
                     Quantity = item.Quantity
                 };
 
@@ -196,17 +183,17 @@ else
         return list;
     }
 
-    private void StartedEditingItem(OrderDetailsDataModel item)
+    private void StartedEditingItem(OrderDetailsDisplayModel item)
     {
         events.Insert(0, $"Event = StartedEditingItem, Data = {JsonSerializer.Serialize(item)}");
     }
 
-    private void CanceledEditingItem(OrderDetailsDataModel item)
+    private void CanceledEditingItem(OrderDetailsDisplayModel item)
     {
         events.Insert(0, $"Event = CanceledEditingItem, Data = {JsonSerializer.Serialize(item)}");
     }
 
-    private async Task CommittedItemChanges(OrderDetailsDataModel item)
+    private async Task CommittedItemChanges(OrderDetailsDisplayModel item)
     {
         events.Insert(0, $"Event = CommittedItemChanges, Data = {JsonSerializer.Serialize(item)}");
 
@@ -223,7 +210,7 @@ else
         await OrderEndpoint.UpdateOrderAsync(request);
     }
 
-    private Func<OrderDetailsDataModel, bool> quickFilter => x =>
+    private Func<OrderDetailsDisplayModel, bool> quickFilter => x =>
     {
         if (string.IsNullOrWhiteSpace(searchText))
         {

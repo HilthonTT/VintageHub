@@ -75,14 +75,14 @@ public class OrderEndpoint : IOrderEndpoint
         return null;
     }
 
-    public async Task<List<OrderDetailsModel>> GetOrderDetailsByOrderIdAsync(int orderId)
+    public async Task<List<OrderDetailsDisplayModel>> GetOrderDetailsByOrderIdAsync(int orderId)
     {
         try
         {
             using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/orderDetails/{orderId}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<List<OrderDetailsModel>>();
+            return await response.Content.ReadFromJsonAsync<List<OrderDetailsDisplayModel>>();
         }
         catch (AccessTokenNotAvailableException ex)
         {

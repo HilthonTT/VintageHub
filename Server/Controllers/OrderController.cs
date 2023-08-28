@@ -48,7 +48,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("orderDetails/{orderId}")]
-    public async Task<ActionResult<List<OrderDetailsModel>>> GetOrderDetailsByOrderIdAsync(int orderId)
+    public async Task<ActionResult<List<OrderDetailsDisplayModel>>> GetOrderDetailsByOrderIdAsync(int orderId)
     {
         try
         {

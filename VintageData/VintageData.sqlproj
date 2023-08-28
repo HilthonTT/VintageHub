@@ -148,6 +148,7 @@
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetAllDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByOwnerIdDetailed.sql" />
+    <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_GetByOrderIdDetails.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\Review\Index_Review_Id.sql" />
