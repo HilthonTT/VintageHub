@@ -17,7 +17,7 @@ public class ReviewController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ReviewModel>> GetReviewByIdAsync(int id)
+    public async Task<ActionResult<ReviewDisplayModel>> GetReviewByIdAsync(int id)
     {
         try
         {
@@ -33,7 +33,7 @@ public class ReviewController : ControllerBase
     }
 
     [HttpGet("artifact/{artifactId}")]
-    public async Task<ActionResult<List<ReviewModel>>> GetReviewsByArtifactId(int artifactId)
+    public async Task<ActionResult<List<ReviewDisplayModel>>> GetReviewsByArtifactId(int artifactId)
     {
         try
         {
@@ -48,7 +48,7 @@ public class ReviewController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ReviewModel>> InsertReviewAsync([FromBody] ReviewModel review)
+    public async Task<ActionResult<ReviewDisplayModel>> InsertReviewAsync([FromBody] ReviewModel review)
     {
         if (ModelState.IsValid is false)
         {

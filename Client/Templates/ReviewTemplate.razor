@@ -1,5 +1,4 @@
-﻿@inject IUserEndpoint UserEndpoint
-@inject NavigationManager Navigation
+﻿@inject NavigationManager Navigation
 
 <MudCard Outlined="true" Class="mb-3">
     <MudCardContent>
@@ -25,19 +24,17 @@
 @code {
     [Parameter]
     [EditorRequired]
-    public ReviewModel Review { get; set; }
+    public ReviewDisplayModel Review { get; set; }
 
     [Parameter]
     [EditorRequired]
     public ArtifactDisplayModel Artifact { get; set; }
 
-    private UserModel reviewer;
     private string reviewerFullName = "";
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        reviewer = await UserEndpoint.GetUserByIdAsync(Review.UserId);
-        reviewerFullName = $"{reviewer?.FirstName} {reviewer?.LastName}";
+        reviewerFullName = $"{Review.User?.FirstName} {Review.User?.LastName}";
     }
 
     private void LoadReviewPage()

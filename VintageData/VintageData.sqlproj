@@ -88,8 +88,8 @@
     <Build Include="dbo\Stored Procedures\Category\spCategory_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Category\spCategory_Update.sql" />
     <Build Include="dbo\Stored Procedures\Category\spCategory_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetAll.sql" />
-    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetAllDetailed.sql" />
+    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetByIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_Update.sql" />
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_Delete.sql" />
@@ -115,7 +115,7 @@
     <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Order\spOrder_Delete.sql" />
     <Build Include="dbo\Tables\Review.sql" />
-    <Build Include="dbo\Stored Procedures\Review\spReview_GetByArtifactId.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_GetByArtifactIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_Update.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_Delete.sql" />
@@ -125,13 +125,13 @@
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_Update.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetByVendorId.sql" />
+    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetByVendorIdDetailed.sql" />
     <Build Include="dbo\Scripts\Artifact\Index_Artifact_Id.sql" />
     <Build Include="dbo\Scripts\OrderDetails\Index_OrderDetails_Id.sql" />
     <Build Include="dbo\Scripts\Order\Index_Order_Id.sql" />
     <Build Include="dbo\Scripts\User\Index_User_Id.sql" />
     <Build Include="dbo\Scripts\User\Index_User_Oid.sql" />
-    <Build Include="dbo\Stored Procedures\Review\spReview_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_GetByIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByOwnerId.sql" />
     <Build Include="dbo\Tables\Wishlist.sql" />
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_GetArtifacts.sql" />
@@ -139,6 +139,9 @@
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_GetByUserId.sql" />
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_GetByArtifactId.sql" />
+    <Build Include="dbo\Stored Procedures\Review\spReview_GetById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Locations\VintageData.publish.xml" />

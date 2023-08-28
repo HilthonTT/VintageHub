@@ -61,16 +61,20 @@ public class ReviewData : IReviewData
         _cache.Remove(key);
     }
 
-    public async Task<ReviewModel> GetReviewByIdAsync(int id)
+    public async Task<ReviewDisplayModel> GetReviewByIdAsync(int id)
     {
         string key = CacheNamePrefix + id;
-        var output = _cache.Get<ReviewModel>(key);
+        var output = _cache.Get<ReviewDisplayModel>(key);
         if (output is null)
         {
-            string storedProcedure = GetStoredProcedure("GetById");
+            string storedProcedure = GetStoredProcedure("GetByIdDetailed");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<ReviewModel>(storedProcedure, parameters);
+            var user = new UserModel();
+            var artifact = new ArtifactModel();
+
+            output = await _sql.LoadFirstOrDefaultDetailedDataAsync<ReviewDisplayModel>(
+                "Id", storedProcedure, parameters, user, artifact);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -78,16 +82,20 @@ public class ReviewData : IReviewData
         return output;
     }
 
-    public async Task<List<ReviewModel>> GetReviewsByArtifactIdAsync(int artifactId)
+    public async Task<List<ReviewDisplayModel>> GetReviewsByArtifactIdAsync(int artifactId)
     {
         string key = CacheNameArtifactPrefix + artifactId;
-        var output = _cache.Get<List<ReviewModel>>(key);
+        var output = _cache.Get<List<ReviewDisplayModel>>(key);
         if (output is null)
         {
-            string storedProcedure = GetStoredProcedure("GetByArtifactId");
+            string storedProcedure = GetStoredProcedure("GetByArtifactIdDetailed");
             var parameters = GetArtifactIdParameters(artifactId);
 
-            output = await _sql.LoadDataAsync<ReviewModel>(storedProcedure, parameters);
+            var user = new UserModel();
+            var artifact = new ArtifactModel();
+
+            output = await _sql.LoadDetailedDataAsync<ReviewDisplayModel>(
+                "Id", storedProcedure, parameters, user, artifact);
 
             _cache.Set(key, output, CacheTimeSpan);
         }

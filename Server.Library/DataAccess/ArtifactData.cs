@@ -58,7 +58,7 @@ public class ArtifactData : IArtifactData
         var output = _cache.Get<List<ArtifactDisplayModel>>(CacheName);
         if (output is null)
         {
-            string storedProcedure = GetStoredProcedure("GetAll");
+            string storedProcedure = GetStoredProcedure("GetAllDetailed");
             var parameters = new DynamicParameters();
 
             var vendor = new VendorModel();
@@ -80,7 +80,7 @@ public class ArtifactData : IArtifactData
         var output = _cache.Get<List<ArtifactDisplayModel>>(key);
         if (output is null)
         {
-            string storedProcedure = GetStoredProcedure("GetByVendorId");
+            string storedProcedure = GetStoredProcedure("GetByVendorIdDetailed");
             var parameters = GetVendorIdParameters(vendorId);
 
             var vendor = new VendorModel();
@@ -102,7 +102,7 @@ public class ArtifactData : IArtifactData
         var output = _cache.Get<ArtifactDisplayModel>(key);
         if (output is null)
         {
-            string storedProcedure = GetStoredProcedure("GetById");
+            string storedProcedure = GetStoredProcedure("GetByIdDetailed");
             var parameters = ParameterHelper.GetIdParameters(id);
 
             var vendor = new VendorModel();

@@ -1,6 +1,5 @@
 ﻿@page "/Artifact/{ArtifactId:int}/Review/{ReviewId:int}"
 @inject IReviewEndpoint ReviewEndpoint
-@inject IUserEndpoint UserEndpoint
 @inject NavigationManager Navigation
 
 @if (isLoading)
@@ -53,17 +52,14 @@ else
     [Parameter]
     public int ReviewId { get; set; }
 
-    private ReviewModel review;
-    private UserModel writer;
+    private ReviewDisplayModel review;
     private bool isLoading = true;
     private string writerFullName = "";
 
     protected override async Task OnInitializedAsync()
     {
         review = await ReviewEndpoint.GetReviewByIdAsync(ReviewId);
-        writer = await UserEndpoint.GetUserByIdAsync(review.UserId);
-
-        writerFullName = $"{writer?.FirstName} {writer?.LastName}";
+        writerFullName = $"{review.User?.FirstName} {review.User?.LastName}";
 
         isLoading = false;
     }

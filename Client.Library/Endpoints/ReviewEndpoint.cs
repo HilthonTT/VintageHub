@@ -16,18 +16,18 @@ public class ReviewEndpoint : IReviewEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<ReviewModel>> GetAllReviewsByArtifactId(int artifactId)
+    public async Task<List<ReviewDisplayModel>> GetAllReviewsByArtifactId(int artifactId)
     {
         try
         {
             string key = CacheNamePrefix + artifactId;
-            var output = await _localStorage.GetAsync<List<ReviewModel>>(key);
+            var output = await _localStorage.GetAsync<List<ReviewDisplayModel>>(key);
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/artifact/{artifactId}");
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<ReviewModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<ReviewDisplayModel>>();
                 await _localStorage.SetAsync(key, output, CacheTimeSpan);
             }
 
@@ -45,14 +45,14 @@ public class ReviewEndpoint : IReviewEndpoint
         return null;
     }
 
-    public async Task<ReviewModel> GetReviewByIdAsync(int id)
+    public async Task<ReviewDisplayModel> GetReviewByIdAsync(int id)
     {
         try
         {
             using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<ReviewModel>();
+            return await response.Content.ReadFromJsonAsync<ReviewDisplayModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -66,14 +66,14 @@ public class ReviewEndpoint : IReviewEndpoint
         return null;
     }
 
-    public async Task<ReviewModel> InsertReviewAsync(ReviewModel review)
+    public async Task<ReviewDisplayModel> InsertReviewAsync(ReviewModel review)
     {
         try
         {
             using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, review);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<ReviewModel>();
+            return await response.Content.ReadFromJsonAsync<ReviewDisplayModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {

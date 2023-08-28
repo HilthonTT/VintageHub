@@ -4,9 +4,9 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT [Id], [UserId], [ArtifactId], [Title], [Description], [Rating]
+	SELECT [Id], [UserId], [ArtifactId], [Title], [Description], [Rating] 
 	FROM [dbo].[Review]
-	WHERE ArtifactId = @ArtifactId;
+	WHERE [ArtifactId] = @ArtifactId
 
 	RETURN 0;
 END

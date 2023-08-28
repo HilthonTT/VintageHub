@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spArtifact_GetByVendorId]
+﻿CREATE PROCEDURE [dbo].[spArtifact_GetByVendorIdDetailed]
 	@VendorId INT
 AS
 BEGIN
@@ -11,9 +11,9 @@ BEGIN
         C.Id AS [Id], C.[Name] AS [Name], C.[Description] AS [Description],
         E.Id AS [Id], E.[Name] AS [Name], E.[Description] AS [Description]
     FROM Artifact A
-    INNER JOIN Vendor V ON A.VendorId = V.Id
-    INNER JOIN Category C ON A.CategoryId = C.Id
-    INNER JOIN Era E ON A.EraId = E.Id
+    INNER JOIN [dbo].[Vendor] V ON A.VendorId = V.Id
+    INNER JOIN [dbo].[Category] C ON A.CategoryId = C.Id
+    INNER JOIN [dbo].[Era] E ON A.EraId = E.Id
 	WHERE [A].[VendorId] = @VendorId;
 
 	RETURN 0;
