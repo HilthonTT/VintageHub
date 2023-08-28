@@ -79,7 +79,7 @@
                 </div>
                 <MudItem>
                     <MudImage Src="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/1100x250/000/fff" : imageSource))"
-                               Fluid="true" Alt="@vendor?.Name" />
+                              Fluid="true" Alt="@vendor?.Name" />
                 </MudItem>
                 <MudDivider Class="mt-3 mb-3" />
                 <MudItem>
@@ -143,7 +143,7 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private VendorModel vendor;
+    private VendorDisplayModel vendor;
     private List<ArtifactDisplayModel> artifacts;
     private List<CategoryModel> categories;
     private List<EraModel> eras;
@@ -193,7 +193,7 @@ else
     private async Task LoadErasAsync()
     {
         var allEras = await EraEndpoint.GetAllErasAsync();
-        eras =  showAllEras ? allEras : allEras.Take(5).ToList();
+        eras = showAllEras ? allEras : allEras.Take(5).ToList();
     }
 
     private async Task<IEnumerable<string>> SearchArtifactsAsync(string value)

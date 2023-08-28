@@ -53,15 +53,17 @@ public class VendorData : IVendorData
         }
     }
 
-    public async Task<List<VendorModel>> GetAllVendorsAsync()
+    public async Task<List<VendorDisplayModel>> GetAllVendorsAsync()
     {
-        var output = _cache.Get<List<VendorModel>>(CacheName);
+        var output = _cache.Get<List<VendorDisplayModel>>(CacheName);
         if (output is null)
         {
-            string storedProcedure = GetStoredProcedure("GetAll");
+            string storedProcedure = GetStoredProcedure("GetAllDetailed");
             var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<VendorModel>(storedProcedure, parameters);
+            var user = new UserModel();
+            output = await _sql.LoadDetailedDataAsync<VendorDisplayModel>(
+                "Id", storedProcedure, parameters, user);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -69,16 +71,18 @@ public class VendorData : IVendorData
         return output;
     }
 
-    public async Task<VendorModel> GetVendorByIdAsync(int id)
+    public async Task<VendorDisplayModel> GetVendorByIdAsync(int id)
     {
         string key = CacheNamePrefix + id;
-        var output = _cache.Get<VendorModel>(key);
+        var output = _cache.Get<VendorDisplayModel>(key);
         if (output is null)
         {
-            string storedProcedure = GetStoredProcedure("GetById");
+            string storedProcedure = GetStoredProcedure("GetByIdDetailed");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<VendorModel>(storedProcedure, parameters);
+            var user = new UserModel();
+            output = await _sql.LoadFirstOrDefaultDetailedDataAsync<VendorDisplayModel>(
+                "Id", storedProcedure, parameters, user);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -86,16 +90,18 @@ public class VendorData : IVendorData
         return output;
     }
 
-    public async Task<List<VendorModel>> GetAllVendorByOwnerUserIdAsync(int ownerUserId)
+    public async Task<List<VendorDisplayModel>> GetAllVendorByOwnerUserIdAsync(int ownerUserId)
     {
         string key = CacheNameUserPrefix + ownerUserId;
-        var output = _cache.Get<List<VendorModel>>(key);
+        var output = _cache.Get<List<VendorDisplayModel>>(key);
         if (output is null)
         {
-            string storedProcedure = GetStoredProcedure("GetByOwnerId");
+            string storedProcedure = GetStoredProcedure("GetByOwnerIdDetailed");
             var parameters = GetOwnerIdParamters(ownerUserId);
 
-            output = await _sql.LoadDataAsync<VendorModel>(storedProcedure, parameters);
+            var user = new UserModel();
+            output = await _sql.LoadDetailedDataAsync<VendorDisplayModel>(
+                "Id", storedProcedure, parameters, user);
 
             _cache.Set(key, output, CacheTimeSpan);
         }

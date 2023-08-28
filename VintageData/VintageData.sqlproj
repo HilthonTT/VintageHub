@@ -145,10 +145,13 @@
     <Build Include="dbo\Stored Procedures\Order\spOrder_GetByIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Order\spOrder_GetByUserIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Order\spOrder_GetAllDetailed.sql" />
+    <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetAllDetailed.sql" />
+    <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByIdDetailed.sql" />
+    <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByOwnerIdDetailed.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Publish Locations\VintageData.publish.xml" />
     <None Include="dbo\Scripts\Review\Index_Review_Id.sql" />
+    <None Include="Publish Locations\VintageData.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VintageData.refactorlog" />

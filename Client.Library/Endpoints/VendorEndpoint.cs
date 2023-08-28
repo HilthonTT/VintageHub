@@ -17,17 +17,17 @@ public class VendorEndpoint : IVendorEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<VendorModel>> GetAllVendorsAsync()
+    public async Task<List<VendorDisplayModel>> GetAllVendorsAsync()
     {
         try
         {
-            var output = await _localStorage.GetAsync<List<VendorModel>>(CacheName);
+            var output = await _localStorage.GetAsync<List<VendorDisplayModel>>(CacheName);
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<VendorModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<VendorDisplayModel>>();
                 await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
             }
 
@@ -45,11 +45,11 @@ public class VendorEndpoint : IVendorEndpoint
         return null;
     }
 
-    public async Task<VendorModel> GetVendorByIdAsync(int id)
+    public async Task<VendorDisplayModel> GetVendorByIdAsync(int id)
     {
         try
         {
-            var cachedVendors = await _localStorage.GetAsync<List<VendorModel>>(CacheNameSingle);
+            var cachedVendors = await _localStorage.GetAsync<List<VendorDisplayModel>>(CacheNameSingle);
             cachedVendors ??= new();
 
             var cachedVendor = cachedVendors.FirstOrDefault(v => v.Id == id);
@@ -58,7 +58,7 @@ public class VendorEndpoint : IVendorEndpoint
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
-                cachedVendor = await response.Content.ReadFromJsonAsync<VendorModel>();
+                cachedVendor = await response.Content.ReadFromJsonAsync<VendorDisplayModel>();
                 cachedVendors.Add(cachedVendor);
                 await _localStorage.SetAsync(CacheNameSingle, cachedVendors, CacheTimeSpan);
             }
@@ -77,19 +77,19 @@ public class VendorEndpoint : IVendorEndpoint
         return null;
     }
 
-    public async Task<List<VendorModel>> GetAllVendorsByOwnerUserIdAsync(int ownerUserId)
+    public async Task<List<VendorDisplayModel>> GetAllVendorsByOwnerUserIdAsync(int ownerUserId)
     {
         try
         {
             string key = CacheNamePrefix + ownerUserId;
-            var vendors = await _localStorage.GetAsync<List<VendorModel>>(key);
+            var vendors = await _localStorage.GetAsync<List<VendorDisplayModel>>(key);
 
             if (vendors?.Count <= 0)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/owner/{ownerUserId}");
                 response.EnsureSuccessStatusCode();
 
-                vendors = await response.Content.ReadFromJsonAsync<List<VendorModel>>();
+                vendors = await response.Content.ReadFromJsonAsync<List<VendorDisplayModel>>();
                 await _localStorage.SetAsync(key, vendors, CacheTimeSpan);
             }
 
@@ -107,14 +107,14 @@ public class VendorEndpoint : IVendorEndpoint
         return null;
     }
 
-    public async Task<VendorModel> InsertVendorAsync(VendorModel vendor)
+    public async Task<VendorDisplayModel> InsertVendorAsync(VendorModel vendor)
     {
         try
         {
             using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, vendor);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<VendorModel>();
+            return await response.Content.ReadFromJsonAsync<VendorDisplayModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {

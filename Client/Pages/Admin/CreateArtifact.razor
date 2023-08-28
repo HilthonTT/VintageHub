@@ -54,7 +54,7 @@
                                     <MudItem xs="12">
                                         <MudTextField @bind-Value="artifact.Description" Label="Artifact Description"
                                                       Lines="2" Required="true" Variant="Variant.Outlined" Clearable="true"
-                                                      HelperText="Describe your artifact in 1000 characters."/>
+                                                      HelperText="Describe your artifact in 1000 characters." />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.Description" />
                                         </MudText>
@@ -120,7 +120,7 @@
                                         <MudAutocomplete Label="Artifact Owner"
                                                          HelperText="Select the vendor you're portraying."
                                                          SearchFunc="SearchVendorsAsync"
-                                                         ValueChanged="(e) => artifact.VendorId = e.Id" T="VendorModel"
+                                                         ValueChanged="(e) => artifact.VendorId = e.Id" T="VendorDisplayModel"
                                                          ToStringFunc="@(e => e==null?null : $"{e.Name} - {e.Id}")"
                                                          Variant="Variant.Outlined">
                                             <NoItemsTemplate>
@@ -208,8 +208,8 @@ else
     private CreateArtifactModel artifact = new();
     private List<CategoryModel> categories;
     private List<EraModel> eras;
-    private List<VendorModel> vendors;
-    private VendorModel selectedVendor;
+    private List<VendorDisplayModel> vendors;
+    private VendorDisplayModel selectedVendor;
 
     private IBrowserFile selectedImageFile;
     private string errorMessage = "";
@@ -228,7 +228,7 @@ else
         artifact.VendorId = vendors.FirstOrDefault().Id;
     }
 
-    private async Task<IEnumerable<VendorModel>> SearchVendorsAsync(string value)
+    private async Task<IEnumerable<VendorDisplayModel>> SearchVendorsAsync(string value)
     {
         var vendors = await VendorEndpoint.GetAllVendorsAsync();
 
@@ -300,18 +300,18 @@ else
     {
         errorMessage = "";
         var newArtifact = new ArtifactModel
-        {
-            Name = artifact.Name,
-            Description = artifact.Description,
-            Quantity = artifact.Quantity,
-            Price = artifact.Price,
-            DiscountAmount = artifact.DiscountAmount,
-            CategoryId = artifact.CategoryId,
-            VendorId = artifact.VendorId,
-            ImageId = "",
-            EraId = artifact.EraId,
-            Availability = artifact.Availability,
-        };
+            {
+                Name = artifact.Name,
+                Description = artifact.Description,
+                Quantity = artifact.Quantity,
+                Price = artifact.Price,
+                DiscountAmount = artifact.DiscountAmount,
+                CategoryId = artifact.CategoryId,
+                VendorId = artifact.VendorId,
+                ImageId = "",
+                EraId = artifact.EraId,
+                Availability = artifact.Availability,
+            };
 
         if (IsArtifactInvalid(newArtifact))
         {

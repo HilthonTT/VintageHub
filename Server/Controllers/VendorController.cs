@@ -17,7 +17,7 @@ public class VendorController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<VendorModel>>> GetAllVendorsAsync()
+    public async Task<ActionResult<List<VendorDisplayModel>>> GetAllVendorsAsync()
     {
         try
         {
@@ -32,7 +32,7 @@ public class VendorController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<VendorModel>> GetVendorByIdAsync(int id)
+    public async Task<ActionResult<VendorDisplayModel>> GetVendorByIdAsync(int id)
     {
         try
         {
@@ -48,7 +48,7 @@ public class VendorController : ControllerBase
     }
 
     [HttpGet("owner/{ownerUserId}")]
-    public async Task<ActionResult<List<VendorModel>>> GetAllVendorsByOwnerUserIdAsync(int ownerUserId)
+    public async Task<ActionResult<List<VendorDisplayModel>>> GetAllVendorsByOwnerUserIdAsync(int ownerUserId)
     {
         try
         {
@@ -64,7 +64,7 @@ public class VendorController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<VendorModel>> InsertVendorAsync([FromBody] VendorModel vendor)
+    public async Task<ActionResult<VendorDisplayModel>> InsertVendorAsync([FromBody] VendorModel vendor)
     {
         if (ModelState.IsValid is false)
         {
