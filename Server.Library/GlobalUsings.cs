@@ -9,3 +9,4 @@ global using Microsoft.Extensions.Configuration;
 global using System.Data;
 global using System.ComponentModel.DataAnnotations;
 global using Server.Library.DataAccess.Helpers;
+global using Server.Library.Models.Display;

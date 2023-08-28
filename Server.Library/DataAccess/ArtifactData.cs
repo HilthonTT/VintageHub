@@ -1,6 +1,4 @@
-﻿using Server.Library.Models.Display;
-
-namespace Server.Library.DataAccess;
+﻿namespace Server.Library.DataAccess;
 public class ArtifactData : IArtifactData
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
@@ -55,15 +53,20 @@ public class ArtifactData : IArtifactData
         _cache.Remove(idKey);
     }
 
-    public async Task<List<ArtifactModel>> GetAllArtifactsAsync()
+    public async Task<List<ArtifactDisplayModel>> GetAllArtifactsAsync()
     {
-        var output = _cache.Get<List<ArtifactModel>>(CacheName);
+        var output = _cache.Get<List<ArtifactDisplayModel>>(CacheName);
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetAll");
             var parameters = new DynamicParameters();
 
-            output = await _sql.LoadDataAsync<ArtifactModel>(storedProcedure, parameters);
+            var vendor = new VendorModel();
+            var category = new CategoryModel();
+            var era = new EraModel();
+
+            output = await _sql.LoadDetailedDataAsync<ArtifactDisplayModel>(
+                "Id", storedProcedure, parameters, vendor, category, era);
 
             _cache.Set(CacheName, output, CacheTimeSpan);
         }
@@ -71,38 +74,21 @@ public class ArtifactData : IArtifactData
         return output;
     }
 
-    public async Task<List<ArtifactDisplayModel>> GetAllArtifactsWithDetailsAsync()
-    {
-        string key = CacheName + "Details";
-        var output = _cache.Get<List<ArtifactDisplayModel>>(key);
-        if (output is null)
-        {
-            string storedProcedure = GetStoredProcedure("GetAllWithDetails");
-            
-            var vendor = new VendorModel();
-            var category = new CategoryModel();
-            var era = new EraModel();
-
-            output = await _sql.LoadDetailedDataAsync<ArtifactDisplayModel>(
-                "Id", storedProcedure, vendor, category, era);
-
-
-            _cache.Set(key, output, CacheTimeSpan);
-        }
-
-        return output;
-    }
-
-    public async Task<List<ArtifactModel>> GetAllArtifactsByVendorIdAsync(int vendorId)
+    public async Task<List<ArtifactDisplayModel>> GetAllArtifactsByVendorIdAsync(int vendorId)
     {
         string key = CacheNameVendorPrefix + vendorId;
-        var output = _cache.Get<List<ArtifactModel>>(key);
+        var output = _cache.Get<List<ArtifactDisplayModel>>(key);
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetByVendorId");
             var parameters = GetVendorIdParameters(vendorId);
 
-            output = await _sql.LoadDataAsync<ArtifactModel>(storedProcedure, parameters);
+            var vendor = new VendorModel();
+            var category = new CategoryModel();
+            var era = new EraModel();
+
+            output = await _sql.LoadDetailedDataAsync<ArtifactDisplayModel>(
+                "Id", storedProcedure, parameters, vendor, category, era);
 
             _cache.Set(key, output, CacheTimeSpan);
         }
@@ -110,16 +96,21 @@ public class ArtifactData : IArtifactData
         return output;
     }
 
-    public async Task<ArtifactModel> GetArtifactByIdAsync(int id)
+    public async Task<ArtifactDisplayModel> GetArtifactByIdAsync(int id)
     {
         string key = CacheNamePrefix + id;
-        var output = _cache.Get<ArtifactModel>(key);
+        var output = _cache.Get<ArtifactDisplayModel>(key);
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetById");
             var parameters = ParameterHelper.GetIdParameters(id);
 
-            output = await _sql.LoadFirstOrDefaultAsync<ArtifactModel>(storedProcedure, parameters);
+            var vendor = new VendorModel();
+            var category = new CategoryModel();
+            var era = new EraModel();
+
+            output = await _sql.LoadFirstOrDefaultDetailedDataAsync<ArtifactDisplayModel>(
+                "Id", storedProcedure, parameters, vendor, category, era);
 
             _cache.Set(key, output, CacheTimeSpan);
         }

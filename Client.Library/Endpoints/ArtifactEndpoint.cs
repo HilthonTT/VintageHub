@@ -17,18 +17,18 @@ public class ArtifactEndpoint : IArtifactEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<ArtifactModel>> GetAllArtifactsAsync()
+    public async Task<List<ArtifactDisplayModel>> GetAllArtifactsAsync()
     {
         try
         {
-            var output = await _localStorage.GetAsync<List<ArtifactModel>>(CacheName);
+            var output = await _localStorage.GetAsync<List<ArtifactDisplayModel>>(CacheName);
 
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<ArtifactDisplayModel>>();
                 await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
             }
 
@@ -46,11 +46,11 @@ public class ArtifactEndpoint : IArtifactEndpoint
         return null;
     }
 
-    public async Task<ArtifactModel> GetArtifactByIdAsync(int id)
+    public async Task<ArtifactDisplayModel> GetArtifactByIdAsync(int id)
     {
         try
         {
-            var cachedArtifacts = await _localStorage.GetAsync<List<ArtifactModel>>(CacheNameSingle);
+            var cachedArtifacts = await _localStorage.GetAsync<List<ArtifactDisplayModel>>(CacheNameSingle);
             cachedArtifacts ??= new();
 
             var cachedArtifact = cachedArtifacts.FirstOrDefault(a => a.Id == id);
@@ -59,7 +59,7 @@ public class ArtifactEndpoint : IArtifactEndpoint
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
-                cachedArtifact = await response.Content.ReadFromJsonAsync<ArtifactModel>();
+                cachedArtifact = await response.Content.ReadFromJsonAsync<ArtifactDisplayModel>();
 
                 cachedArtifacts.Add(cachedArtifact);
                 await _localStorage.SetAsync(CacheNameSingle, cachedArtifacts, CacheTimeSpan);
@@ -79,19 +79,19 @@ public class ArtifactEndpoint : IArtifactEndpoint
         return null;
     }
 
-    public async Task<List<ArtifactModel>> GetArtifactByVendorIdAsync(int vendorId)
+    public async Task<List<ArtifactDisplayModel>> GetArtifactByVendorIdAsync(int vendorId)
     {
         try
         {
             string key = CacheNameVendorPrefix + vendorId;
-            var output = await _localStorage.GetAsync<List<ArtifactModel>>(key);
+            var output = await _localStorage.GetAsync<List<ArtifactDisplayModel>>(key);
 
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/vendor/{vendorId}");
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<ArtifactDisplayModel>>();
                 await _localStorage.SetAsync(key, output, CacheTimeSpan);
             }
 
@@ -109,14 +109,14 @@ public class ArtifactEndpoint : IArtifactEndpoint
         return null;
     }
 
-    public async Task<ArtifactModel> InsertArtifactAsync(ArtifactModel artifact)
+    public async Task<ArtifactDisplayModel> InsertArtifactAsync(ArtifactModel artifact)
     {
         try
         {
             using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, artifact);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<ArtifactModel>();
+            return await response.Content.ReadFromJsonAsync<ArtifactDisplayModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {

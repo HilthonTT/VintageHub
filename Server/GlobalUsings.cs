@@ -13,3 +13,4 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.Identity.Web.Resource;
 global using Server.Library.Models;
 global using VintageHub.Server.Models;
+global using Server.Library.Models.Display;

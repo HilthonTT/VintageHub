@@ -6,3 +6,4 @@ global using System.Net.Http.Json;
 global using Client.Library.Models.Cache;
 global using Microsoft.AspNetCore.Components.Forms;
 global using Blazored.LocalStorage;
+global using Client.Library.Models.Display;

@@ -4,9 +4,9 @@ namespace Client.Library.Endpoints.Interfaces;
 public interface IArtifactEndpoint
 {
     Task DeleteArtifactAsync(ArtifactModel artifact);
-    Task<List<ArtifactModel>> GetAllArtifactsAsync();
-    Task<ArtifactModel> GetArtifactByIdAsync(int id);
-    Task<List<ArtifactModel>> GetArtifactByVendorIdAsync(int vendorId);
-    Task<ArtifactModel> InsertArtifactAsync(ArtifactModel artifact);
+    Task<List<ArtifactDisplayModel>> GetAllArtifactsAsync();
+    Task<ArtifactDisplayModel> GetArtifactByIdAsync(int id);
+    Task<List<ArtifactDisplayModel>> GetArtifactByVendorIdAsync(int vendorId);
+    Task<ArtifactDisplayModel> InsertArtifactAsync(ArtifactModel artifact);
     Task UpdateArtifactAsync(ArtifactModel artifact);
 }

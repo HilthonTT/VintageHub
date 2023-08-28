@@ -67,7 +67,7 @@ else
 
 @code {
     private UserModel loggedInUser;
-    private List<ArtifactModel> artifacts;
+    private List<ArtifactDisplayModel> artifacts;
     private List<WishlistModel> wishlists;
     private bool isLoading = true;
 
@@ -95,7 +95,7 @@ else
         return false;
     }
 
-    private async Task RemoveFromWishlistAsync(ArtifactModel artifact)
+    private async Task RemoveFromWishlistAsync(ArtifactDisplayModel artifact)
     {
         var removedWishlist = wishlists.FirstOrDefault(w => w.ArtifactId == artifact.Id);
         var removedArtifact = artifacts.FirstOrDefault(a => a.Id == artifact.Id);

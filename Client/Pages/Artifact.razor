@@ -33,12 +33,12 @@
                                     <div class="d-flex">
                                         <MudAvatar>
                                             <MudImage Src="@(string.IsNullOrWhiteSpace(vendorImageSource)? "https://dummyimage.com/600x400/000/fff": vendorImageSource)"
-                                                      Alt="@vendor?.Name" />
+                                                      Alt="@artifact?.Vendor?.Name" />
                                         </MudAvatar>
                                         <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
                                             Vendor:
                                             <MudButton OnClick="LoadVendorPage" StartIcon="@Icons.Material.Filled.BrandingWatermark" Color="Color.Primary">
-                                                @vendor?.Name
+                                                @artifact?.Vendor?.Name
                                             </MudButton>
                                         </MudText>
                                     </div>
@@ -145,13 +145,10 @@ else
     private bool isLoading = true;
     private bool canAddToCart = false;
     private bool canAddToWishlist = false;
-    private List<ArtifactModel> randomArtifacts;
+    private List<ArtifactDisplayModel> randomArtifacts;
     private List<ReviewModel> reviews;
-    private VendorModel vendor;
-    private ArtifactModel artifact;
+    private ArtifactDisplayModel artifact;
     private UserModel loggedInUser;
-    private CategoryModel category;
-    private EraModel era;
     private ShoppingCartModel shoppingCart;
 
     protected override async Task OnInitializedAsync()
@@ -181,21 +178,11 @@ else
             artifact.Quantity = GetArtifactQuantity(artifact);
             canAddToCart = CanAddToCart(artifact);
             artifactImageSource = ImageEndpoint.GetImage(artifact.ImageId);
+            vendorImageSource = ImageEndpoint.GetImage(artifact.Vendor.ImageId);
 
             canAddToWishlist = await CanAddToWishlistAsync();
-            category = await CategoryEndpoint.GetCategoryByIdAsync(artifact.CategoryId);
-            era = await EraEndpoint.GetEraByIdAsync(artifact.EraId);
             reviews = await ReviewEndpoint.GetAllReviewsByArtifactId(artifact.Id);
-
-            await LoadVendorAsync();
         }
-    }
-
-    private async Task LoadVendorAsync()
-    {
-        vendor = await VendorEndpoint.GetVendorByIdAsync(artifact.VendorId);
-
-        vendorImageSource = ImageEndpoint.GetImage(vendor.ImageId);
     }
 
     private async Task LoadRandomArtifactsAsync()
@@ -238,15 +225,15 @@ else
 
     private void LoadVendorPage()
     {
-        if (vendor is null)
+        if (artifact.Vendor is null)
         {
             return;
         }
 
-        Navigation.NavigateTo($"/Vendor/{vendor.Id}");
+        Navigation.NavigateTo($"/Vendor/{artifact.Vendor.Id}");
     }
 
-    private bool CanAddToCart(ArtifactModel artifact)
+    private bool CanAddToCart(ArtifactDisplayModel artifact)
     {
         var item = shoppingCart.CartItems.FirstOrDefault(x => x.Artifact.Id == artifact.Id);
 
@@ -258,7 +245,7 @@ else
         return true;
     }
 
-    private int GetArtifactQuantity(ArtifactModel artifact)
+    private int GetArtifactQuantity(ArtifactDisplayModel artifact)
     {
         if (shoppingCart is null)
         {

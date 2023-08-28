@@ -15,7 +15,7 @@ public class WishlistController : ControllerBase
     }
 
     [HttpGet("artifacts/{userId}")]
-    public async Task<ActionResult<List<ArtifactModel>>> GetAllArtifactsInWishlistAsync(int userId)
+    public async Task<ActionResult<List<ArtifactDisplayModel>>> GetAllArtifactsInWishlistAsync(int userId)
     {
         try
         {
@@ -45,7 +45,7 @@ public class WishlistController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<List<ArtifactModel>>> InsertWishlistAsync([FromBody] WishlistModel wishlist)
+    public async Task<ActionResult<List<ArtifactDisplayModel>>> InsertWishlistAsync([FromBody] WishlistModel wishlist)
     {
         if (ModelState.IsValid is false)
         {

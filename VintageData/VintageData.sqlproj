@@ -139,7 +139,6 @@
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_GetByUserId.sql" />
     <Build Include="dbo\Stored Procedures\Wishlist\spWishlist_GetById.sql" />
-    <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetAllWithDetails.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Locations\VintageData.publish.xml" />

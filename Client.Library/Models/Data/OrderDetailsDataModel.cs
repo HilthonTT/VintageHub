@@ -20,5 +20,5 @@ public class OrderDetailsDataModel
     public int ArtifactId { get; set; }
     public int Quantity { get; set; }
     public decimal TotalPrice { get; set; }
-    public ArtifactModel Artifact { get; set; }
+    public ArtifactDisplayModel Artifact { get; set; }
 }

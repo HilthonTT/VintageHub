@@ -1,5 +1,4 @@
 ﻿@inject IImageEndpoint ImageEndpoint
-@inject IVendorEndpoint VendorEndpoint
 @inject IShoppingCartStorage ShoppingCartStorage
 @inject NavigationManager Navigation
 
@@ -21,7 +20,7 @@
             <MudText Typo="Typo.body2">@Artifact?.Description</MudText>
             <MudDivider Class="mt-3 mb-3" />
             <MudText Typo="Typo.body1">Price: @Artifact?.Price.ToString("0.####") &euro;</MudText>
-            <MudText Typo="Typo.body2">This artifact is sold by: @vendor?.Name</MudText>
+            <MudText Typo="Typo.body2">This artifact is sold by: @Artifact.Vendor?.Name</MudText>
         </MudCardContent>
         <MudCardActions>
             <MudButton OnClick="AddToCartAsync" Variant="Variant.Text" Disabled="!canAddToCart"
@@ -39,12 +38,11 @@
 @code {
     [Parameter]
     [EditorRequired]
-    public ArtifactModel Artifact { get; set; }
+    public ArtifactDisplayModel Artifact { get; set; }
 
     [Parameter]
-    public EventCallback<ArtifactModel> RemoveEvent { get; set; }
+    public EventCallback<ArtifactDisplayModel> RemoveEvent { get; set; }
 
-    private VendorModel vendor;
     private ShoppingCartModel shoppingCart;
     private string imageSource = "";
     private bool canAddToCart = false;
@@ -52,7 +50,6 @@
     protected override async Task OnInitializedAsync()
     {
         imageSource = ImageEndpoint.GetImage(Artifact.ImageId);
-        vendor = await VendorEndpoint.GetVendorByIdAsync(Artifact.VendorId);
         shoppingCart = await ShoppingCartStorage.GetShoppingCartAsync();
 
         canAddToCart = CanAddToCart();

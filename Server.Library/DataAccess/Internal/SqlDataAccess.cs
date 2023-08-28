@@ -56,6 +56,7 @@ public class SqlDataAccess : ISqlDataAccess
     public async Task<List<T>> LoadDetailedDataAsync<T>(
         string splitOnColumn, 
         string storedProcedure, 
+        DynamicParameters parameters,
         params object[] secondaryObjects)
     {
         string connectionString = GetConnectionString();
@@ -63,8 +64,6 @@ public class SqlDataAccess : ISqlDataAccess
 
         var types = new List<Type> { typeof(T) };
         types.AddRange(secondaryObjects.Select(obj => obj.GetType()));
-
-        var parameters = new DynamicParameters();
 
         var entities = await connection.QueryAsync(
             storedProcedure,
@@ -97,6 +96,7 @@ public class SqlDataAccess : ISqlDataAccess
     public async Task<T> LoadFirstOrDefaultDetailedDataAsync<T>(
         string splitOnColumn,
         string storedProcedure,
+        DynamicParameters parameters,
         params object[] secondaryObjects)
     {
         string connectionString = GetConnectionString();
@@ -104,8 +104,6 @@ public class SqlDataAccess : ISqlDataAccess
 
         var types = new List<Type> { typeof(T) };
         types.AddRange(secondaryObjects.Select(obj => obj.GetType()));
-
-        var parameters = new DynamicParameters();
 
         var entities = await connection.QueryAsync(
             storedProcedure,

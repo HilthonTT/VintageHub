@@ -6,27 +6,22 @@
 public class ArtifactController : ControllerBase
 {
     private readonly IArtifactData _artifactData;
-    private readonly ISqlDataAccess _sql;
     private readonly ILogger<ArtifactController> _logger;
 
     public ArtifactController(
         IArtifactData artifactData,
-        ISqlDataAccess sql,
         ILogger<ArtifactController> logger)
     {
         _artifactData = artifactData;
-        _sql = sql;
         _logger = logger;
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ArtifactModel>>> GetAllArtifactsAsync()
+    public async Task<ActionResult<List<ArtifactDisplayModel>>> GetAllArtifactsAsync()
     {
         try
         {
             var artifacts = await _artifactData.GetAllArtifactsAsync();
-
-            var detailed = await _artifactData.GetAllArtifactsWithDetailsAsync();
 
             return Ok(artifacts);
         }
@@ -38,7 +33,7 @@ public class ArtifactController : ControllerBase
     }
 
     [HttpGet("vendor/{id}")]
-    public async Task<ActionResult<List<ArtifactModel>>> GetArtifactByVendorIdAsync(int id)
+    public async Task<ActionResult<List<ArtifactDisplayModel>>> GetArtifactByVendorIdAsync(int id)
     {
         try
         {
@@ -54,7 +49,7 @@ public class ArtifactController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ArtifactModel>> GetArtifactByIdAsync(int id)
+    public async Task<ActionResult<ArtifactDisplayModel>> GetArtifactByIdAsync(int id)
     {
         try
         {
@@ -71,7 +66,7 @@ public class ArtifactController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "Admin")]
-    public async Task<ActionResult<ArtifactModel>> InsertArtifactAsync([FromBody] ArtifactModel artifact)
+    public async Task<ActionResult<ArtifactDisplayModel>> InsertArtifactAsync([FromBody] ArtifactModel artifact)
     {
         if (ModelState.IsValid is false)
         {

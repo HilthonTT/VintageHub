@@ -22,17 +22,17 @@ public class WishlistEndpoint : IWishlistEndpoint
         await _localStorage.RemoveAsync(CacheNameUser);
     }
 
-    public async Task<List<ArtifactModel>> GetAllArtifactsInWishlistAsync(int userId)
+    public async Task<List<ArtifactDisplayModel>> GetAllArtifactsInWishlistAsync(int userId)
     {
         try
         {
-            var output = await _localStorage.GetAsync<List<ArtifactModel>>(CacheName);
+            var output = await _localStorage.GetAsync<List<ArtifactDisplayModel>>(CacheName);
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/artifacts/{userId}");
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<ArtifactDisplayModel>>();
                 await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
             }
 
@@ -78,7 +78,7 @@ public class WishlistEndpoint : IWishlistEndpoint
         return null;
     }
 
-    public async Task<List<ArtifactModel>> InsertWishlistAsync(WishlistModel wishlist)
+    public async Task<List<ArtifactDisplayModel>> InsertWishlistAsync(WishlistModel wishlist)
     {
         try
         {
@@ -86,7 +86,7 @@ public class WishlistEndpoint : IWishlistEndpoint
             response.EnsureSuccessStatusCode();
 
             await RemoveCacheAsync();
-            return await response.Content.ReadFromJsonAsync<List<ArtifactModel>>();
+            return await response.Content.ReadFromJsonAsync<List<ArtifactDisplayModel>>();
         }
         catch (AccessTokenNotAvailableException ex)
         {

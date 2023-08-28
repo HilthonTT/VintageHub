@@ -55,16 +55,22 @@ public class WishlistData : IWishlistData
         return await _sql.LoadFirstOrDefaultAsync<WishlistModel>(storedProcedure, parameters);
     }
 
-    public async Task<List<ArtifactModel>> GetAllArtifactsInWishlistAsync(int userId)
+    public async Task<List<ArtifactDisplayModel>> GetAllArtifactsInWishlistAsync(int userId)
     {
         string key = CacheNamePrefix + userId;
-        var output = _cache.Get<List<ArtifactModel>>(key);
+        var output = _cache.Get<List<ArtifactDisplayModel>>(key);
         if (output is null)
         {
             string storedProcedure = GetStoredProcedure("GetArtifacts");
             var parameters = GetUserIdParameters(userId);
 
-            output = await _sql.LoadDataAsync<ArtifactModel>(storedProcedure, parameters);
+            var vendor = new VendorModel();
+            var category = new CategoryModel();
+            var era = new EraModel();
+
+            output = await _sql.LoadDetailedDataAsync<ArtifactDisplayModel>(
+                "Id", storedProcedure, parameters, vendor, category, era);
+
             _cache.Set(key, output, CacheTimeSpan);
         }
 

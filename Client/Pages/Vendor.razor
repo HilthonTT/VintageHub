@@ -144,7 +144,7 @@ else
     public int Id { get; set; }
 
     private VendorModel vendor;
-    private List<ArtifactModel> artifacts;
+    private List<ArtifactDisplayModel> artifacts;
     private List<CategoryModel> categories;
     private List<EraModel> eras;
     private CategoryModel selectedCategory;
@@ -253,12 +253,12 @@ else
 
         if (selectedEra is not null)
         {
-            output = output.Where(a => a.EraId == selectedEra.Id).ToList();
+            output = output.Where(a => a.Era.Id == selectedEra.Id).ToList();
         }
 
         if (selectedCategory is not null)
         {
-            output = output.Where(a => a.CategoryId == selectedCategory.Id).ToList();
+            output = output.Where(a => a.Category.Id == selectedCategory.Id).ToList();
         }
 
         output = selectedRating switch
