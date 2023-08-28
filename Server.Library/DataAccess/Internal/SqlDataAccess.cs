@@ -7,7 +7,6 @@ public class SqlDataAccess : ISqlDataAccess
     private readonly IMemoryCache _cache;
     private readonly IConfiguration _config;
 
-    private static bool _isClosed;
     private static IDbConnection _connection;
     private static IDbTransaction _transaction;
 
@@ -38,8 +37,6 @@ public class SqlDataAccess : ISqlDataAccess
 
         _transaction = null;
         _connection = null;
-
-        _isClosed = true;
     }
 
     public async Task<List<T>> LoadDataAsync<T>(string storedProcedure, DynamicParameters parameters)
@@ -163,8 +160,6 @@ public class SqlDataAccess : ISqlDataAccess
         _connection.Open();
 
         _transaction = _connection.BeginTransaction();
-
-        _isClosed = false;
     }
 
     public async Task<int> SaveDataInTransactionAsync(string storedProcedure, DynamicParameters parameters)
