@@ -1,24 +1,25 @@
 ﻿@page "/CustomerServices"
+@inject IStringLocalizer<Resource> Localizer
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<PageTitle>Customer Services</PageTitle>
+<PageTitle>@Localizer["customer-service"]</PageTitle>
 
 <MudGrid Class="mt-3 mb-5">
     <MudItem xs="12">
         <div class="d-flex justify-content-between">
             <MudText Typo="Typo.h5" GutterBottom="true" Class="fw-bold text-uppercase">
-                Customer Services
+                @Localizer["customer-service"]
             </MudText>
             <MudIconButton OnClick="ClosePage" Icon="@Icons.Material.Filled.Close" />
         </div>
         <MudDivider Class="mt-3 mb-3"/>
         <MudItem>
             <MudText Typo="Typo.h6">
-                Find your the answer to your questions here.
+                @Localizer["customer-service-description-1"]
             </MudText>
             <MudText Typo="Typo.body1">
-                All the subjects in a blink of an eye!
+                @Localizer["customer-service-description-2"]
             </MudText>
         </MudItem>       
     </MudItem>
@@ -37,7 +38,7 @@
                             <MudItem xs="11">
                                 <div class="d-flex justify-content-between">
                                     <MudText Typo="Typo.h6" Class="mt-auto mb-auto fw-bold">
-                                        Call Support
+                                        @Localizer["call-support"]
                                     </MudText>
                                     <MudFab OnClick="CallSupport" Color="Color.Secondary"
                                             StartIcon="@Icons.Material.Filled.ArrowRight" />

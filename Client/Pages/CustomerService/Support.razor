@@ -1,22 +1,23 @@
 ﻿@page "/CustomerServices/Call-Support"
+@inject IStringLocalizer<Resource> Localizer
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<PageTitle>Call Support</PageTitle>
+<PageTitle>@Localizer["call-support"]</PageTitle>
 
 <MudGrid Class="mt-3 mb-5">
     <MudItem xs="12">
         <MudText Typo="Typo.body2">
-            Customer Service
+            @Localizer["customer-service"]
             <MudIcon Icon="@Icons.Material.Filled.ArrowRight" />
-            Call Support
+            @Localizer["call-support"]
         </MudText>
     </MudItem>
     <MudItem xs="12">
         <div class="d-flex justify-content-between">
             <div>
                 <MudText Typo="Typo.h5" GutterBottom="true" Class="fw-bold text-uppercase">
-                    Call Support
+                    @Localizer["call-support"]
                 </MudText>
             </div>
             <MudIconButton OnClick="ClosePage" Icon="@Icons.Material.Filled.Close" />
@@ -38,7 +39,7 @@
                             <MudItem xs="10">
                                 <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
                                      <MudText>
-                                         Technical Support
+                                         @Localizer["technical-support"]
                                      </MudText>
                                      <MudText Color="Color.Primary">
                                          888-888-888
@@ -62,7 +63,7 @@
                             <MudItem xs="10">
                                 <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
                                      <MudText>
-                                         Customer Service
+                                         @Localizer["customer-service"]
                                      </MudText>
                                      <MudText Color="Color.Primary">
                                          777-777-777
@@ -86,7 +87,7 @@
                             <MudItem xs="10">
                                 <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
                                      <MudText>
-                                         Shipping Assistance
+                                         @Localizer["shipping-support"]
                                      </MudText>
                                      <MudText Color="Color.Primary">
                                          555-555-555
@@ -110,7 +111,7 @@
                             <MudItem xs="10">
                                 <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
                                      <MudText>
-                                         Returns and Refunds
+                                         @Localizer["refund-return-support"]
                                      </MudText>
                                      <MudText Color="Color.Primary">
                                          444-444-444
@@ -134,7 +135,7 @@
                             <MudItem xs="10">
                                 <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
                                      <MudText>
-                                         Product Information
+                                         @Localizer["product-information-support"]
                                      </MudText>
                                      <MudText Color="Color.Primary">
                                          333-333-333
@@ -158,7 +159,7 @@
                             <MudItem xs="10">
                                 <MudStack Row Spacing="2" Class="mt-auto mb-auto fw-bold">
                                      <MudText>
-                                         Technical Assistance
+                                         @Localizer["technical-assistance-support"]
                                      </MudText>
                                      <MudText Color="Color.Primary">
                                          222-222-222

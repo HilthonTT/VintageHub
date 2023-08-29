@@ -1,4 +1,5 @@
 ﻿@page "/Cart"
+@inject IStringLocalizer<Resource> Localizer
 @inject IShoppingCartStorage ShoppingCartStorage
 @inject IUserEndpoint UserEndpoint
 @inject ISessionStorageService SessionStorage
@@ -6,14 +7,7 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<PageTitle>Cart</PageTitle>
-
-@if (string.IsNullOrWhiteSpace(errorMessage) is false)
-{
-    <MudAlert Severity="Severity.Error" Elevation="3">
-        @errorMessage
-    </MudAlert>
-}
+<PageTitle>@Localizer["cart"]</PageTitle>
 
 @if (isLoading is false)
 {
@@ -23,10 +17,10 @@
             {
                 <MudAlert Severity="Severity.Normal" Variant="Variant.Filled" Elevation="3">
                     <MudText>
-                        It seems you do not have any items in your shopping cart list.
+                        @Localizer["empty-cart"]
                     </MudText>
                     <MudText>
-                        Please add items to your shopping cart list.
+                        @Localizer["empty-cart-description"]
                     </MudText>
                 </MudAlert>
             }
@@ -50,13 +44,19 @@
                     </MudItem>
                     <MudItem xs="12">
                         <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
-                            Information
+                            @Localizer["information"]
                         </MudText>
                         <MudDivider />
                         <MudItem xs="12">
-                            <MudText>You have a total of @totalItems items in your cart.</MudText>
+                            <MudText>
+                                @Localizer["cart-total-part-1"]
+                                @totalItems 
+                                @Localizer["cart-total-part-2"]
+                            </MudText>
                             <MudItem>
-                                <MudText Color="Color.Default">The total price is: </MudText>
+                                <MudText Color="Color.Default">
+                                    @Localizer["total-price"]
+                                </MudText>
                                 <MudText Color="Color.Error" Class="mt-1">@totalPrice.ToString("0.####") &euro;</MudText>
                             </MudItem>
                         </MudItem>
@@ -64,7 +64,7 @@
                         <MudItem xs="12">
                             <MudButton OnClick="CheckoutAsync" Variant="Variant.Filled" Color="Color.Primary"
                                        StartIcon="@Icons.Material.Filled.ShoppingCartCheckout" Disabled="!CanCheckout()">
-                                Check out
+                                @Localizer["checkout"]
                             </MudButton>
                         </MudItem>
                     </MudItem>
@@ -84,7 +84,6 @@ else
 
     private decimal totalPrice = 0;
     private int totalItems = 0;
-    private string errorMessage = "";
     private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()

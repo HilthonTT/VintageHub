@@ -1,4 +1,5 @@
 ﻿@page "/Admin/Vendor/Create"
+@inject IStringLocalizer<Resource> Localizer
 @inject IVendorEndpoint VendorEndpoint
 @inject IUserEndpoint UserEndpoint
 @inject IImageEndpoint ImageEndpoint
@@ -6,7 +7,7 @@
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
-<PageTitle>Create A Vendor</PageTitle>
+<PageTitle>@Localizer["create-vendor"]</PageTitle>
 
 @if (isCreatingVendor is false)
 {
@@ -28,7 +29,7 @@
                             <MudCardHeader>
                                 <CardHeaderContent>
                                     <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
-                                        Create A Vendor
+                                        @Localizer["create-vendor"]
                                     </MudText>
                                 </CardHeaderContent>
                                 <CardHeaderActions>
@@ -38,37 +39,41 @@
                             <MudCardContent>
                                 <MudGrid>
                                     <MudItem xs="12">
-                                        <MudTextField @bind-Value="vendor.Name" Label="Vendor Name"
+                                        <MudTextField @bind-Value="vendor.Name" Label=@Localizer["vendor-name"]
                                                       Required="true" Variant="Variant.Outlined" Clearable="true"
-                                                      HelperText="Enter the vendor's name." />
+                                                      HelperText=@Localizer["vendor-name-description"] />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => vendor.Name" />
                                         </MudText>
                                     </MudItem>
                                     <MudItem xs="12">
-                                        <MudTextField @bind-Value="vendor.Description" Label="Vendor Description"
+                                        <MudTextField @bind-Value="vendor.Description" Label=@Localizer["vendor-description"]
                                                       Lines="2" Required="true" Clearable="true" Variant="Variant.Outlined"
-                                                      HelperText="Describe the vendor. Who are they? What do they do? etc..." />
+                                                      HelperText=@Localizer["vendor-description-description"] />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => vendor.Description" />
                                         </MudText>
                                     </MudItem>
                                     <MudItem xs="12">
-                                        <MudDatePicker @bind-Date="vendor.DateFounded" Label="Date Founded" Required="true"
+                                        <MudDatePicker @bind-Date="vendor.DateFounded" Label=@Localizer["vendor-date-founded"] 
+                                                       Required="true"
                                                        Clearable="true" Variant="Variant.Outlined"
-                                                       HelperText="Provide the date the vendor was founded." />
+                                                       HelperText=@Localizer["vendor-date-founded-description"] />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => vendor.DateFounded" />
                                         </MudText>
                                     </MudItem>
                                     <MudItem xs="12">
-                                        <MudAutocomplete Label="Vendor Owner" HelperText="Select the owner of the vendor."
+                                        <MudAutocomplete Label=@Localizer["vendor-owner"] 
+                                                         HelperText=@Localizer["vendor-owner-description"]
                                                          SearchFunc="SearchUserAsync" T="UserModel"
                                                          ValueChanged="(u) => vendor.OwnerUserId = u.Id"
                                                          ToStringFunc="@(u => u==null?null : $"{u.FirstName} {u.LastName} - {u.Id}")"
                                                          Variant="Variant.Outlined">
                                             <NoItemsTemplate>
-                                                <MudText>No users with such name</MudText>
+                                                <MudText>
+                                                    @Localizer["no-user-found"]
+                                                </MudText>
                                             </NoItemsTemplate>
                                         </MudAutocomplete>
                                         <MudText Color="Color.Error">
@@ -89,7 +94,7 @@
                                 </MudFileUpload>
                                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
                                            Color="Color.Primary" Class="ml-auto" Size="Size.Large">
-                                    Make Vendor
+                                    @Localizer["make-vendor"]
                                 </MudButton>
                             </MudCardActions>
                         </MudCard>

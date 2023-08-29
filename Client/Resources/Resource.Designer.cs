@@ -61,6 +61,63 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add To Cart.
+        /// </summary>
+        public static string add_cart {
+            get {
+                return ResourceManager.GetString("add-cart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add To Wishlist.
+        /// </summary>
+        public static string add_wishlist {
+            get {
+                return ResourceManager.GetString("add-wishlist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Admin.
+        /// </summary>
+        public static string admin {
+            get {
+                return ResourceManager.GetString("admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Admin Guidelines.
+        /// </summary>
+        public static string admin_guidelines {
+            get {
+                return ResourceManager.GetString("admin-guidelines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        ///Nullam commodo nulla ac eros lacinia, in lacinia metus luctus.
+        ///Sed eget quam at dui vestibulum rhoncus a eget justo.
+        ///Sed vitae elit id nunc aliquam volutpat in a arcu..
+        /// </summary>
+        public static string admin_guidelines_text {
+            get {
+                return ResourceManager.GetString("admin-guidelines-text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Admin Hub.
+        /// </summary>
+        public static string admin_hub {
+            get {
+                return ResourceManager.GetString("admin-hub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string all {
@@ -70,11 +127,65 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Our Artifacts appear in a wide range of variety! You just have to choose wisely!.
+        ///   Looks up a localized string similar to Artifact.
+        /// </summary>
+        public static string artifact {
+            get {
+                return ResourceManager.GetString("artifact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the suited category for the artifact.
+        /// </summary>
+        public static string artifact_category {
+            get {
+                return ResourceManager.GetString("artifact-category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Artifact Description.
         /// </summary>
         public static string artifact_description {
             get {
                 return ResourceManager.GetString("artifact-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Describe your artifact in 1000 characters.
+        /// </summary>
+        public static string artifact_description_description {
+            get {
+                return ResourceManager.GetString("artifact-description-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discount Amount.
+        /// </summary>
+        public static string artifact_discount_amount {
+            get {
+                return ResourceManager.GetString("artifact-discount-amount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the amount that you want to deduct current artifact price in euros.
+        /// </summary>
+        public static string artifact_discount_amount_description {
+            get {
+                return ResourceManager.GetString("artifact-discount-amount-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the correct era of the artifact.
+        /// </summary>
+        public static string artifact_era {
+            get {
+                return ResourceManager.GetString("artifact-era", resourceCulture);
             }
         }
         
@@ -84,6 +195,78 @@ namespace VintageHub.Client.Resources {
         public static string artifact_listing {
             get {
                 return ResourceManager.GetString("artifact-listing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our Artifacts appear in a wide range of variety! You just have to choose wisely!.
+        /// </summary>
+        public static string artifact_listing_description {
+            get {
+                return ResourceManager.GetString("artifact-listing-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Artifact Name.
+        /// </summary>
+        public static string artifact_name {
+            get {
+                return ResourceManager.GetString("artifact-name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the artifact&apos;s name.
+        /// </summary>
+        public static string artifact_name_description {
+            get {
+                return ResourceManager.GetString("artifact-name-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Artifact Owner.
+        /// </summary>
+        public static string artifact_owner {
+            get {
+                return ResourceManager.GetString("artifact-owner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the vendor you&apos;re portraying.
+        /// </summary>
+        public static string artifact_owner_description {
+            get {
+                return ResourceManager.GetString("artifact-owner-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the price of the artifact in Euros.
+        /// </summary>
+        public static string artifact_price_description {
+            get {
+                return ResourceManager.GetString("artifact-price-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the quantity of artifacts you have available.
+        /// </summary>
+        public static string artifact_quantity_description {
+            get {
+                return ResourceManager.GetString("artifact-quantity-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This artifact is sold by: .
+        /// </summary>
+        public static string artifact_sold {
+            get {
+                return ResourceManager.GetString("artifact-sold", resourceCulture);
             }
         }
         
@@ -106,6 +289,150 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Completing Login.
+        /// </summary>
+        public static string auth_completing_login {
+            get {
+                return ResourceManager.GetString("auth-completing-login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We are completing the logging, please remain patient..
+        /// </summary>
+        public static string auth_completing_login_description {
+            get {
+                return ResourceManager.GetString("auth-completing-login-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completing Logout.
+        /// </summary>
+        public static string auth_completing_logout {
+            get {
+                return ResourceManager.GetString("auth-completing-logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We are completing the logout, please remain patient..
+        /// </summary>
+        public static string auth_completing_logout_description {
+            get {
+                return ResourceManager.GetString("auth-completing-logout-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logging In.
+        /// </summary>
+        public static string auth_logging {
+            get {
+                return ResourceManager.GetString("auth-logging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are being logged in, please remain patient..
+        /// </summary>
+        public static string auth_logging_description {
+            get {
+                return ResourceManager.GetString("auth-logging-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login Failed.
+        /// </summary>
+        public static string auth_login_failed {
+            get {
+                return ResourceManager.GetString("auth-login-failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oops, there seems to be an issue while logging you in. Please try again..
+        /// </summary>
+        public static string auth_login_failed_description {
+            get {
+                return ResourceManager.GetString("auth-login-failed-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout.
+        /// </summary>
+        public static string auth_logout {
+            get {
+                return ResourceManager.GetString("auth-logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are now being logged out..
+        /// </summary>
+        public static string auth_logout_description {
+            get {
+                return ResourceManager.GetString("auth-logout-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout Failed.
+        /// </summary>
+        public static string auth_logout_failed {
+            get {
+                return ResourceManager.GetString("auth-logout-failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oops, there seems to be an issue while logging you out. Please try again..
+        /// </summary>
+        public static string auth_logout_failed_description {
+            get {
+                return ResourceManager.GetString("auth-logout-failed-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout Suceeded.
+        /// </summary>
+        public static string auth_logout_suceeded {
+            get {
+                return ResourceManager.GetString("auth-logout-suceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are now logged out..
+        /// </summary>
+        public static string auth_logout_suceeded_description {
+            get {
+                return ResourceManager.GetString("auth-logout-suceeded-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registering.
+        /// </summary>
+        public static string auth_registering {
+            get {
+                return ResourceManager.GetString("auth-registering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are now being registered, please remain patient..
+        /// </summary>
+        public static string auth_registering_description {
+            get {
+                return ResourceManager.GetString("auth-registering-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Buyer.
         /// </summary>
         public static string buyer {
@@ -115,11 +442,47 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Call Support.
+        /// </summary>
+        public static string call_support {
+            get {
+                return ResourceManager.GetString("call-support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Canceled.
         /// </summary>
         public static string canceled {
             get {
                 return ResourceManager.GetString("canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cart.
+        /// </summary>
+        public static string cart {
+            get {
+                return ResourceManager.GetString("cart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have a total of .
+        /// </summary>
+        public static string cart_total_part_1 {
+            get {
+                return ResourceManager.GetString("cart-total-part-1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to items in your cart..
+        /// </summary>
+        public static string cart_total_part_2 {
+            get {
+                return ResourceManager.GetString("cart-total-part-2", resourceCulture);
             }
         }
         
@@ -160,6 +523,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close Preview.
+        /// </summary>
+        public static string close_preview {
+            get {
+                return ResourceManager.GetString("close-preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed.
         /// </summary>
         public static string completed {
@@ -178,11 +550,65 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create An Artifact.
+        /// </summary>
+        public static string create_artifact {
+            get {
+                return ResourceManager.GetString("create-artifact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Artifacts.
+        /// </summary>
+        public static string create_artifacts {
+            get {
+                return ResourceManager.GetString("create-artifacts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Categories.
+        /// </summary>
+        public static string create_categories {
+            get {
+                return ResourceManager.GetString("create-categories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Eras.
+        /// </summary>
+        public static string create_eras {
+            get {
+                return ResourceManager.GetString("create-eras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create A Review.
         /// </summary>
         public static string create_review {
             get {
                 return ResourceManager.GetString("create-review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create A Vendor.
+        /// </summary>
+        public static string create_vendor {
+            get {
+                return ResourceManager.GetString("create-vendor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Vendors.
+        /// </summary>
+        public static string create_vendors {
+            get {
+                return ResourceManager.GetString("create-vendors", resourceCulture);
             }
         }
         
@@ -385,6 +811,24 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Find your the answer to your questions here..
+        /// </summary>
+        public static string customer_service_description_1 {
+            get {
+                return ResourceManager.GetString("customer-service-description-1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All the subjects in a blink of an eye!.
+        /// </summary>
+        public static string customer_service_description_2 {
+            get {
+                return ResourceManager.GetString("customer-service-description-2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date Ordered.
         /// </summary>
         public static string date_ordered {
@@ -399,6 +843,24 @@ namespace VintageHub.Client.Resources {
         public static string discounts {
             get {
                 return ResourceManager.GetString("discounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It seems you do not have any items in your shopping cart list..
+        /// </summary>
+        public static string empty_cart {
+            get {
+                return ResourceManager.GetString("empty-cart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please add items to your shopping cart list..
+        /// </summary>
+        public static string empty_cart_description {
+            get {
+                return ResourceManager.GetString("empty-cart-description", resourceCulture);
             }
         }
         
@@ -430,11 +892,68 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string error {
+            get {
+                return ResourceManager.GetString("error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oops, something went wrong..
+        /// </summary>
+        public static string error_description {
+            get {
+                return ResourceManager.GetString("error-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Founded on the: .
         /// </summary>
         public static string founded_on {
             get {
                 return ResourceManager.GetString("founded-on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General Guidelines.
+        /// </summary>
+        public static string general_guidelines {
+            get {
+                return ResourceManager.GetString("general-guidelines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fusce fermentum facilisis felis, in ullamcorper lectus fermentum a.
+        ///Sed id elit nec nisl malesuada vehicula eu nec dui.
+        ///Integer nec quam vel urna bibendum feugiat.
+        ///Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper..
+        /// </summary>
+        public static string general_guidelines_text {
+            get {
+                return ResourceManager.GetString("general-guidelines-text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello.
+        /// </summary>
+        public static string hello {
+            get {
+                return ResourceManager.GetString("hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string home {
+            get {
+                return ResourceManager.GetString("home", resourceCulture);
             }
         }
         
@@ -457,11 +976,65 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learn More.
+        /// </summary>
+        public static string learn_more {
+            get {
+                return ResourceManager.GetString("learn-more", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Preview.
+        /// </summary>
+        public static string load_preview {
+            get {
+                return ResourceManager.GetString("load-preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to loading....
         /// </summary>
         public static string loading {
             get {
                 return ResourceManager.GetString("loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We are currently loading the page, please remain patient..
+        /// </summary>
+        public static string loading_description {
+            get {
+                return ResourceManager.GetString("loading-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string login {
+            get {
+                return ResourceManager.GetString("login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout.
+        /// </summary>
+        public static string logout {
+            get {
+                return ResourceManager.GetString("logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make Artifact.
+        /// </summary>
+        public static string make_artifact {
+            get {
+                return ResourceManager.GetString("make-artifact", resourceCulture);
             }
         }
         
@@ -484,6 +1057,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make Vendor.
+        /// </summary>
+        public static string make_vendor {
+            get {
+                return ResourceManager.GetString("make-vendor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My Orders.
         /// </summary>
         public static string my_orders {
@@ -493,11 +1075,47 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No users have been found.
+        /// </summary>
+        public static string no_user_found {
+            get {
+                return ResourceManager.GetString("no-user-found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No vendors have been found.
+        /// </summary>
+        public static string no_vendor_found {
+            get {
+                return ResourceManager.GetString("no-vendor-found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Allowed.
         /// </summary>
         public static string not_allowed {
             get {
                 return ResourceManager.GetString("not-allowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Authorized.
+        /// </summary>
+        public static string not_authorized {
+            get {
+                return ResourceManager.GetString("not-authorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to access this resource..
+        /// </summary>
+        public static string not_authorized_description {
+            get {
+                return ResourceManager.GetString("not-authorized-description", resourceCulture);
             }
         }
         
@@ -516,6 +1134,15 @@ namespace VintageHub.Client.Resources {
         public static string not_logged_in_make_review {
             get {
                 return ResourceManager.GetString("not-logged-in-make-review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Details.
+        /// </summary>
+        public static string open_details {
+            get {
+                return ResourceManager.GetString("open-details", resourceCulture);
             }
         }
         
@@ -547,6 +1174,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Order Listing.
+        /// </summary>
+        public static string order_listing {
+            get {
+                return ResourceManager.GetString("order-listing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ordering.
         /// </summary>
         public static string ordering {
@@ -561,6 +1197,33 @@ namespace VintageHub.Client.Resources {
         public static string orders {
             get {
                 return ResourceManager.GetString("orders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our Artifacts.
+        /// </summary>
+        public static string our_artifacts {
+            get {
+                return ResourceManager.GetString("our-artifacts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Not Found.
+        /// </summary>
+        public static string page_not_found {
+            get {
+                return ResourceManager.GetString("page-not-found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The page you are looking for might have been removed had its name change..
+        /// </summary>
+        public static string page_not_found_description {
+            get {
+                return ResourceManager.GetString("page-not-found-description", resourceCulture);
             }
         }
         
@@ -592,11 +1255,38 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Product Information.
+        /// </summary>
+        public static string product_information_support {
+            get {
+                return ResourceManager.GetString("product-information-support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity.
+        /// </summary>
+        public static string quantity {
+            get {
+                return ResourceManager.GetString("quantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ratings.
         /// </summary>
         public static string rating {
             get {
                 return ResourceManager.GetString("rating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Returns and Refunds.
+        /// </summary>
+        public static string refund_return_support {
+            get {
+                return ResourceManager.GetString("refund-return-support", resourceCulture);
             }
         }
         
@@ -628,6 +1318,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sample Data.
+        /// </summary>
+        public static string sample_data {
+            get {
+                return ResourceManager.GetString("sample-data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string search {
@@ -655,6 +1354,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shipping Assistance.
+        /// </summary>
+        public static string shipping_support {
+            get {
+                return ResourceManager.GetString("shipping-support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shopping Cart.
         /// </summary>
         public static string shopping_cart {
@@ -673,11 +1381,119 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Technical Assistance.
+        /// </summary>
+        public static string technical_assistance_support {
+            get {
+                return ResourceManager.GetString("technical-assistance-support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Technical Support.
+        /// </summary>
+        public static string technical_support {
+            get {
+                return ResourceManager.GetString("technical-support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Price  €.
         /// </summary>
         public static string total_price {
             get {
                 return ResourceManager.GetString("total-price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vendor.
+        /// </summary>
+        public static string vendor {
+            get {
+                return ResourceManager.GetString("vendor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Founded.
+        /// </summary>
+        public static string vendor_date_founded {
+            get {
+                return ResourceManager.GetString("vendor-date-founded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide the date the vendor was founded.
+        /// </summary>
+        public static string vendor_date_founded_description {
+            get {
+                return ResourceManager.GetString("vendor-date-founded-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vendor Description.
+        /// </summary>
+        public static string vendor_description {
+            get {
+                return ResourceManager.GetString("vendor-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Describe the vendor. Who are they? What do they do? etc....
+        /// </summary>
+        public static string vendor_description_description {
+            get {
+                return ResourceManager.GetString("vendor-description-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vendor Name.
+        /// </summary>
+        public static string vendor_name {
+            get {
+                return ResourceManager.GetString("vendor-name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the vendor&apos;s name.
+        /// </summary>
+        public static string vendor_name_description {
+            get {
+                return ResourceManager.GetString("vendor-name-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vendor Owner.
+        /// </summary>
+        public static string vendor_owner {
+            get {
+                return ResourceManager.GetString("vendor-owner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the owner of the vendor.
+        /// </summary>
+        public static string vendor_owner_description {
+            get {
+                return ResourceManager.GetString("vendor-owner-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vendors.
+        /// </summary>
+        public static string vendors {
+            get {
+                return ResourceManager.GetString("vendors", resourceCulture);
             }
         }
         

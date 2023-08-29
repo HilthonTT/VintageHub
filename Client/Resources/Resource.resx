@@ -117,14 +117,77 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="add-cart" xml:space="preserve">
+    <value>Add To Cart</value>
+  </data>
+  <data name="add-wishlist" xml:space="preserve">
+    <value>Add To Wishlist</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="admin-guidelines" xml:space="preserve">
+    <value>Admin Guidelines</value>
+  </data>
+  <data name="admin-guidelines-text" xml:space="preserve">
+    <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nullam commodo nulla ac eros lacinia, in lacinia metus luctus.
+Sed eget quam at dui vestibulum rhoncus a eget justo.
+Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
+  </data>
+  <data name="admin-hub" xml:space="preserve">
+    <value>Admin Hub</value>
+  </data>
   <data name="all" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="artifact" xml:space="preserve">
+    <value>Artifact</value>
+  </data>
+  <data name="artifact-category" xml:space="preserve">
+    <value>Select the suited category for the artifact</value>
+  </data>
   <data name="artifact-description" xml:space="preserve">
-    <value>Our Artifacts appear in a wide range of variety! You just have to choose wisely!</value>
+    <value>Artifact Description</value>
+  </data>
+  <data name="artifact-description-description" xml:space="preserve">
+    <value>Describe your artifact in 1000 characters</value>
+  </data>
+  <data name="artifact-discount-amount" xml:space="preserve">
+    <value>Discount Amount</value>
+  </data>
+  <data name="artifact-discount-amount-description" xml:space="preserve">
+    <value>Please enter the amount that you want to deduct current artifact price in euros</value>
+  </data>
+  <data name="artifact-era" xml:space="preserve">
+    <value>Select the correct era of the artifact</value>
   </data>
   <data name="artifact-listing" xml:space="preserve">
     <value>Artifact Listing</value>
+  </data>
+  <data name="artifact-listing-description" xml:space="preserve">
+    <value>Our Artifacts appear in a wide range of variety! You just have to choose wisely!</value>
+  </data>
+  <data name="artifact-name" xml:space="preserve">
+    <value>Artifact Name</value>
+  </data>
+  <data name="artifact-name-description" xml:space="preserve">
+    <value>Enter the artifact's name</value>
+  </data>
+  <data name="artifact-owner" xml:space="preserve">
+    <value>Artifact Owner</value>
+  </data>
+  <data name="artifact-owner-description" xml:space="preserve">
+    <value>Select the vendor you're portraying</value>
+  </data>
+  <data name="artifact-price-description" xml:space="preserve">
+    <value>Please enter the price of the artifact in Euros</value>
+  </data>
+  <data name="artifact-quantity-description" xml:space="preserve">
+    <value>Please enter the quantity of artifacts you have available</value>
+  </data>
+  <data name="artifact-sold" xml:space="preserve">
+    <value>This artifact is sold by: </value>
   </data>
   <data name="artifact-unavailable" xml:space="preserve">
     <value>The artifact is currently unavailable.</value>
@@ -132,11 +195,71 @@
   <data name="artifacts" xml:space="preserve">
     <value>Artifacts</value>
   </data>
+  <data name="auth-completing-login" xml:space="preserve">
+    <value>Completing Login</value>
+  </data>
+  <data name="auth-completing-login-description" xml:space="preserve">
+    <value>We are completing the logging, please remain patient.</value>
+  </data>
+  <data name="auth-completing-logout" xml:space="preserve">
+    <value>Completing Logout</value>
+  </data>
+  <data name="auth-completing-logout-description" xml:space="preserve">
+    <value>We are completing the logout, please remain patient.</value>
+  </data>
+  <data name="auth-logging" xml:space="preserve">
+    <value>Logging In</value>
+  </data>
+  <data name="auth-logging-description" xml:space="preserve">
+    <value>You are being logged in, please remain patient.</value>
+  </data>
+  <data name="auth-login-failed" xml:space="preserve">
+    <value>Login Failed</value>
+  </data>
+  <data name="auth-login-failed-description" xml:space="preserve">
+    <value>Oops, there seems to be an issue while logging you in. Please try again.</value>
+  </data>
+  <data name="auth-logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="auth-logout-description" xml:space="preserve">
+    <value>You are now being logged out.</value>
+  </data>
+  <data name="auth-logout-failed" xml:space="preserve">
+    <value>Logout Failed</value>
+  </data>
+  <data name="auth-logout-failed-description" xml:space="preserve">
+    <value>Oops, there seems to be an issue while logging you out. Please try again.</value>
+  </data>
+  <data name="auth-logout-suceeded" xml:space="preserve">
+    <value>Logout Suceeded</value>
+  </data>
+  <data name="auth-logout-suceeded-description" xml:space="preserve">
+    <value>You are now logged out.</value>
+  </data>
+  <data name="auth-registering" xml:space="preserve">
+    <value>Registering</value>
+  </data>
+  <data name="auth-registering-description" xml:space="preserve">
+    <value>You are now being registered, please remain patient.</value>
+  </data>
   <data name="buyer" xml:space="preserve">
     <value>Buyer</value>
   </data>
+  <data name="call-support" xml:space="preserve">
+    <value>Call Support</value>
+  </data>
   <data name="canceled" xml:space="preserve">
     <value>Canceled</value>
+  </data>
+  <data name="cart" xml:space="preserve">
+    <value>Cart</value>
+  </data>
+  <data name="cart-total-part-1" xml:space="preserve">
+    <value>You have a total of </value>
+  </data>
+  <data name="cart-total-part-2" xml:space="preserve">
+    <value>items in your cart.</value>
   </data>
   <data name="categories" xml:space="preserve">
     <value>Categories</value>
@@ -150,14 +273,35 @@
   <data name="clear-wishlist" xml:space="preserve">
     <value>Clear Wishlist</value>
   </data>
+  <data name="close-preview" xml:space="preserve">
+    <value>Close Preview</value>
+  </data>
   <data name="completed" xml:space="preserve">
     <value>Completed</value>
   </data>
   <data name="confirm-payment" xml:space="preserve">
     <value>Confirm Payment</value>
   </data>
+  <data name="create-artifact" xml:space="preserve">
+    <value>Create An Artifact</value>
+  </data>
+  <data name="create-artifacts" xml:space="preserve">
+    <value>Create Artifacts</value>
+  </data>
+  <data name="create-categories" xml:space="preserve">
+    <value>Create Categories</value>
+  </data>
+  <data name="create-eras" xml:space="preserve">
+    <value>Create Eras</value>
+  </data>
   <data name="create-review" xml:space="preserve">
     <value>Create A Review</value>
+  </data>
+  <data name="create-vendor" xml:space="preserve">
+    <value>Create A Vendor</value>
+  </data>
+  <data name="create-vendors" xml:space="preserve">
+    <value>Create Vendors</value>
   </data>
   <data name="credit-card-billing-address" xml:space="preserve">
     <value>Billing Address</value>
@@ -225,11 +369,23 @@
   <data name="customer-service" xml:space="preserve">
     <value>Customer Service</value>
   </data>
+  <data name="customer-service-description-1" xml:space="preserve">
+    <value>Find your the answer to your questions here.</value>
+  </data>
+  <data name="customer-service-description-2" xml:space="preserve">
+    <value>All the subjects in a blink of an eye!</value>
+  </data>
   <data name="date-ordered" xml:space="preserve">
     <value>Date Ordered</value>
   </data>
   <data name="discounts" xml:space="preserve">
     <value>Discounts</value>
+  </data>
+  <data name="empty-cart" xml:space="preserve">
+    <value>It seems you do not have any items in your shopping cart list.</value>
+  </data>
+  <data name="empty-cart-description" xml:space="preserve">
+    <value>Please add items to your shopping cart list.</value>
   </data>
   <data name="empty-wishlist" xml:space="preserve">
     <value>Your wishlist is empty.</value>
@@ -240,8 +396,29 @@
   <data name="eras" xml:space="preserve">
     <value>Eras</value>
   </data>
+  <data name="error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="error-description" xml:space="preserve">
+    <value>Oops, something went wrong.</value>
+  </data>
   <data name="founded-on" xml:space="preserve">
     <value>Founded on the: </value>
+  </data>
+  <data name="general-guidelines" xml:space="preserve">
+    <value>General Guidelines</value>
+  </data>
+  <data name="general-guidelines-text" xml:space="preserve">
+    <value>Fusce fermentum facilisis felis, in ullamcorper lectus fermentum a.
+Sed id elit nec nisl malesuada vehicula eu nec dui.
+Integer nec quam vel urna bibendum feugiat.
+Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
+  </data>
+  <data name="hello" xml:space="preserve">
+    <value>Hello</value>
+  </data>
+  <data name="home" xml:space="preserve">
+    <value>Home</value>
   </data>
   <data name="information" xml:space="preserve">
     <value>Information</value>
@@ -249,8 +426,26 @@
   <data name="language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="learn-more" xml:space="preserve">
+    <value>Learn More</value>
+  </data>
+  <data name="load-preview" xml:space="preserve">
+    <value>Load Preview</value>
+  </data>
   <data name="loading" xml:space="preserve">
     <value>loading...</value>
+  </data>
+  <data name="loading-description" xml:space="preserve">
+    <value>We are currently loading the page, please remain patient.</value>
+  </data>
+  <data name="login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="make-artifact" xml:space="preserve">
+    <value>Make Artifact</value>
   </data>
   <data name="make-review" xml:space="preserve">
     <value>Make Review</value>
@@ -258,17 +453,35 @@
   <data name="make-review-for" xml:space="preserve">
     <value>Make A Review For</value>
   </data>
+  <data name="make-vendor" xml:space="preserve">
+    <value>Make Vendor</value>
+  </data>
   <data name="my-orders" xml:space="preserve">
     <value>My Orders</value>
   </data>
+  <data name="no-user-found" xml:space="preserve">
+    <value>No users have been found</value>
+  </data>
+  <data name="no-vendor-found" xml:space="preserve">
+    <value>No vendors have been found</value>
+  </data>
   <data name="not-allowed" xml:space="preserve">
     <value>Not Allowed</value>
+  </data>
+  <data name="not-authorized" xml:space="preserve">
+    <value>Not Authorized</value>
+  </data>
+  <data name="not-authorized-description" xml:space="preserve">
+    <value>You are not authorized to access this resource.</value>
   </data>
   <data name="not-found" xml:space="preserve">
     <value>404 - Not Found</value>
   </data>
   <data name="not-logged-in-make-review" xml:space="preserve">
     <value>It appears there has been an error identifying you. Try logging in again.</value>
+  </data>
+  <data name="open-details" xml:space="preserve">
+    <value>Open Details</value>
   </data>
   <data name="open-order" xml:space="preserve">
     <value>Open Order</value>
@@ -279,11 +492,23 @@
   <data name="order-details-description" xml:space="preserve">
     <value>Order Details of order Id</value>
   </data>
+  <data name="order-listing" xml:space="preserve">
+    <value>Order Listing</value>
+  </data>
   <data name="ordering" xml:space="preserve">
     <value>Ordering</value>
   </data>
   <data name="orders" xml:space="preserve">
     <value>Orders</value>
+  </data>
+  <data name="our-artifacts" xml:space="preserve">
+    <value>Our Artifacts</value>
+  </data>
+  <data name="page-not-found" xml:space="preserve">
+    <value>Page Not Found</value>
+  </data>
+  <data name="page-not-found-description" xml:space="preserve">
+    <value>The page you are looking for might have been removed had its name change.</value>
   </data>
   <data name="payment-confirmed" xml:space="preserve">
     <value>Payment confirmed.</value>
@@ -294,8 +519,17 @@
   <data name="price" xml:space="preserve">
     <value>Price €</value>
   </data>
+  <data name="product-information-support" xml:space="preserve">
+    <value>Product Information</value>
+  </data>
+  <data name="quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
   <data name="rating" xml:space="preserve">
     <value>Ratings</value>
+  </data>
+  <data name="refund-return-support" xml:space="preserve">
+    <value>Returns and Refunds</value>
   </data>
   <data name="results" xml:space="preserve">
     <value>results</value>
@@ -306,6 +540,9 @@
   <data name="review-title" xml:space="preserve">
     <value>Review Title</value>
   </data>
+  <data name="sample-data" xml:space="preserve">
+    <value>Sample Data</value>
+  </data>
   <data name="search" xml:space="preserve">
     <value>Search</value>
   </data>
@@ -315,14 +552,53 @@
   <data name="see-more" xml:space="preserve">
     <value>See More</value>
   </data>
+  <data name="shipping-support" xml:space="preserve">
+    <value>Shipping Assistance</value>
+  </data>
   <data name="shopping-cart" xml:space="preserve">
     <value>Shopping Cart</value>
   </data>
   <data name="show-events" xml:space="preserve">
     <value>Show Events</value>
   </data>
+  <data name="technical-assistance-support" xml:space="preserve">
+    <value>Technical Assistance</value>
+  </data>
+  <data name="technical-support" xml:space="preserve">
+    <value>Technical Support</value>
+  </data>
   <data name="total-price" xml:space="preserve">
     <value>Total Price  €</value>
+  </data>
+  <data name="vendor" xml:space="preserve">
+    <value>Vendor</value>
+  </data>
+  <data name="vendor-date-founded" xml:space="preserve">
+    <value>Date Founded</value>
+  </data>
+  <data name="vendor-date-founded-description" xml:space="preserve">
+    <value>Provide the date the vendor was founded</value>
+  </data>
+  <data name="vendor-description" xml:space="preserve">
+    <value>Vendor Description</value>
+  </data>
+  <data name="vendor-description-description" xml:space="preserve">
+    <value>Describe the vendor. Who are they? What do they do? etc...</value>
+  </data>
+  <data name="vendor-name" xml:space="preserve">
+    <value>Vendor Name</value>
+  </data>
+  <data name="vendor-name-description" xml:space="preserve">
+    <value>Enter the vendor's name</value>
+  </data>
+  <data name="vendor-owner" xml:space="preserve">
+    <value>Vendor Owner</value>
+  </data>
+  <data name="vendor-owner-description" xml:space="preserve">
+    <value>Select the owner of the vendor</value>
+  </data>
+  <data name="vendors" xml:space="preserve">
+    <value>Vendors</value>
   </data>
   <data name="wishlist" xml:space="preserve">
     <value>Wish List</value>

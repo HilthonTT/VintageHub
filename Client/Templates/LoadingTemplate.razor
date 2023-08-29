@@ -1,4 +1,5 @@
-﻿
+﻿@inject IStringLocalizer<Resource> Localizer
+
 <MudGrid Justify="Justify.Center">
     <MudItem xs="12" role="alert" Class="centered-layout">
         <MudGrid Justify="Justify.Center">
@@ -7,10 +8,10 @@
                     <MudProgressCircular Color="Color.Primary" Style="height:70px;width:70px;" Indeterminate="true" />
                 </MudText>
                 <MudText Typo="Typo.h4" Class="text-uppercase" GutterBottom>
-                    Loading...
+                    @Localizer["loading"]
                 </MudText>
                 <MudText Typo="Typo.subtitle1" Class="mt-1">
-                    We are currently loading the page, please remain patient.
+                    @Localizer["loading-description"]
                 </MudText>
             </MudItem>
         </MudGrid>

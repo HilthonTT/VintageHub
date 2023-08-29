@@ -1,4 +1,5 @@
 ﻿@page "/Admin/Artifact/Create"
+@inject IStringLocalizer<Resource> Localizer
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject ICategoryEndpoint CategoryEndpoint
 @inject IEraEndpoint EraEndpoint
@@ -9,7 +10,7 @@
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
-<PageTitle>Create An Artifact</PageTitle>
+<PageTitle>@Localizer["create-artifact"]</PageTitle>
 
 @if (isCreatingArtifact is false && viewPreview is false)
 {
@@ -31,12 +32,12 @@
                             <MudCardHeader>
                                 <CardHeaderContent>
                                     <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
-                                        Create An Artifact
+                                        @Localizer["create-artifact"]
                                     </MudText>
                                 </CardHeaderContent>
                                 <CardHeaderActions>
                                     <MudButton StartIcon="@Icons.Material.Filled.Preview" Color="Color.Info" OnClick="LoadPreview">
-                                        Load Preview
+                                        @Localizer["load-preview"]
                                     </MudButton>
                                     <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
                                 </CardHeaderActions>
@@ -44,44 +45,45 @@
                             <MudCardContent>
                                 <MudGrid>
                                     <MudItem xs="12">
-                                        <MudTextField @bind-Value="artifact.Name" Label="Artifact Name"
+                                        <MudTextField @bind-Value="artifact.Name" Label=@Localizer["artifact-name"]
                                                       Required="true" Variant="Variant.Outlined" Clearable="true"
-                                                      HelperText="Enter the artifact's name." />
+                                                      HelperText=@Localizer["artifact-name-description"] />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.Name" />
                                         </MudText>
                                     </MudItem>
                                     <MudItem xs="12">
-                                        <MudTextField @bind-Value="artifact.Description" Label="Artifact Description"
+                                        <MudTextField @bind-Value="artifact.Description" Label=@Localizer["artifact-description"]
                                                       Lines="2" Required="true" Variant="Variant.Outlined" Clearable="true"
-                                                      HelperText="Describe your artifact in 1000 characters." />
+                                                      HelperText=@Localizer["artifact-description-description"] />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.Description" />
                                         </MudText>
                                     </MudItem>
 
                                     <MudItem xs="6">
-                                        <MudNumericField @bind-Value="artifact.Quantity" Label="Quantity" Required="true"
+                                        <MudNumericField @bind-Value="artifact.Quantity" Label=@Localizer["quantity"] Required="true"
                                                          Variant="Variant.Outlined" Clearable="true"
-                                                         HelperText="Please enter the quantity of artifacts you have available." />
+                                                         HelperText=@Localizer["artifact-quantity-description"] />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.Quantity" />
                                         </MudText>
                                     </MudItem>
 
                                     <MudItem xs="6">
-                                        <MudNumericField @bind-Value="artifact.Price" Label="Price" Required="true"
+                                        <MudNumericField @bind-Value="artifact.Price" Label=@Localizer["price"] Required="true"
                                                          Variant="Variant.Outlined" Clearable="true"
-                                                         HelperText="Please enter the price of the artifact in Euros." />
+                                                         HelperText=@Localizer["artifact-price-description"] />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.Price" />
                                         </MudText>
                                     </MudItem>
 
                                     <MudItem xs="12">
-                                        <MudNumericField @bind-Value="artifact.DiscountAmount" Label="Discount Amount" Required="true"
+                                        <MudNumericField @bind-Value="artifact.DiscountAmount" Label=@Localizer["artifact-discount-amount"] 
+                                                         Required="true"
                                                          Variant="Variant.Outlined" Clearable="true"
-                                                         HelperText="Please enter the amount that you want to deduct current artifact price in euros." />
+                                                         HelperText=@Localizer["artifact-discount-amount-description"] />
                                         <MudText Color="Color.Error">
                                             <ValidationMessage For="() => artifact.DiscountAmount" />
                                         </MudText>
@@ -89,7 +91,7 @@
 
                                     <MudItem xs="6">
                                         <MudSelect @bind-Value="artifact.CategoryId" Variant="Variant.Outlined"
-                                                   Label="Select the suited category for the artifact.">
+                                                   Label=@Localizer["artifact-category"]>
                                             @if (categories is not null)
                                             {
                                                 <MudVirtualize Items="categories" Context="c" OverscanCount="10">
@@ -104,7 +106,7 @@
 
                                     <MudItem xs="6">
                                         <MudSelect @bind-Value="artifact.EraId" Variant="Variant.Outlined"
-                                                   Label="Select the correct era of the artifact.">
+                                                   Label=@Localizer["artifact-era"]>
                                             @if (eras is not null)
                                             {
                                                 <MudVirtualize Items="eras" Context="e" OverscanCount="10">
@@ -117,14 +119,16 @@
                                         </MudText>
                                     </MudItem>
                                     <MudItem xs="12">
-                                        <MudAutocomplete Label="Artifact Owner"
-                                                         HelperText="Select the vendor you're portraying."
+                                        <MudAutocomplete Label=@Localizer["artifact-owner"]
+                                                         HelperText=@Localizer["artifact-owner-description"]
                                                          SearchFunc="SearchVendorsAsync"
                                                          ValueChanged="(e) => artifact.VendorId = e.Id" T="VendorDisplayModel"
                                                          ToStringFunc="@(e => e==null?null : $"{e.Name} - {e.Id}")"
                                                          Variant="Variant.Outlined">
                                             <NoItemsTemplate>
-                                                <MudText>No vendors with such name</MudText>
+                                                <MudText>
+                                                    @Localizer["no-vendor-found"]
+                                                </MudText>
                                             </NoItemsTemplate>
                                         </MudAutocomplete>
                                         <MudText Color="Color.Error">
@@ -145,7 +149,7 @@
                                 </MudFileUpload>
                                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
                                            Color="Color.Primary" Class="ml-auto" Size="Size.Large">
-                                    Make Artifact
+                                    @Localizer["make-artifact"]
                                 </MudButton>
                             </MudCardActions>
                         </MudCard>
@@ -164,7 +168,7 @@ else if (viewPreview && isCreatingArtifact is false)
                     <div class="d-flex justify-content-between">
                         <MudText Typo="Typo.h5">This is a preview on how your artifact will look like in the store.</MudText>
                         <MudButton Color="Color.Info" StartIcon="@Icons.Material.Filled.Close" OnClick="() => viewPreview = false">
-                            Close Preview
+                            @Localizer["close-preview"]
                         </MudButton>
                     </div>
                 </MudItem>
@@ -181,16 +185,17 @@ else if (viewPreview && isCreatingArtifact is false)
                     <MudText Typo="Typo.h5">@artifact?.Name</MudText>
                     <MudText Typo="Typo.body2">@artifact?.Description</MudText>
                     <MudDivider Class="mt-3 mb-3" />
-                    <MudText Typo="Typo.body2">This artifact is sold by: @selectedVendor?.Name</MudText>
+                    <MudRating SelectedValue="3" />
+                    <MudText Typo="Typo.body2">@Localizer["artifact-sold"]: @selectedVendor?.Name</MudText>
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton Variant="Variant.Text" Color="Color.Error"
                                StartIcon="@Icons.Material.Filled.AddShoppingCart">
-                        Add to Cart
+                        @Localizer["add-cart"]
                     </MudButton>
                     <MudButton Variant="Variant.Text" Color="Color.Primary"
                                StartIcon="@Icons.Material.Filled.Details">
-                        Learn More
+                        @Localizer["learn-more"]
                     </MudButton>
                 </MudCardActions>
             </MudCard>

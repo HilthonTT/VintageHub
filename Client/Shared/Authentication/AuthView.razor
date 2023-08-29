@@ -1,4 +1,6 @@
-﻿<PageTitle>@GetTitle()</PageTitle>
+﻿@inject IStringLocalizer<Resource> Localizer
+
+<PageTitle>@GetTitle()</PageTitle>
 
 <MudGrid Justify="Justify.Center" Class="mt-10 mb-5">
     <MudItem xs="12" role="alert" Class="mt-auto">
@@ -28,15 +30,15 @@
     {
         return AuthState switch
         {
-            AuthState.CompletingLogin => "Completing Login",
-            AuthState.CompletingLogout => "Completing Logout",
-            AuthState.Logging => "Logging In",
-            AuthState.LoginFailed => "Login Failed",
-            AuthState.Logout => "Logout",
-            AuthState.LogoutFailed => "Logout Failed",
-            AuthState.LogoutSuceeded => "Logout Suceeded",
-            AuthState.Registering => "Registering",
-            _ => "Error",
+            AuthState.CompletingLogin => Localizer["auth-completing-login"],
+            AuthState.CompletingLogout => Localizer["auth-completing-logout"],
+            AuthState.Logging => Localizer["auth-logging"],
+            AuthState.LoginFailed => Localizer["auth-login-failed"],
+            AuthState.Logout => Localizer["auth-logout"],
+            AuthState.LogoutFailed => Localizer["auth-logout-failed"],
+            AuthState.LogoutSuceeded => Localizer["auth-logout-suceeded"],
+            AuthState.Registering => Localizer["auth-registering"],
+            _ => Localizer["error"],
         };
     }
 
@@ -44,15 +46,15 @@
     {
         return AuthState switch
         {
-            AuthState.CompletingLogin => "We are completing the logging, please remain patient.",
-            AuthState.CompletingLogout => "We are completing the logout, please remain patient.",
-            AuthState.Logging => "You are being logged in, please remain patient.",
-            AuthState.LoginFailed => "Oops, there seems to be an issue while logging you in. Please try again.",
-            AuthState.Logout => "You are now being logged out.",
-            AuthState.LogoutFailed => "Oops, there seems to be an issue while logging you out. Please try again.",
-            AuthState.LogoutSuceeded => "You are now logged out.",
-            AuthState.Registering => "You are now being registered, please remain patient.",
-            _ => "Oops, something went wrong."
+            AuthState.CompletingLogin => Localizer["auth-completing-login-description"],
+            AuthState.CompletingLogout => Localizer["auth-completing-logout-description"],
+            AuthState.Logging => Localizer["auth-logging-description"],
+            AuthState.LoginFailed => Localizer["auth-login-failed-description"],
+            AuthState.Logout => Localizer["auth-logout-description"],
+            AuthState.LogoutFailed => Localizer["auth-logout-failed-description"],
+            AuthState.LogoutSuceeded => Localizer["auth-logout-suceeded-description"],
+            AuthState.Registering => Localizer["auth-registering-description"],
+            _ => Localizer["error-description"]
         };
     }
 

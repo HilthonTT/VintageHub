@@ -1,4 +1,5 @@
-﻿@inject IImageEndpoint ImageEndpoint
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IImageEndpoint ImageEndpoint
 @inject IShoppingCartStorage ShoppingCartStorage
 @inject NavigationManager Navigation
 
@@ -16,21 +17,29 @@
         <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
                       Height="200" alt="@Artifact?.Name" />
         <MudCardContent>
-            <MudText Typo="Typo.h5">@Artifact?.Name</MudText>
-            <MudText Typo="Typo.body2">@Artifact?.Description</MudText>
+            <MudText Typo="Typo.h5">
+                @Artifact?.Name
+            </MudText>
+            <MudText Typo="Typo.body2">
+                @Artifact?.Description
+            </MudText>
             <MudDivider Class="mt-3 mb-3" />
-            <MudRating SelectedValue="@((int)Artifact.Rating)" ReadOnly="true"/>
-            <MudText Typo="Typo.body1">Price: @Artifact?.Price.ToString("0.####") &euro;</MudText>
-            <MudText Typo="Typo.body2">This artifact is sold by: @Artifact.Vendor?.Name</MudText>
+            <MudRating SelectedValue="@((int)Artifact.Rating)" ReadOnly="true" />
+            <MudText Typo="Typo.body1">
+                @Localizer["price"]: @Artifact?.Price.ToString("0.####")
+            </MudText>
+            <MudText Typo="Typo.body2">
+                @Localizer["artifact-sold"] @Artifact.Vendor?.Name
+            </MudText>
         </MudCardContent>
         <MudCardActions>
             <MudButton OnClick="AddToCartAsync" Variant="Variant.Text" Disabled="!canAddToCart"
                        Color="Color.Error" StartIcon="@Icons.Material.Filled.AddShoppingCart">
-                Add to Cart
+                @Localizer["add-cart"]
             </MudButton>
             <MudButton OnClick="OpenDetails" Variant="Variant.Text"
                        Color="Color.Primary" StartIcon="@Icons.Material.Filled.Details">
-                Learn More
+                @Localizer["learn-more"]
             </MudButton>
         </MudCardActions>
     </MudCard>

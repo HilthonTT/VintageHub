@@ -1,44 +1,45 @@
 ﻿@page "/Admin"
+@inject IStringLocalizer<Resource> Localizer
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "Admin")]
 
-<PageTitle>Admin Hub</PageTitle>
+<PageTitle>@Localizer["admin-hub"]</PageTitle>
 
 <MudGrid Class="mt-3 mb-5">
     <MudItem xs="12" sm="6" md="4">
         <MudPaper Elevation="2" Class="pa-4" Height="220px">
             <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
-                <MudTooltip Text="Create an artifact">
+                <MudTooltip Text=@Localizer["create-artifact"]>
                     <MudFab OnClick="LoadCreateArtifactPage" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Article"
-                            IconSize="Size.Large" Size="Size.Large" Label="Create an artifact" />
+                            IconSize="Size.Large" Size="Size.Large" Label=@Localizer["create-artifact"] />
                 </MudTooltip>
                 <MudImage Src="images/artifact.png" Height="120"
-                          Class="rounded-lg" Elevation="25" Alt="Artifact" />
+                          Class="rounded-lg" Elevation="25" Alt=@Localizer["artifact"] />
             </MudStack>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="4">
         <MudPaper Elevation="2" Class="pa-4" Style="height: 220px;">
             <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
-                <MudTooltip Text="Create a vendor">
+                <MudTooltip Text=@Localizer["create-vendor"]>
                     <MudFab OnClick="LoadCreateVendorPage" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Article"
-                            IconSize="Size.Large" Size="Size.Large" Label="Create a vendor" />
+                            IconSize="Size.Large" Size="Size.Large" Label=@Localizer["create-vendor"] />
                 </MudTooltip>
                 <MudImage Src="images/vendor.png" Height="120"
-                          Class="rounded-lg" Elevation="25" Alt="Vendor" />
+                          Class="rounded-lg" Elevation="25" Alt=@Localizer["vendor"] />
             </MudStack>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="12" md="4">
         <MudPaper Elevation="2" Class="pa-4" Style="height: 220px;">
             <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
-                <MudTooltip Text="Order listing">
+                <MudTooltip Text=@Localizer["order-listing"]>
                     <MudFab OnClick="LoadOrderListingPage" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Article"
-                            IconSize="Size.Large" Size="Size.Large" Label="Order listing" />
+                            IconSize="Size.Large" Size="Size.Large" Label=@Localizer["order-listing"] />
                 </MudTooltip>
                 <MudImage Src="images/order-listing.png" Height="120"
-                          Class="rounded-lg" Elevation="25" Alt="Order listing fish" />
+                          Class="rounded-lg" Elevation="25" Alt=@Localizer["order-listing"] />
             </MudStack>
         </MudPaper>
     </MudItem>
@@ -48,16 +49,13 @@
                 <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;">
                     <MudItem xs="12">
                         <MudText Typo="Typo.h5" Class="fw-bold text-uppercase text-decoration-underline">
-                            Admin Guidelines
+                            @Localizer["admin-guidelines"]
                         </MudText>
                         <MudDivider Class="mt-3 mb-3" />
                     </MudItem>
                     <MudItem xs="12">
                         <MudText Typo="Typo.body1">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Nullam commodo nulla ac eros lacinia, in lacinia metus luctus.
-                            Sed eget quam at dui vestibulum rhoncus a eget justo.
-                            Sed vitae elit id nunc aliquam volutpat in a arcu.
+                            @Localizer["admin-guidelines-text"]
                         </MudText>
                     </MudItem>
                 </MudPaper>
@@ -66,16 +64,13 @@
                 <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;">
                     <MudItem xs="12">
                         <MudText Typo="Typo.h5" Class="fw-bold text-uppercase text-decoration-underline">
-                            General Guidelines
+                            @Localizer["general-guidelines"]
                         </MudText>
                         <MudDivider Class="mt-3 mb-3" />
                     </MudItem>
                     <MudItem xs="12">
                         <MudText Typo="Typo.body1">
-                            Fusce fermentum facilisis felis, in ullamcorper lectus fermentum a.
-                            Sed id elit nec nisl malesuada vehicula eu nec dui.
-                            Integer nec quam vel urna bibendum feugiat.
-                            Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.
+                            @Localizer["general-guidelines-text"]
                         </MudText>
                     </MudItem>
                 </MudPaper>
@@ -105,7 +100,6 @@
     protected override async Task OnInitializedAsync()
     {
         var rnd = new Random();
-
         var artifactList = await ArtifactEndpoint.GetAllArtifactsAsync();
 
         artifacts = artifactList.OrderBy(_ => rnd.Next()).ToList();

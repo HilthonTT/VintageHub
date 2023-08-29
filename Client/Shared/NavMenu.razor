@@ -1,42 +1,47 @@
-﻿@inject IShoppingCartStorage ShoppingCartStorage
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IShoppingCartStorage ShoppingCartStorage
 @inject NavigationManager Navigation
 
 <MudAppBar Color="Color.Dark">
     <AuthorizeView Policy="Admin">
         <MudButton OnClick="LoadAdminPage"
                    StartIcon="@Icons.Material.Filled.AdminPanelSettings" Color="Color.Error">
-            Admin
+            @Localizer["admin"]
         </MudButton>
     </AuthorizeView>
     <AuthorizeView>
         <Authorized>
             <MudButton OnClick="LoadHomePage" StartIcon="@Icons.Material.Filled.Home">
-                Home
+                @Localizer["home"]
             </MudButton>
             <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.List">
-                Our Artifacts
+                @Localizer["our-artifacts"]
             </MudButton>
             <MudButton OnClick="LoadCartPage" StartIcon="@Icons.Material.Filled.ShoppingCart">
-                Cart [@shoppingCart?.CartItems.Count]
+                @Localizer["cart"] 
+                [@shoppingCart?.CartItems.Count]
             </MudButton>
 
             <MudSpacer />
             <MudButton OnClick="LoadProfilePage" Variant="Variant.Text">
-                Hello, @context.User.Identity?.Name!
+                @Localizer["hello"], 
+                @context.User.Identity?.Name!
             </MudButton>
             <MudButton OnClick="BeginLogOut"
-                       StartIcon="@Icons.Material.Filled.Logout">Logout</MudButton>
+                       StartIcon="@Icons.Material.Filled.Logout">
+                @Localizer["logout"]
+            </MudButton>
         </Authorized>
         <NotAuthorized>
             <MudButton OnClick="LoadHomePage" StartIcon="@Icons.Material.Filled.Home">
-                Home
+                @Localizer["home"]
             </MudButton>
             <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.List">
-                Our Artifacts
+                @Localizer["our-artifacts"]
             </MudButton>
             <MudSpacer />
             <MudButton OnClick="BeginLogIn" StartIcon="@Icons.Material.Filled.Login">
-                Login
+                @Localizer["login"]
             </MudButton>
         </NotAuthorized>
     </AuthorizeView>

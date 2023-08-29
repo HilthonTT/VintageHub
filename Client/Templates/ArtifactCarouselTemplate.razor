@@ -1,12 +1,13 @@
-﻿@inject IImageEndpoint ImageEndpoint
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IImageEndpoint ImageEndpoint
 @inject NavigationManager Navigation
 
 <div class="d-flex flex-column flex-column justify-center" style="height:100%">
     <MudImage Class="mx-auto rounded-lg" Src="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))" Width="350" Height="300"
               Elevation="25" Alt="@Artifact.Name" />
     <MudItem Class="mx-auto mt-2">
-        <MudTooltip Text="Open Details">
-            <MudFab OnClick="LoadArtifactPage" Label="Open Details"
+        <MudTooltip Text=@Localizer["open-details"]>
+            <MudFab OnClick="LoadArtifactPage" Label=@Localizer["open-details"]
                     Color="Color.Primary" StartIcon="@Icons.Material.Filled.OpenInBrowser">
                 @Artifact.Name
             </MudFab>

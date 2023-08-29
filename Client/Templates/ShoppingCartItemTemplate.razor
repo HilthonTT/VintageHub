@@ -1,28 +1,39 @@
-﻿@inject IImageEndpoint ImageEndpoint
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IImageEndpoint ImageEndpoint
 @inject NavigationManager Navigation
 
 <MudItem xs="4">
     <MudCard Class="m-2">
         <MudCardHeader>
             <CardHeaderContent>
-                <MudText Typo="Typo.subtitle1" Class="fw-bold text-uppercase">@CartItem.Artifact?.Name</MudText>
+                <MudText Typo="Typo.subtitle1" Class="fw-bold text-uppercase">
+                    @CartItem.Artifact?.Name
+                </MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudIconButton  Icon="@Icons.Material.Filled.RemoveShoppingCart" Color="Color.Default" OnClick="RemoveFromCartAsync" />
+                <MudIconButton Icon="@Icons.Material.Filled.RemoveShoppingCart" Color="Color.Default" OnClick="RemoveFromCartAsync" />
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
-                      Height="200" alt="@CartItem.Artifact?.Name" />
+                      Height="200" />
         <MudCardContent>
-            <MudText Typo="Typo.body2">@CartItem.Artifact?.Description</MudText>
+            <MudText Typo="Typo.body2">
+                @CartItem.Artifact?.Description
+            </MudText>
             <MudDivider Class="mt-3 mb-3" />
-            <MudText Typo="Typo.body2">Quantity: @CartItem.Quantity</MudText>
-            <MudText Typo="Typo.body2">Total Price: @totalPrice &euro;</MudText>
+            <MudText Typo="Typo.body2">
+                @Localizer["quantity"]:
+                @CartItem.Quantity
+            </MudText>
+            <MudText Typo="Typo.body2">
+                @Localizer["total-price"]:
+                @totalPrice
+            </MudText>
         </MudCardContent>
         <MudCardActions>
             <MudButton OnClick="OpenDetails" Variant="Variant.Text"
                        Color="Color.Primary" StartIcon="@Icons.Material.Filled.Details">
-                Learn More
+                @Localizer["learn-more"]
             </MudButton>
         </MudCardActions>
     </MudCard>

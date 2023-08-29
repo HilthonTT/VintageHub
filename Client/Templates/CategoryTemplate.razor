@@ -1,4 +1,5 @@
-﻿@inject NavigationManager Navigation
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject NavigationManager Navigation
 
 <MudItem xs="3">
     <MudCard Class="m-2">
@@ -10,7 +11,7 @@
         </MudCardContent>
         <MudCardActions>
             <MudButton OnClick="OnCategoryClick" Variant="Variant.Text" Color="Color.Primary">
-                Learn More
+                @Localizer["learn-more"]
             </MudButton>
         </MudCardActions>
     </MudCard>

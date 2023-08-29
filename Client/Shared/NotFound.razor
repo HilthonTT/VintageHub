@@ -1,6 +1,7 @@
-﻿@inject NavigationManager Navigation
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject NavigationManager Navigation
 
-<PageTitle>Not Found</PageTitle>
+<PageTitle>@Localizer["not-found"]</PageTitle>
 
 <MudGrid Justify="Justify.Center" Class="mt-10 mb-5">
     <MudItem xs="12" role="alert" Class="mt-auto">
@@ -11,15 +12,15 @@
                              Size="Size.Large" Color="Color.Error" />
                 </MudText>
                 <MudText Typo="Typo.h4" Class="text-uppercase" GutterBottom>
-                    Page Not Found
+                    @Localizer["page-not-found"]
                 </MudText>
                 <MudText Typo="Typo.subtitle1" Class="mt-1">
-                    The page you are looking for might have been removed had its name change
+                    @Localizer["page-not-found-description"]
                 </MudText>
             </MudItem>
             <MudItem xs="12" Class="text-center">
                 <MudFab OnClick="LoadHomePage" Color="Color.Error"
-                        StartIcon="@Icons.Material.Filled.Home" Label="Home" Style="width: 25rem" />
+                        StartIcon="@Icons.Material.Filled.Home" Label=@Localizer["home"] Style="width: 25rem" />
             </MudItem>
         </MudGrid>
     </MudItem>

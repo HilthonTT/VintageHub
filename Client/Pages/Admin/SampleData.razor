@@ -1,4 +1,5 @@
 ﻿@page "/Admin/SampleData"
+@inject IStringLocalizer<Resource> Localizer
 @inject ICategoryEndpoint CategoryEndpoint
 @inject IEraEndpoint EraEndpoint
 @inject IArtifactEndpoint ArtifactEndpoint
@@ -8,7 +9,7 @@
 @inject AuthenticationStateProvider AuthProvider
 @attribute [Authorize(Policy = "Admin")]
 
-<PageTitle>Sample Data</PageTitle>
+<PageTitle>@Localizer["sample-data"]</PageTitle>
 
 <MudGrid>
     @if (string.IsNullOrWhiteSpace(errorMessage) is false)
@@ -19,50 +20,58 @@
     }
     <MudItem xs="12">
         <MudItem>
-            <MudText Typo="Typo.h6">Categories</MudText>
+            <MudText Typo="Typo.h6">
+                @Localizer["categories"]
+            </MudText>
             <MudDivider Class="mt-3 mb-3" />
         </MudItem>
         <MudItem>
             <MudButton OnClick="GenerateCategoriesAsync" Variant="Variant.Filled"
                        Color="Color.Primary" Disabled="DisableButton(categoriesCreated)">
-                Create Categories
+                @Localizer["create-categories"]
             </MudButton>
         </MudItem>
     </MudItem>
     <MudDivider Class="mb-3 mt-3" />
     <MudItem xs="12">
         <MudItem>
-            <MudText Typo="Typo.h6">Eras</MudText>
+            <MudText Typo="Typo.h6">
+                @Localizer["eras"]
+            </MudText>
             <MudDivider Class="mt-3 mb-3" />
         </MudItem>
         <MudItem>
             <MudButton OnClick="GenerateErasAsync" Variant="Variant.Filled"
                        Color="Color.Primary" Disabled="DisableButton(erasCreated)">
-                Create Eras
+                @Localizer["create-eras"]
             </MudButton>
         </MudItem>
     </MudItem>
     <MudItem xs="12">
         <MudItem>
-            <MudText Typo="Typo.h6">Artifacts</MudText>
+            <MudText Typo="Typo.h6">
+                @Localizer["artifacts"]
+            </MudText>
             <MudDivider Class="mt-3 mb-3" />
         </MudItem>
         <MudItem>
             <MudButton OnClick="GenerateArtifactAsync" Variant="Variant.Filled"
                        Color="Color.Primary" Disabled="DisableButton(artifactsCreated)">
-                Create Artifacts
+                @Localizer["create-artifacts"]
             </MudButton>
         </MudItem>
     </MudItem>
     <MudItem xs="12">
         <MudItem>
-            <MudText Typo="Typo.h6">Vendors</MudText>
+            <MudText Typo="Typo.h6">
+                @Localizer["vendors"]
+            </MudText>
             <MudDivider Class="mt-3 mb-3" />
         </MudItem>
         <MudItem>
             <MudButton OnClick="GenerateVendorsAsync" Variant="Variant.Filled" 
                        Color="Color.Primary" Disabled="DisableButton(vendorsCreated)">
-                Create Vendors
+                @Localizer["create-vendors"]
             </MudButton>
         </MudItem>
     </MudItem>

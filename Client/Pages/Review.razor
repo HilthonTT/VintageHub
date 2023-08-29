@@ -11,10 +11,7 @@
 }
 else if (review is null)
 {
-    <MudAlert Severity="Severity.Error" ShowCloseIcon="true"
-              CloseIcon="@Icons.Material.Filled.Close">
-        @Localizer["not-found"]
-    </MudAlert>
+    <NotFound />
 }
 else
 {
