@@ -7,4 +7,10 @@ public class OrderDisplayModel
     public bool IsComplete { get; set; }
     public bool IsCanceled { get; set; }
     public DateTime DateOrdered { get; set; }
+    public string FullName => GetFullName();
+
+    private string GetFullName()
+    {
+        return $"{User.FirstName} {User.LastName}";
+    }
 }
