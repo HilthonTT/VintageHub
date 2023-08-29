@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
 
-<MudDialog>
+<MudDialog Options="@options">
     <TitleContent>
         <MudText Typo="Typo.h6">
             <MudIcon Icon="@Icons.Material.Filled.Language" Class="mr-3 mb-n1"/>
@@ -17,8 +17,9 @@
         </MudSelect>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Close">Close</MudButton>
-        <MudButton></MudButton>
+        <MudButton OnClick="Close" Color="Color.Error">
+            Close
+        </MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -27,6 +28,8 @@
     private MudDialogInstance MudDialog { get; set; }
 
     private void Close() => MudDialog.Close(DialogResult.Ok(true));
+
+    private DialogOptions options = new() { ClassBackground = "dialog-backdrop" };
 
     private List<CultureInfo> cultures = new()
     {
