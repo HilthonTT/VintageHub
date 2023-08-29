@@ -496,6 +496,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The category you&apos;ve provided is currently unavailable..
+        /// </summary>
+        public static string category_unavailable {
+            get {
+                return ResourceManager.GetString("category-unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checkout.
         /// </summary>
         public static string checkout {
@@ -883,6 +892,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The era you&apos;ve provided is currently unavailable..
+        /// </summary>
+        public static string era_unavailable {
+            get {
+                return ResourceManager.GetString("era-unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eras.
         /// </summary>
         public static string eras {
@@ -954,6 +972,15 @@ namespace VintageHub.Client.Resources {
         public static string home {
             get {
                 return ResourceManager.GetString("home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your image is above .
+        /// </summary>
+        public static string image_above_limit {
+            get {
+                return ResourceManager.GetString("image-above-limit", resourceCulture);
             }
         }
         
@@ -1404,6 +1431,15 @@ namespace VintageHub.Client.Resources {
         public static string total_price {
             get {
                 return ResourceManager.GetString("total-price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The user you&apos;ve provided is currently unavailable..
+        /// </summary>
+        public static string user_unavailable {
+            get {
+                return ResourceManager.GetString("user-unavailable", resourceCulture);
             }
         }
         
