@@ -1,8 +1,10 @@
 ﻿@page "/"
+@using VintageHub.Client.Dialog;
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject ICategoryEndpoint CategoryEndpoint
 @inject IEraEndpoint EraEndpoint
 @inject IUserDataVerifier UserVerifier
+@inject IDialogService DialogService
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
@@ -49,6 +51,10 @@
                             <MudButton StartIcon="@Icons.Material.Filled.DesignServices"
                                        OnClick="LoadCustomerServicePage">
                                 Customer Service
+                            </MudButton>
+                            <MudButton StartIcon="@Icons.Material.Filled.Language"
+                                       OnClick="LoadLanguageDialogAsync">
+                                Language
                             </MudButton>
                         </MudStack>
                     </div>
@@ -191,5 +197,10 @@
 
         var artifactList = await ArtifactEndpoint.GetAllArtifactsAsync();
         artifacts = artifactList.OrderBy(_ => rnd.Next()).ToList();
+    }
+
+    private async Task LoadLanguageDialogAsync()
+    {
+        await DialogService.ShowAsync<LanguageSelector>();
     }
 }

@@ -1,0 +1,50 @@
+﻿@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Language" Class="mr-3 mb-n1"/>
+            Select your language
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudSelect @bind-Value="culture" Label="Language" HelperText="Select your prefered language">
+            @foreach (var c in cultures)
+            {
+                <MudSelectItem Value="@c">@c.DisplayName</MudSelectItem>
+            }
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close">Close</MudButton>
+        <MudButton></MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] 
+    private MudDialogInstance MudDialog { get; set; }
+
+    private void Close() => MudDialog.Close(DialogResult.Ok(true));
+
+    private List<CultureInfo> cultures = new()
+    {
+        new("en-US"),
+        new("fr-FR"),
+    };
+
+    private CultureInfo culture
+    {
+        get => CultureInfo.CurrentCulture;
+        set
+        {
+            if (CultureInfo.CurrentCulture != value)
+            {
+                var js = (IJSInProcessRuntime)JSRuntime;
+                js.InvokeVoid("blazorCulture.set", value.Name);
+                Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+            }
+        }
+    }
+}
