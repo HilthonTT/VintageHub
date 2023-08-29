@@ -57,7 +57,7 @@
                             <MudText>You have a total of @totalItems items in your cart.</MudText>
                             <MudItem>
                                 <MudText Color="Color.Default">The total price is: </MudText>
-                                <MudText Color="Color.Error" Class="mt-1">@totalPrice &euro;</MudText>
+                                <MudText Color="Color.Error" Class="mt-1">@totalPrice.ToString("0.####") &euro;</MudText>
                             </MudItem>
                         </MudItem>
                         <MudDivider Class="mt-3 mb-3" />

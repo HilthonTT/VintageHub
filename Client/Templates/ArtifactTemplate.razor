@@ -19,6 +19,7 @@
             <MudText Typo="Typo.h5">@Artifact?.Name</MudText>
             <MudText Typo="Typo.body2">@Artifact?.Description</MudText>
             <MudDivider Class="mt-3 mb-3" />
+            <MudRating SelectedValue="@((int)Artifact.Rating)" ReadOnly="true"/>
             <MudText Typo="Typo.body1">Price: @Artifact?.Price.ToString("0.####") &euro;</MudText>
             <MudText Typo="Typo.body2">This artifact is sold by: @Artifact.Vendor?.Name</MudText>
         </MudCardContent>
