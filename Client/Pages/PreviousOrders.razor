@@ -1,11 +1,12 @@
 ﻿@page "/Order/Previous"
+@inject IStringLocalizer<Resource> Localizer
 @inject IUserEndpoint UserEndpoint
 @inject IOrderEndpoint OrderEndpoint
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<PageTitle>My Previous Orders</PageTitle>
+<PageTitle>@Localizer["previous-orders"]</PageTitle>
 
 @if (isLoading is false)
 {
@@ -13,7 +14,7 @@
         <MudItem xs="12">
             <div class="d-flex justify-content-between">
                 <MudText Typo="Typo.h6" Class="fw-bold text-uppercase">
-                    My Previous Orders
+                    @Localizer["previous-orders"]
                 </MudText>
                 <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
             </div>
@@ -26,25 +27,29 @@
                              Hideable="true" Bordered="true" Hover="true" Striped="true" QuickFilter="quickFilter"
                              EditTrigger="DataGridEditTrigger.Manual" CommittedItemChanges="UpdateOrderAsync">
                     <ToolBarContent>
-                        <MudText Typo="Typo.h6">Orders</MudText>
+                        <MudText Typo="Typo.h6">
+                            @Localizer["orders"]
+                        </MudText>
                         <MudSpacer />
-                        <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                        <MudTextField @bind-Value="searchText" Placeholder=@Localizer["search"] Adornment="Adornment.Start" Immediate="true"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
                     </ToolBarContent>
                     <Columns>
                         <SelectColumn T="OrderDisplayModel" />
                         <PropertyColumn Property="x => x.Id" Title="Id" Sortable="false" Filterable="false" IsEditable="false" />
-                        <PropertyColumn Property="x => x.FullName" Title="Buyer" IsEditable="false" />
-                        <PropertyColumn Property="x => x.TotalPrice" Title="Total Price &euro;" IsEditable="false" />
-                        <PropertyColumn Property="x => x.DateOrdered" Title="Date Ordered" IsEditable="false" />
-                        <PropertyColumn Property="x => x.IsComplete" Title="Completed" IsEditable="true">
+                        <PropertyColumn Property="x => x.FullName" Title=@Localizer["buyer"] IsEditable="false" />
+                        <PropertyColumn Property="x => x.TotalPrice" Title=@Localizer["total-price"] IsEditable="false" />
+                        <PropertyColumn Property="x => x.DateOrdered" Title=@Localizer["date-ordered"] IsEditable="false" />
+                        <PropertyColumn Property="x => x.IsComplete" Title=@Localizer["completed"] IsEditable="true">
                             <EditTemplate>
-                                <MudCheckBox @bind-Checked="@context.Item.IsComplete" Color="Color.Primary" Label="Completed" />
+                                <MudCheckBox @bind-Checked="@context.Item.IsComplete"
+                                             Color="Color.Primary" Label=@Localizer["completed"] />
                             </EditTemplate>
                         </PropertyColumn>
-                        <PropertyColumn Property="x => x.IsCanceled" Title="Canceled" IsEditable="true">
+                        <PropertyColumn Property="x => x.IsCanceled" Title=@Localizer["canceled"] IsEditable="true">
                             <EditTemplate>
-                                <MudCheckBox @bind-Checked="@context.Item.IsCanceled" Color="Color.Primary" Label="Canceled" />
+                                <MudCheckBox @bind-Checked="@context.Item.IsCanceled"
+                                             Color="Color.Primary" Label=@Localizer["canceled"] />
                             </EditTemplate>
                         </PropertyColumn>
                         <TemplateColumn>
@@ -52,7 +57,7 @@
                                 <MudStack Row="true">
                                     <MudButton OnClick="() => LoadOrderDetailsPage(context.Item)" Size="Size.Small"
                                                Variant="Variant.Filled" Color="Color.Primary">
-                                        Open Order
+                                        @Localizer["open-order"]
                                     </MudButton>
                                     <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit"
                                                    OnClick="@context.Actions.StartEditingItemAsync" />

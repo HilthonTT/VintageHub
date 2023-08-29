@@ -1,5 +1,5 @@
 ﻿@page "/"
-@using VintageHub.Client.Dialog;
+@inject IStringLocalizer<Resource> Localizer
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject ICategoryEndpoint CategoryEndpoint
 @inject IEraEndpoint EraEndpoint
@@ -32,7 +32,7 @@
                         <MudStack Row="true" Spacing="3">
                             <MudButton StartIcon="@Icons.Material.Filled.List"
                                        OnClick="LoadWishListPage">
-                                Wish List
+                                @Localizer["wishlist"]
                             </MudButton>
                         </MudStack>
                     </div>
@@ -42,19 +42,19 @@
                         <MudStack Row="true" Spacing="3">
                             <MudButton StartIcon="@Icons.Material.Filled.Discount"
                                        OnClick="LoadDiscountPage">
-                                Discounts
+                                @Localizer["discounts"]
                             </MudButton>
                             <MudButton StartIcon="@Icons.Material.Filled.Shop"
                                        OnClick="LoadOrdersPage">
-                                My Orders
+                                @Localizer["my-orders"]
                             </MudButton>
                             <MudButton StartIcon="@Icons.Material.Filled.DesignServices"
                                        OnClick="LoadCustomerServicePage">
-                                Customer Service
+                                @Localizer["customer-service"]
                             </MudButton>
                             <MudButton StartIcon="@Icons.Material.Filled.Language"
                                        OnClick="LoadLanguageDialogAsync">
-                                Language
+                                @Localizer["language"]
                             </MudButton>
                         </MudStack>
                     </div>
@@ -69,11 +69,15 @@
         <div class="d-flex justify-content-between">
             <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">Artifacts</MudText>
             <div>
-                <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.More">See More</MudButton>
+                <MudButton OnClick="LoadListingPage" StartIcon="@Icons.Material.Filled.More">
+                    @Localizer["see-more"]
+                </MudButton>
                 @if (artifacts is null)
                 {
                     <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                        <span class="visually-hidden">
+                            @Localizer["loading"]
+                        </span>
                     </div>
                 }
             </div>
@@ -81,7 +85,7 @@
         <MudGrid>
             @if (artifacts is not null)
             {
-                <MudVirtualize Items="artifacts?.Take(6).ToList()" Context="a">
+                <MudVirtualize Items="artifacts?.ToList()" Context="a">
                     <ArtifactTemplate @key="a.Id" Artifact="a" />
                 </MudVirtualize>
             }
@@ -91,11 +95,13 @@
     <MudDivider />
     <MudItem xs="12">
         <div class="d-flex justify-content-between">
-            <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">Categories</MudText>
+            <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">
+                @Localizer["categories"]
+            </MudText>
             @if (categories is null)
             {
                 <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">@Localizer["loading"]</span>
                 </div>
             }
         </div>
@@ -112,11 +118,13 @@
     <MudDivider />
     <MudItem xs="12">
         <div class="d-flex justify-content-between">
-            <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">Eras</MudText>
+            <MudText Typo="Typo.h4" GutterBottom="true" Class="fw-bold text-uppercase">
+                @Localizer["eras"]
+            </MudText>
             @if (eras is null)
             {
                 <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">@Localizer["loading"]</span>
                 </div>
             }
         </div>
@@ -147,8 +155,6 @@
             categories = await CategoryEndpoint.GetAllCategoriesAsync();
             eras = await EraEndpoint.GetAllErasAsync();
             loggedInUser = await UserVerifier.LoadAndVerifyUserAsync();
-
-            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -196,7 +202,7 @@
         var rnd = new Random();
 
         var artifactList = await ArtifactEndpoint.GetAllArtifactsAsync();
-        artifacts = artifactList.OrderBy(_ => rnd.Next()).ToList();
+        artifacts = artifactList.OrderBy(_ => rnd.Next()).Take(6).ToList();
     }
 
     private async Task LoadLanguageDialogAsync()

@@ -1,6 +1,9 @@
 ﻿@page "/Artifact/{ArtifactId:int}/Review/{ReviewId:int}"
+@inject IStringLocalizer<Resource> Localizer
 @inject IReviewEndpoint ReviewEndpoint
 @inject NavigationManager Navigation
+
+<PageTitle>@review?.Title</PageTitle>
 
 @if (isLoading)
 {
@@ -10,7 +13,7 @@ else if (review is null)
 {
     <MudAlert Severity="Severity.Error" ShowCloseIcon="true"
               CloseIcon="@Icons.Material.Filled.Close">
-        404 - Not Found.
+        @Localizer["not-found"]
     </MudAlert>
 }
 else
@@ -25,7 +28,7 @@ else
                                 @review.Title
                             </MudText>
                             <MudText Typo="Typo.subtitle1">
-                                Written by: @writerFullName
+                                @Localizer["written-by"] @writerFullName
                             </MudText>
                             <MudRating SelectedValue="review.Rating" ReadOnly="true" />
                             <MudDivider Class="mt-3 mb-3" />

@@ -61,11 +61,668 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hello World.
+        ///   Looks up a localized string similar to All.
         /// </summary>
-        public static string helloworld {
+        public static string all {
             get {
-                return ResourceManager.GetString("helloworld", resourceCulture);
+                return ResourceManager.GetString("all", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our Artifacts appear in a wide range of variety! You just have to choose wisely!.
+        /// </summary>
+        public static string artifact_description {
+            get {
+                return ResourceManager.GetString("artifact-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Artifact Listing.
+        /// </summary>
+        public static string artifact_listing {
+            get {
+                return ResourceManager.GetString("artifact-listing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The artifact is currently unavailable..
+        /// </summary>
+        public static string artifact_unavailable {
+            get {
+                return ResourceManager.GetString("artifact-unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Artifacts.
+        /// </summary>
+        public static string artifacts {
+            get {
+                return ResourceManager.GetString("artifacts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Buyer.
+        /// </summary>
+        public static string buyer {
+            get {
+                return ResourceManager.GetString("buyer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Canceled.
+        /// </summary>
+        public static string canceled {
+            get {
+                return ResourceManager.GetString("canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories.
+        /// </summary>
+        public static string categories {
+            get {
+                return ResourceManager.GetString("categories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checkout.
+        /// </summary>
+        public static string checkout {
+            get {
+                return ResourceManager.GetString("checkout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string clear {
+            get {
+                return ResourceManager.GetString("clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Wishlist.
+        /// </summary>
+        public static string clear_wishlist {
+            get {
+                return ResourceManager.GetString("clear-wishlist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        public static string completed {
+            get {
+                return ResourceManager.GetString("completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Payment.
+        /// </summary>
+        public static string confirm_payment {
+            get {
+                return ResourceManager.GetString("confirm-payment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create A Review.
+        /// </summary>
+        public static string create_review {
+            get {
+                return ResourceManager.GetString("create-review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Address.
+        /// </summary>
+        public static string credit_card_billing_address {
+            get {
+                return ResourceManager.GetString("credit-card-billing-address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a billing address.
+        /// </summary>
+        public static string credit_card_billing_address_description {
+            get {
+                return ResourceManager.GetString("credit-card-billing-address-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cardholder Name.
+        /// </summary>
+        public static string credit_card_cardholder {
+            get {
+                return ResourceManager.GetString("credit-card-cardholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cardholder name is required.
+        /// </summary>
+        public static string credit_card_cardholder_description {
+            get {
+                return ResourceManager.GetString("credit-card-cardholder-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to City.
+        /// </summary>
+        public static string credit_card_city {
+            get {
+                return ResourceManager.GetString("credit-card-city", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a city.
+        /// </summary>
+        public static string credit_card_city_description {
+            get {
+                return ResourceManager.GetString("credit-card-city-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        public static string credit_card_country {
+            get {
+                return ResourceManager.GetString("credit-card-country", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a country.
+        /// </summary>
+        public static string credit_card_country_description {
+            get {
+                return ResourceManager.GetString("credit-card-country-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CVV.
+        /// </summary>
+        public static string credit_card_cvv {
+            get {
+                return ResourceManager.GetString("credit-card-cvv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid CVV code.
+        /// </summary>
+        public static string credit_card_cvv_description {
+            get {
+                return ResourceManager.GetString("credit-card-cvv-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong in the process. Please try again later..
+        /// </summary>
+        public static string credit_card_error {
+            get {
+                return ResourceManager.GetString("credit-card-error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a valid expiration year.
+        /// </summary>
+        public static string credit_card_expiration_description {
+            get {
+                return ResourceManager.GetString("credit-card-expiration-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration Month.
+        /// </summary>
+        public static string credit_card_expiration_month {
+            get {
+                return ResourceManager.GetString("credit-card-expiration-month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a valid expiration month.
+        /// </summary>
+        public static string credit_card_expiration_month_description {
+            get {
+                return ResourceManager.GetString("credit-card-expiration-month-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration Year.
+        /// </summary>
+        public static string credit_card_expiration_year {
+            get {
+                return ResourceManager.GetString("credit-card-expiration-year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credit Card Number.
+        /// </summary>
+        public static string credit_card_number {
+            get {
+                return ResourceManager.GetString("credit-card-number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid credit card number.
+        /// </summary>
+        public static string credit_card_number_description {
+            get {
+                return ResourceManager.GetString("credit-card-number-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Postal Code.
+        /// </summary>
+        public static string credit_card_postal_code {
+            get {
+                return ResourceManager.GetString("credit-card-postal-code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid postal code.
+        /// </summary>
+        public static string credit_card_postal_code_description {
+            get {
+                return ResourceManager.GetString("credit-card-postal-code-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State.
+        /// </summary>
+        public static string credit_card_state {
+            get {
+                return ResourceManager.GetString("credit-card-state", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a state.
+        /// </summary>
+        public static string credit_card_state_description {
+            get {
+                return ResourceManager.GetString("credit-card-state-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customer Service.
+        /// </summary>
+        public static string customer_service {
+            get {
+                return ResourceManager.GetString("customer-service", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Ordered.
+        /// </summary>
+        public static string date_ordered {
+            get {
+                return ResourceManager.GetString("date-ordered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discounts.
+        /// </summary>
+        public static string discounts {
+            get {
+                return ResourceManager.GetString("discounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your wishlist is empty..
+        /// </summary>
+        public static string empty_wishlist {
+            get {
+                return ResourceManager.GetString("empty-wishlist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can view artifact pages and add them into your wishlist..
+        /// </summary>
+        public static string empty_wishlist_description {
+            get {
+                return ResourceManager.GetString("empty-wishlist-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eras.
+        /// </summary>
+        public static string eras {
+            get {
+                return ResourceManager.GetString("eras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Founded on the: .
+        /// </summary>
+        public static string founded_on {
+            get {
+                return ResourceManager.GetString("founded-on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        public static string information {
+            get {
+                return ResourceManager.GetString("information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string language {
+            get {
+                return ResourceManager.GetString("language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to loading....
+        /// </summary>
+        public static string loading {
+            get {
+                return ResourceManager.GetString("loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make Review.
+        /// </summary>
+        public static string make_review {
+            get {
+                return ResourceManager.GetString("make-review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make A Review For.
+        /// </summary>
+        public static string make_review_for {
+            get {
+                return ResourceManager.GetString("make-review-for", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Orders.
+        /// </summary>
+        public static string my_orders {
+            get {
+                return ResourceManager.GetString("my-orders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Allowed.
+        /// </summary>
+        public static string not_allowed {
+            get {
+                return ResourceManager.GetString("not-allowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 404 - Not Found.
+        /// </summary>
+        public static string not_found {
+            get {
+                return ResourceManager.GetString("not-found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It appears there has been an error identifying you. Try logging in again..
+        /// </summary>
+        public static string not_logged_in_make_review {
+            get {
+                return ResourceManager.GetString("not-logged-in-make-review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Order.
+        /// </summary>
+        public static string open_order {
+            get {
+                return ResourceManager.GetString("open-order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order Details.
+        /// </summary>
+        public static string order_details {
+            get {
+                return ResourceManager.GetString("order-details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order Details of order Id.
+        /// </summary>
+        public static string order_details_description {
+            get {
+                return ResourceManager.GetString("order-details-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ordering.
+        /// </summary>
+        public static string ordering {
+            get {
+                return ResourceManager.GetString("ordering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orders.
+        /// </summary>
+        public static string orders {
+            get {
+                return ResourceManager.GetString("orders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment confirmed..
+        /// </summary>
+        public static string payment_confirmed {
+            get {
+                return ResourceManager.GetString("payment-confirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Previous Orders.
+        /// </summary>
+        public static string previous_orders {
+            get {
+                return ResourceManager.GetString("previous-orders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price €.
+        /// </summary>
+        public static string price {
+            get {
+                return ResourceManager.GetString("price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ratings.
+        /// </summary>
+        public static string rating {
+            get {
+                return ResourceManager.GetString("rating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to results.
+        /// </summary>
+        public static string results {
+            get {
+                return ResourceManager.GetString("results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Review Description.
+        /// </summary>
+        public static string review_description {
+            get {
+                return ResourceManager.GetString("review-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Review Title.
+        /// </summary>
+        public static string review_title {
+            get {
+                return ResourceManager.GetString("review-title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string search {
+            get {
+                return ResourceManager.GetString("search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to See Less.
+        /// </summary>
+        public static string see_less {
+            get {
+                return ResourceManager.GetString("see-less", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to See More.
+        /// </summary>
+        public static string see_more {
+            get {
+                return ResourceManager.GetString("see-more", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shopping Cart.
+        /// </summary>
+        public static string shopping_cart {
+            get {
+                return ResourceManager.GetString("shopping-cart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Events.
+        /// </summary>
+        public static string show_events {
+            get {
+                return ResourceManager.GetString("show-events", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Price  €.
+        /// </summary>
+        public static string total_price {
+            get {
+                return ResourceManager.GetString("total-price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wish List.
+        /// </summary>
+        public static string wishlist {
+            get {
+                return ResourceManager.GetString("wishlist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have a total of.
+        /// </summary>
+        public static string wishlist_total_part_1 {
+            get {
+                return ResourceManager.GetString("wishlist-total-part-1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to artifacts in your wishlist..
+        /// </summary>
+        public static string wishlist_total_part_2 {
+            get {
+                return ResourceManager.GetString("wishlist-total-part-2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Written by: .
+        /// </summary>
+        public static string written_by {
+            get {
+                return ResourceManager.GetString("written-by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Rating.
+        /// </summary>
+        public static string your_rating {
+            get {
+                return ResourceManager.GetString("your-rating", resourceCulture);
             }
         }
     }

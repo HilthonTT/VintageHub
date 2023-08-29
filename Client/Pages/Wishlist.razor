@@ -1,11 +1,12 @@
 ﻿@page "/Wishlist"
+@inject IStringLocalizer<Resource> Localizer
 @inject IWishlistEndpoint WishlistEndpoint
 @inject IUserEndpoint UserEndpoint
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<PageTitle>Wishlist</PageTitle>
+<PageTitle>@Localizer["wishlist"]</PageTitle>
 
 @if (isLoading is false)
 {
@@ -15,10 +16,10 @@
             {
                 <MudAlert Severity="Severity.Normal" Variant="Variant.Filled" Elevation="3">
                     <MudText>
-                        Your wishlist is empty.
+                        @Localizer["empty-wishlist"]
                     </MudText>
                     <MudText>
-                        You can view artifact pages and add them into your wishlist.
+                        @Localizer["empty-wishlist-description"]
                     </MudText>
                 </MudAlert>
             }
@@ -41,17 +42,21 @@
                     </MudItem>
                     <MudItem xs="12">
                         <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
-                            Information
+                            @Localizer["information"]
                         </MudText>
                         <MudDivider />
                         <MudItem xs="12">
-                            <MudText>You have a total of @artifacts?.Count artifacts in your wishlist.</MudText>
+                            <MudText>
+                                @Localizer["wishlist-total-part-1"] 
+                                @artifacts?.Count
+                                @Localizer["wishlist-total-part-2"]
+                            </MudText>
                         </MudItem>
                         <MudDivider Class="mt-3 mb-3" />
                         <MudItem xs="12">
                             <MudButton OnClick="ClearWishlistAsync" Variant="Variant.Filled" Color="Color.Primary"
                                        StartIcon="@Icons.Material.Filled.ClearAll" Disabled="IsDisabled()">
-                                Clear Wishlist
+                                @Localizer["clear-wishlist"]
                             </MudButton>
                         </MudItem>
                     </MudItem>

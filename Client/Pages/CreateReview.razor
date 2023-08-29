@@ -1,4 +1,5 @@
 ﻿@page "/Artifact/{Id:int}/Review"
+@inject IStringLocalizer<Resource> Localizer
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject IImageEndpoint ImageEndpoint
 @inject IReviewEndpoint ReviewEndpoint
@@ -7,13 +8,13 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<PageTitle>Create A Review</PageTitle>
+<PageTitle>@Localizer["create-review"]</PageTitle>
 
 @if (noArtifact)
 {
     <MudAlert Severity="Severity.Error" CloseIcon="@Icons.Material.Filled.Close"
               CloseIconClicked="ClosePage" ShowCloseIcon="true">
-        No Artifact found with this ID.
+        @Localizer["not-found"]
     </MudAlert>
 }
 else if (isCreatingReview is false)
@@ -35,8 +36,12 @@ else if (isCreatingReview is false)
                         <CardHeaderContent>
                             <MudText>
                                 <div class="d-flex">
-                                    <MudText Color="Color.Default" Typo="Typo.h6" Class="mx-1">Make A Review for </MudText>
-                                    <MudText Color="Color.Primary" Typo="Typo.h6">'@artifact?.Name'</MudText>
+                                    <MudText Color="Color.Default" Typo="Typo.h6" Class="mx-1">
+                                        @Localizer["make-review-for"] 
+                                    </MudText>
+                                    <MudText Color="Color.Primary" Typo="Typo.h6">
+                                        '@artifact?.Name'
+                                    </MudText>
                                 </div>
                             </MudText>
                         </CardHeaderContent>
@@ -47,28 +52,24 @@ else if (isCreatingReview is false)
                     <MudCardContent>
                         <MudItem xs="12">
                             <MudItem>
-                                <MudTextField @bind-Value="review.Title" T="string" Label="Review Title"
-                                              Required="true" Variant="Variant.Outlined"
-                                              RequiredError="The title is required." 
-                                              Clearable="true"/>
+                                <MudTextField @bind-Value="review.Title" T="string" Label=@Localizer["review-title"]
+                                              Required="true" Variant="Variant.Outlined" Clearable="true"/>
                                 <MudText Color="Color.Error">
                                     <ValidationMessage For="() => review.Title"/>
                                 </MudText>
                             </MudItem>
                             <MudItem>
-                                <MudTextField @bind-Value="review.Description" T="string" Label="Review Description"
-                                              Required="true" Lines="2" Variant="Variant.Outlined"
-                                              RequiredError="The description is required." 
-                                              Clearable="true"/>
+                                <MudTextField @bind-Value="review.Description" T="string" Label=@Localizer["review-description"]
+                                              Required="true" Lines="2" Variant="Variant.Outlined"Clearable="true"/>
                                 <MudText Color="Color.Error">
                                     <ValidationMessage For="() => review.Description"/>
                                 </MudText>
                             </MudItem>
                         </MudItem>
-                        <MudDivider Class="mt-3 mb-3"/>
-                        <MudText Typo="Typo.subtitle1">Your Rating.</MudText>
+                        <MudDivider Class="mt-3 mb-3" />
+                        <MudText Typo="Typo.subtitle1">@Localizer["your-rating"]</MudText>
                         <MudItem xs="12">
-                            <MudRating @bind-SelectedValue="review.Rating" Size="Size.Large" MaxValue="5"></MudRating>
+                            <MudRating @bind-SelectedValue="review.Rating" Size="Size.Large" MaxValue="5" />
                             <MudText Color="Color.Error">
                                 <ValidationMessage For="() => review.Rating"/>
                             </MudText>
@@ -77,7 +78,7 @@ else if (isCreatingReview is false)
                     <MudCardActions>
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
                                     Color="Color.Primary" Class="ml-auto" Size="Size.Large">
-                            Make Review
+                            @Localizer["make-review"]
                         </MudButton>
                     </MudCardActions>
                 </MudCard>
@@ -130,13 +131,13 @@ else
     {
         if (artifact is null)
         {
-            errorMessage = "The artifact is currently unavailable.";
+            errorMessage = Localizer["artifact-unavailable"];
             return true;
         }
 
         if (loggedInUser is null)
         {
-            errorMessage = "It appears there has been an error identifying you. Try logging in again.";
+            errorMessage = Localizer["not-logged-in-make-review"];
             return true;
         }
 

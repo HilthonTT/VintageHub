@@ -1,4 +1,5 @@
 ﻿@page "/Listing"
+@inject IStringLocalizer<Resource> Localizer
 @inject IArtifactEndpoint ArtifactEndpoint
 @inject IEraEndpoint EraEndpoint
 @inject ICategoryEndpoint CategoryEndpoint
@@ -6,18 +7,18 @@
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
-<PageTitle>Artifact Listing</PageTitle>
+<PageTitle>@Localizer["artifact-listing"]</PageTitle>
 
 @if (isLoading is false)
 {
     <MudGrid Class="mb-4">
         <MudItem xs="3">
             <MudItem xs="12">
-                <MudText Typo="Typo.h6">Categories</MudText>
+                <MudText Typo="Typo.h6">@Localizer["categories"]</MudText>
                 <MudDivider Class="mt-3 mb-3" />
                 <MudItem xs="12">
                     <MudButton OnClick="() => OnCategoryClickAsync(null)" Color="@GetSelectedCategory()" Class="mt-1 mb-1">
-                        All
+                        @Localizer["all"]
                     </MudButton>
                 </MudItem>
                 @if (categories is not null)
@@ -33,15 +34,15 @@
                 }
                 <MudButton OnClick="() => ToggleShowAllCategoriesAsync(!showAllCategories)" Color="Color.Secondary"
                            Size="Size.Small">
-                    @((showAllCategories ? "See Less" : "Show More"))
+                    @((showAllCategories ? Localizer["see-less"] : Localizer["see-more"]))
                 </MudButton>
             </MudItem>
             <MudItem xs="12">
-                <MudText Typo="Typo.h6">Eras</MudText>
+                <MudText Typo="Typo.h6">@Localizer["eras"]</MudText>
                 <MudDivider Class="mt-3 mb-3" />
                 <MudItem xs="12">
                     <MudButton OnClick="() => OnEraClickAsync(null)" Color="@GetSelectedEraClass()" Class="mt-1 mb-1">
-                        All
+                       @Localizer["all"]
                     </MudButton>
                 </MudItem>
                 @if (eras is not null)
@@ -57,11 +58,11 @@
                 }
                 <MudButton OnClick="() => ToggleShowAllErasAsync(!showAllEras)" Color="Color.Secondary"
                            Size="Size.Small">
-                    @((showAllEras ? "See Less" : "Show More"))
+                    @((showAllEras ? Localizer["see-less"] : Localizer["see-more"]))
                 </MudButton>
             </MudItem>
             <MudItem xs="12">
-                <MudText Typo="Typo.h6">Rating</MudText>
+                <MudText Typo="Typo.h6">@Localizer["rating"]</MudText>
                 <MudDivider Class="mt-3 mb-3" />
                 <MudVirtualize Items="ratings" Context="r" OverscanCount="10">
                     <MudItem xs="12" @onclick="() => OnRatingClickAsync(r)">
@@ -73,29 +74,29 @@
         <MudItem xs="9">
             <MudItem>
                 <MudText Typo="Typo.h4" Class="fw-bold text-uppercase">
-                    Artifacts
+                    @Localizer["artifacts"]
                 </MudText>
                 <MudText Typo="Typo.body1">
-                    Our Artifacts appear in a wide range of variety! You just have to choose wisely!
+                    @Localizer["artifact-description"]
                 </MudText>
                 <MudDivider />
             </MudItem>
             <MudItem Class="mt-5">
                 <MudGrid>
                     <MudItem xs="10">
-                        <MudText>@artifacts?.Count results</MudText>
+                        <MudText>@artifacts?.Count @Localizer["results"]</MudText>
                     </MudItem>
                     <MudItem xs="2">
                         <MudSelect T="string" ValueChanged="((e) => OnSelectChange(e))"
-                                   Label="Ordering" AnchorOrigin="Origin.BottomCenter">
-                            <MudSelectItem Value="@("rating")">Rating</MudSelectItem>
-                            <MudSelectItem Value="@("price")">Price &euro;</MudSelectItem>
+                                   Label=@Localizer["ordering"] AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem Value="@("rating")">@Localizer["rating"]</MudSelectItem>
+                            <MudSelectItem Value="@("price")">@Localizer["price"]</MudSelectItem>
                         </MudSelect>
                     </MudItem>
                 </MudGrid>
             </MudItem>
             <MudItem>
-                <MudAutocomplete T="string" Label="Search"
+                <MudAutocomplete T="string" Label=@Localizer["search"]
                                  SearchFunc="SearchArtifactsAsync" ResetValueOnEmptyText="true"
                                  ValueChanged="OnSearchInputAsync" />
             </MudItem>
