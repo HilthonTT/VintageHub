@@ -12,3 +12,5 @@ global using Microsoft.Identity.Web.Resource;
 global using Shared.Library.Models;
 global using Shared.Library.Models.NonStored;
 global using Shared.Library.Models.Display;
+global using VintageHub.Server.Constants;
+global using VintageHub.Server;

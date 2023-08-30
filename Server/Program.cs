@@ -1,5 +1,3 @@
-using VintageHub.Server;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.ConfigureServices();
@@ -27,7 +25,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseCors();
+app.UseCors(ConstantVariables.CorsPolicyName);
 
 app.MapRazorPages();
 app.MapControllers();

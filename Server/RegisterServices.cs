@@ -41,7 +41,7 @@ public static class RegisterServices
 
         builder.Services.AddCors(cors =>
         {
-            cors.AddPolicy("AllowClientDomain", options =>
+            cors.AddPolicy(ConstantVariables.CorsPolicyName, options =>
             {
                 options.WithOrigins(allowedDomainsDictionary.Values.ToArray());
             });
