@@ -549,6 +549,9 @@ Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
   <data name="review-title" xml:space="preserve">
     <value>Review Title</value>
   </data>
+  <data name="reviews" xml:space="preserve">
+    <value>Reviews</value>
+  </data>
   <data name="sample-data" xml:space="preserve">
     <value>Sample Data</value>
   </data>

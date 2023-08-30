@@ -86,11 +86,13 @@ else
                                             </div>
                                         </MudItem>
                                         <div class="d-flex justify-content-between">
-                                            <MudRating SelectedValue="(int)artifact?.Rating" ReadOnly="true" />
+                                            <MudRating SelectedValue="(int)artifact?.Rating" ReadOnly="true"
+                                                       Class="mt-auto mb-auto" />
                                             <MudStack Row>
-                                             <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity" />
+                                             <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity"
+                                                              Class="mt-auto mb-auto" />
                                              <MudButton OnClick="AddToCartAsync" StartIcon="@Icons.Material.Filled.AddShoppingCart"
-                                                        Color="Color.Error" Disabled="!canAddToCart">
+                                                        Color="Color.Error" Disabled="!canAddToCart" Class="mt-auto mb-auto">
                                                  @Localizer["add-cart"]
                                              </MudButton>
                                          </MudStack>
@@ -104,11 +106,14 @@ else
                 <MudItem xs="12">
                     <MudPaper Elevation="3" Class="p-2">
                         <MudItem xs="12">
-                            <div class="d-flex justify-content-between">
-                                <MudText Typo="Typo.h5" Class="text-start text-uppercase fw-bold">Reviews [@reviews?.Count]</MudText>
-                                <MudButton OnClick="LoadReviewPage" StartIcon="@Icons.Material.Filled.Create" Color="Color.Warning">
-                                    @Localizer["make-review"]
-                                </MudButton>
+                            <div class="d-flex justify-content-between mb-3 mt-3">
+                                <MudText Typo="Typo.h5" Class="text-start text-uppercase fw-bold mt-auto mb-auto">
+                                    @reviews?.Count @Localizer["reviews"]
+                                </MudText>
+                                <MudFab OnClick="LoadReviewPage" Class="mt-auto mb-auto"
+                                        StartIcon="@Icons.Material.Filled.Create" Color="Color.Warning"
+                                        Label="@Localizer["make-review"]">
+                                </MudFab>
                             </div>
                             <MudDivider />
                         </MudItem>

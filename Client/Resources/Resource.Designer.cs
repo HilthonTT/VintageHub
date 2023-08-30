@@ -1345,6 +1345,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reviews.
+        /// </summary>
+        public static string reviews {
+            get {
+                return ResourceManager.GetString("reviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sample Data.
         /// </summary>
         public static string sample_data {
