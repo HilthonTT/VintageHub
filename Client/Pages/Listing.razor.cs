@@ -88,7 +88,6 @@ public partial class Listing
         await SessionStorage.SetItemAsync(nameof(selectedCategory), selectedCategory);
         await SessionStorage.SetItemAsync(nameof(selectedRating), selectedRating);
         await SessionStorage.SetItemAsync(nameof(sortByPrice), sortByPrice);
-        await SessionStorage.SetItemAsync(nameof(filterDiscounts), filterDiscounts);
     }
 
     private async Task FilterArtifactsAsync()
@@ -155,15 +154,9 @@ public partial class Listing
         await FilterArtifactsAsync();
     }
 
-    private async Task OnSelectChange(string value)
+    private async Task OnFilterButtonClickAsync(bool isPrice)
     {
-        value = value.ToLower();
-        sortByPrice = value switch
-        {
-            "price" => true,
-            "rating" => false,
-            _ => false,
-        };
+        sortByPrice = isPrice;
         await FilterArtifactsAsync();
     }
 
@@ -203,6 +196,16 @@ public partial class Listing
         }
 
         return Color.Default;
+    }
+
+    private Color GetSelectedFiltering(bool isPrice)
+    {
+        if (sortByPrice == isPrice)
+        {
+            return Color.Success;
+        }
+
+        return Color.Primary;
     }
 
     private static int GetRatingValue(Rating rating)

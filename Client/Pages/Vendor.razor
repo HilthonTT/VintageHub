@@ -98,17 +98,20 @@
             </MudItem>
             <MudItem xs="12" Class="mt-5">
                 <MudGrid>
-                    <MudItem xs="10">
-                        <MudText>@artifacts?.Count @Localizer["results"]</MudText>
+                    <MudItem xs="6" Class="mt-auto mb-auto">
+                        <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
+                            @artifacts?.Count @Localizer["results"]
+                        </MudText>
                     </MudItem>
-                    <MudItem xs="2">
-                        <MudSelect T="string" ValueChanged="((e) => OnSelectChange(e))"
-                                   Label="@Localizer["ordering"]" AnchorOrigin="Origin.BottomCenter">
-                            <MudSelectItem Value="@("rating")">@Localizer["rating"]</MudSelectItem>
-                            <MudSelectItem Value="@("price")">@Localizer["price"];</MudSelectItem>
-                        </MudSelect>
-                    </MudItem>
-                </MudGrid>
+                    <MudItem xs="6" Class="d-flex justify-content-end">
+                        <MudStack Row Spacing="3">
+                             <MudFab OnClick="() => OnFilterButtonClickAsync(false)" Color="GetSelectedFiltering(false)"
+                                     StartIcon="@Icons.Material.Filled._18UpRating" Label="Rating" />
+                             <MudFab OnClick="() => OnFilterButtonClickAsync(true)" Color="GetSelectedFiltering(true)"
+                                     StartIcon="@Icons.Material.Filled.PriceCheck" Label="Price" />
+                         </MudStack>
+                     </MudItem>
+                 </MudGrid>
             </MudItem>
             <MudItem xs="12">
                 <MudAutocomplete T="string" Label=@Localizer["search"]

@@ -146,21 +146,15 @@ public partial class Vendor
         await FilterArtifactsAsync();
     }
 
-    private async Task OnSelectChange(string value)
-    {
-        value = value.ToLower();
-        sortByPrice = value switch
-        {
-            "price" => true,
-            "rating" => false,
-            _ => false,
-        };
-        await FilterArtifactsAsync();
-    }
-
     private async Task OnRatingClickAsync(Rating rating)
     {
         selectedRating = rating;
+        await FilterArtifactsAsync();
+    }
+
+    private async Task OnFilterButtonClickAsync(bool isPrice)
+    {
+        sortByPrice = isPrice;
         await FilterArtifactsAsync();
     }
 
@@ -206,6 +200,15 @@ public partial class Vendor
         return Color.Default;
     }
 
+    private Color GetSelectedFiltering(bool isPrice)
+    {
+        if (sortByPrice == isPrice)
+        {
+            return Color.Success;
+        }
+
+        return Color.Primary;
+    }
     private static int GetRatingValue(Rating rating)
     {
         return rating switch
