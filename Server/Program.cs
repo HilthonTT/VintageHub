@@ -27,6 +27,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseCors();
 
 app.MapRazorPages();
 app.MapControllers();

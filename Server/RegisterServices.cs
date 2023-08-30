@@ -2,7 +2,7 @@
 
 public static class RegisterServices
 {
-    public static void ConfigureServices(this WebApplicationBuilder builder)
+    private static void AddAuthentication(this WebApplicationBuilder builder)
     {
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAdB2C"));
@@ -14,11 +14,10 @@ public static class RegisterServices
                 policy.RequireClaim("jobTitle", "Admin");
             });
         });
-            
-        builder.Services.AddControllersWithViews();
-        builder.Services.AddRazorPages();
-        builder.Services.AddMemoryCache();
+    }
 
+    private static void ConfigureMaxRequestSize(this WebApplicationBuilder builder)
+    {
         builder.Services.AddControllers()
             .AddJsonOptions(options =>
             {
@@ -30,6 +29,35 @@ public static class RegisterServices
         {
             options.MaxRequestBodySize = int.MaxValue;
         });
+    }
+
+    private static void ConfigureCors(this WebApplicationBuilder builder)
+    {
+        var allowedDomains = builder.Configuration.GetSection("AllowedDomains");
+
+        var allowedDomainsDictionary = allowedDomains
+            .GetChildren()
+            .ToDictionary(x => x.Key, x => x.Value);
+
+        builder.Services.AddCors(cors =>
+        {
+            cors.AddPolicy("AllowClientDomain", options =>
+            {
+                options.WithOrigins(allowedDomainsDictionary.Values.ToArray());
+            });
+        });
+    }
+
+    public static void ConfigureServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddControllersWithViews();
+        builder.Services.AddRazorPages();
+        builder.Services.AddMemoryCache();
+
+        builder.AddAuthentication();
+        builder.ConfigureMaxRequestSize();
+        builder.ConfigureCors();
+        
 
         builder.Services.AddTransient<IMongoDbConnection, MongoDbConnection>();
         builder.Services.AddTransient<IImageData, ImageData>();
