@@ -4,10 +4,32 @@
 <MudItem xs="3">
     <MudCard Class="m-2">
         <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
-                      Height="200" alt="@Era.Name" />
+                      Height="200" />
         <MudCardContent>
-            <MudText Typo="Typo.h5">@Era.Name</MudText>
-            <MudText Typo="Typo.body2">@Era.Description</MudText>
+            <MudText Typo="Typo.h5">
+                <MudTooltip>
+                    <ChildContent>
+                        @truncatedName
+                    </ChildContent>
+                    <TooltipContent>
+                        <MudText>
+                            @Era.Name
+                        </MudText>
+                    </TooltipContent>
+                </MudTooltip>
+            </MudText>
+            <MudText Typo="Typo.body2">
+                <MudTooltip>
+                    <ChildContent>
+                        @truncatedDescription
+                    </ChildContent>
+                    <TooltipContent>
+                        <MudText>
+                            @Era.Description
+                        </MudText>
+                    </TooltipContent>
+                </MudTooltip>
+            </MudText>
         </MudCardContent>
         <MudCardActions>
             <MudButton OnClick="OnEraClick" Variant="Variant.Text" Color="Color.Primary">

@@ -7,19 +7,37 @@
         <MudCardHeader>
             <CardHeaderContent>
                 <MudText Typo="Typo.subtitle1" Class="fw-bold text-uppercase">
-                    @CartItem.Artifact?.Name
+                    <MudTooltip>
+                        <ChildContent>
+                            @truncatedName
+                        </ChildContent>
+                        <TooltipContent>
+                            <MudText>
+                                @CartItem.Artifact?.Name
+                            </MudText>
+                        </TooltipContent>
+                    </MudTooltip>
                 </MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudIconButton Icon="@Icons.Material.Filled.RemoveShoppingCart" Color="Color.Default" OnClick="RemoveFromCartAsync" />
+                <MudIconButton Icon="@Icons.Material.Filled.RemoveShoppingCart"
+                               Color="Color.Error" OnClick="RemoveFromCartAsync" />
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
                       Height="200" />
         <MudCardContent>
-            <MudText Typo="Typo.body2">
-                @CartItem.Artifact?.Description
-            </MudText>
+            <MudDivider Class="mt-3 mb-3" />
+            <MudTooltip Text="@CartItem.Artifact?.Description">
+                <ChildContent>
+                    @truncatedDescription
+                </ChildContent>
+                <TooltipContent>
+                    <MudText>
+                        @CartItem.Artifact?.Description
+                    </MudText>
+                </TooltipContent>
+            </MudTooltip>
             <MudDivider Class="mt-3 mb-3" />
             <MudText Typo="Typo.body2">
                 @Localizer["quantity"]:

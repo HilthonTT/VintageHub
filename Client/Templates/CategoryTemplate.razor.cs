@@ -7,9 +7,22 @@ public partial class CategoryTemplate
     public CategoryModel Category { get; set; }
 
     private string imageSource = "";
+    private string truncatedName = "";
+    private string truncatedDescription = "";
+
     protected override void OnInitialized()
     {
+        TruncateTexts();
         imageSource = GetImageSource();
+    }
+
+    private void TruncateTexts()
+    {
+        string name = Category.Name;
+        truncatedName = name?.Length > 20 ? string.Concat(name.AsSpan(0, 17), "...") : name;
+
+        string description = Category.Description;
+        truncatedDescription = description?.Length > 75 ? string.Concat(description.AsSpan(0, 72), "...") : description;
     }
 
     private string GetImageSource()

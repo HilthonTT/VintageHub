@@ -7,9 +7,22 @@ public partial class EraTemplate
     public EraModel Era { get; set; }
 
     private string imageSource = "";
+    private string truncatedName = "";
+    private string truncatedDescription = "";
+
     protected override void OnInitialized()
     {
+        TruncateTexts();
         imageSource = GetImageSource();
+    }
+
+    private void TruncateTexts()
+    {
+        string name = Era.Name;
+        truncatedName = name?.Length > 20 ? string.Concat(name.AsSpan(0, 17), "...") : name;
+
+        string description = Era.Description;
+        truncatedDescription = description?.Length > 75 ? string.Concat(description.AsSpan(0, 72), "...") : description;
     }
 
     private string GetImageSource()

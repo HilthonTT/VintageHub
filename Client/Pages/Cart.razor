@@ -12,7 +12,7 @@
 @if (isLoading is false)
 {
     <MudGrid Class="mt-3 mb-5">
-        <MudItem xs="9">
+        <MudItem xs="8">
             @if (shoppingCart?.CartItems?.Count <= 0)
             {
                 <MudAlert Severity="Severity.Normal" Variant="Variant.Filled" Elevation="3">
@@ -34,8 +34,8 @@
                 </MudGrid>
             }
         </MudItem>
-        <MudItem xs="3">
-            <MudPaper Class="p-1">
+        <MudItem xs="4">
+            <MudPaper Class="p-2">
                 <MudGrid>
                     <MudItem xs="12">
                         <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">

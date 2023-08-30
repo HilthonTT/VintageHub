@@ -7,7 +7,30 @@
     <MudCardMedia Image="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/600x400/000/fff" : imageSource))"
                     Height="200" alt="@Artifact?.Name" />
     <MudCardContent>
-        <MudText Typo="Typo.h5">@Artifact?.Name</MudText>
+        <MudText Typo="Typo.h5">
+            <MudTooltip>
+                <ChildContent>
+                    @truncatedName
+                </ChildContent>
+                <TooltipContent>
+                    <MudText>
+                        @Artifact?.Name
+                    </MudText>
+                </TooltipContent>
+            </MudTooltip>
+        </MudText>
+        <MudText Typo="Typo.body2">
+            <MudTooltip Text="@Artifact?.Description">
+                <ChildContent>
+                    @truncatedDescription
+                </ChildContent>
+                <TooltipContent>
+                    <MudText>
+                        @Artifact?.Description
+                    </MudText>
+                </TooltipContent>
+            </MudTooltip>
+        </MudText>
         <MudDivider Class="mt-3 mb-3" />
         <MudRating SelectedValue="@((int)Artifact.Rating)" ReadOnly="true"/>
         <MudText Typo="Typo.body1">@Localizer["price"]: @Artifact?.Price.ToString("0.####")</MudText>

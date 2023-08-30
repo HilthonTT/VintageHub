@@ -18,10 +18,28 @@
                       Height="200" alt="@Artifact?.Name" />
         <MudCardContent>
             <MudText Typo="Typo.h5">
-                @Artifact?.Name
+                <MudTooltip>
+                    <ChildContent>
+                        @truncatedName
+                    </ChildContent>
+                    <TooltipContent>
+                        <MudText>
+                            @Artifact?.Name
+                        </MudText>
+                    </TooltipContent>
+                </MudTooltip>
             </MudText>
             <MudText Typo="Typo.body2">
-                @Artifact?.Description
+                <MudTooltip Text="@Artifact?.Description">
+                    <ChildContent>
+                        @truncatedDescription
+                    </ChildContent>
+                    <TooltipContent>
+                        <MudText>
+                            @Artifact?.Description
+                        </MudText>
+                    </TooltipContent>
+                </MudTooltip>
             </MudText>
             <MudDivider Class="mt-3 mb-3" />
             <MudRating SelectedValue="@((int)Artifact.Rating)" ReadOnly="true" />
