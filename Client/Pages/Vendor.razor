@@ -106,9 +106,9 @@
                     <MudItem xs="6" Class="d-flex justify-content-end">
                         <MudStack Row Spacing="3">
                              <MudFab OnClick="() => OnFilterButtonClickAsync(false)" Color="GetSelectedFiltering(false)"
-                                     StartIcon="@Icons.Material.Filled._18UpRating" Label="Rating" />
+                                     StartIcon="@Icons.Material.Filled._18UpRating" Label="@Localizer["rating"]" />
                              <MudFab OnClick="() => OnFilterButtonClickAsync(true)" Color="GetSelectedFiltering(true)"
-                                     StartIcon="@Icons.Material.Filled.PriceCheck" Label="Price" />
+                                     StartIcon="@Icons.Material.Filled.PriceCheck" Label="@Localizer["price"]" />
                          </MudStack>
                      </MudItem>
                  </MudGrid>

@@ -117,7 +117,517 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="helloworld" xml:space="preserve">
-    <value>Bonjour, le monde.</value>
+  <data name="add-cart" xml:space="preserve">
+    <value>Ajouter au panier</value>
+  </data>
+  <data name="add-wishlist" xml:space="preserve">
+    <value>Ajouter à la liste de souhaits</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="admin-guidelines" xml:space="preserve">
+    <value>Directives d'administration</value>
+  </data>
+  <data name="admin-guidelines-text" xml:space="preserve">
+    <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nullam commodo nulla ac eros lacinia, in lacinia metus luctus.
+Sed eget quam at dui vestibulum rhoncus a eget justo.
+Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
+  </data>
+  <data name="admin-hub" xml:space="preserve">
+    <value>Hub d'administration</value>
+  </data>
+  <data name="all" xml:space="preserve">
+    <value>Tout</value>
+  </data>
+  <data name="artifact" xml:space="preserve">
+    <value>Artefact</value>
+  </data>
+  <data name="artifact-category" xml:space="preserve">
+    <value>Sélectionnez la catégorie appropriée pour l'artefact</value>
+  </data>
+  <data name="artifact-description" xml:space="preserve">
+    <value>Description de l'artefact</value>
+  </data>
+  <data name="artifact-description-description" xml:space="preserve">
+    <value>Décrivez votre artefact en 1000 caractères</value>
+  </data>
+  <data name="artifact-discount-amount" xml:space="preserve">
+    <value>Montant de la remise</value>
+  </data>
+  <data name="artifact-discount-amount-description" xml:space="preserve">
+    <value>Veuillez saisir le montant que vous souhaitez déduire le prix actuel de l'artefact en euros</value>
+  </data>
+  <data name="artifact-era" xml:space="preserve">
+    <value>Sélectionnez l'époque correcte de l'artefact</value>
+  </data>
+  <data name="artifact-listing" xml:space="preserve">
+    <value>Liste des artefacts</value>
+  </data>
+  <data name="artifact-listing-description" xml:space="preserve">
+    <value>Nos artefacts apparaissent dans un large éventail de variétés! Il ne vous reste plus qu'à choisir judicieusement !</value>
+  </data>
+  <data name="artifact-name" xml:space="preserve">
+    <value>Nom de l'artefact</value>
+  </data>
+  <data name="artifact-name-description" xml:space="preserve">
+    <value>Entrez le nom de l'artefact</value>
+  </data>
+  <data name="artifact-owner" xml:space="preserve">
+    <value>Propriétaire de l'artefact</value>
+  </data>
+  <data name="artifact-owner-description" xml:space="preserve">
+    <value>Sélectionnez le fournisseur que vous représentez</value>
+  </data>
+  <data name="artifact-price-description" xml:space="preserve">
+    <value>Veuillez saisir le prix de l'artefact en euros</value>
+  </data>
+  <data name="artifact-quantity-description" xml:space="preserve">
+    <value>Veuillez entrer la quantité d'artefacts dont vous disposez</value>
+  </data>
+  <data name="artifact-sold" xml:space="preserve">
+    <value>Cet artefact est vendu par :</value>
+  </data>
+  <data name="artifact-unavailable" xml:space="preserve">
+    <value>L'artefact est actuellement indisponible.</value>
+  </data>
+  <data name="artifacts" xml:space="preserve">
+    <value>Artefacts</value>
+  </data>
+  <data name="auth-completing-login" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="auth-completing-login-description" xml:space="preserve">
+    <value>Nous terminons l'enregistrement, veuillez rester patient.</value>
+  </data>
+  <data name="auth-completing-logout" xml:space="preserve">
+    <value>Terminer la déconnexion</value>
+  </data>
+  <data name="auth-completing-logout-description" xml:space="preserve">
+    <value>Nous terminons la déconnexion, veuillez rester patient.</value>
+  </data>
+  <data name="auth-logging" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="auth-logging-description" xml:space="preserve">
+    <value>Vous êtes connecté, restez patient.</value>
+  </data>
+  <data name="auth-login-failed" xml:space="preserve">
+    <value>Echec de la connexion</value>
+  </data>
+  <data name="auth-login-failed-description" xml:space="preserve">
+    <value>Oups, il semble y avoir un problème lors de la connexion. Veuillez réessayer.</value>
+  </data>
+  <data name="auth-logout" xml:space="preserve">
+    <value>Déconnexion</value>
+  </data>
+  <data name="auth-logout-description" xml:space="preserve">
+    <value>Vous êtes maintenant déconnecté.</value>
+  </data>
+  <data name="auth-logout-failed" xml:space="preserve">
+    <value>Echec de la déconnexion</value>
+  </data>
+  <data name="auth-logout-failed-description" xml:space="preserve">
+    <value>Oups, il semble y avoir un problème lors de la déconnexion. Veuillez réessayer.</value>
+  </data>
+  <data name="auth-logout-suceeded" xml:space="preserve">
+    <value>Déconnexion réussie</value>
+  </data>
+  <data name="auth-logout-suceeded-description" xml:space="preserve">
+    <value>Vous êtes maintenant déconnecté.</value>
+  </data>
+  <data name="auth-registering" xml:space="preserve">
+    <value>Enregistrement</value>
+  </data>
+  <data name="auth-registering-description" xml:space="preserve">
+    <value>Vous êtes maintenant inscrit, restez patient.</value>
+  </data>
+  <data name="buyer" xml:space="preserve">
+    <value>Acheteur</value>
+  </data>
+  <data name="call-support" xml:space="preserve">
+    <value>Appelez l'assistance</value>
+  </data>
+  <data name="canceled" xml:space="preserve">
+    <value>Annulé</value>
+  </data>
+  <data name="cart" xml:space="preserve">
+    <value>Charrette</value>
+  </data>
+  <data name="cart-total-part-1" xml:space="preserve">
+    <value>Vous avez un total de </value>
+  </data>
+  <data name="cart-total-part-2" xml:space="preserve">
+    <value>articles dans votre panier.</value>
+  </data>
+  <data name="categories" xml:space="preserve">
+    <value>Catégories</value>
+  </data>
+  <data name="category-unavailable" xml:space="preserve">
+    <value>La catégorie que vous avez fournie n'est actuellement pas disponible.</value>
+  </data>
+  <data name="checkout" xml:space="preserve">
+    <value>Caisse</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>Effacer</value>
+  </data>
+  <data name="clear-wishlist" xml:space="preserve">
+    <value>Effacer la liste de souhaits</value>
+  </data>
+  <data name="close-preview" xml:space="preserve">
+    <value>Fermer l'aperçu</value>
+  </data>
+  <data name="completed" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="confirm-payment" xml:space="preserve">
+    <value>Confirmer le paiement</value>
+  </data>
+  <data name="create-artifact" xml:space="preserve">
+    <value>Créer un artefact</value>
+  </data>
+  <data name="create-artifacts" xml:space="preserve">
+    <value>Créer des artefacts</value>
+  </data>
+  <data name="create-categories" xml:space="preserve">
+    <value>Créer des catégories</value>
+  </data>
+  <data name="create-eras" xml:space="preserve">
+    <value>Créer des époques</value>
+  </data>
+  <data name="create-review" xml:space="preserve">
+    <value>Créer un avis</value>
+  </data>
+  <data name="create-vendor" xml:space="preserve">
+    <value>Créer un fournisseur</value>
+  </data>
+  <data name="create-vendors" xml:space="preserve">
+    <value>Créer des fournisseurs</value>
+  </data>
+  <data name="credit-card-billing-address" xml:space="preserve">
+    <value>Adresse de facturation</value>
+  </data>
+  <data name="credit-card-billing-address-description" xml:space="preserve">
+    <value>Veuillez saisir une adresse de facturation</value>
+  </data>
+  <data name="credit-card-cardholder" xml:space="preserve">
+    <value>Nom du titulaire de la carte</value>
+  </data>
+  <data name="credit-card-cardholder-description" xml:space="preserve">
+    <value>Le nom du titulaire de carte est requis</value>
+  </data>
+  <data name="credit-card-city" xml:space="preserve">
+    <value>Ville</value>
+  </data>
+  <data name="credit-card-city-description" xml:space="preserve">
+    <value>Veuillez entrer une ville</value>
+  </data>
+  <data name="credit-card-country" xml:space="preserve">
+    <value>Pays</value>
+  </data>
+  <data name="credit-card-country-description" xml:space="preserve">
+    <value>Veuillez saisir un pays</value>
+  </data>
+  <data name="credit-card-cvv" xml:space="preserve">
+    <value>CVV</value>
+  </data>
+  <data name="credit-card-cvv-description" xml:space="preserve">
+    <value>Veuillez saisir un code CVV valide</value>
+  </data>
+  <data name="credit-card-error" xml:space="preserve">
+    <value>Quelque chose s'est mal passé dans le processus. Veuillez réessayer plus tard.</value>
+  </data>
+  <data name="credit-card-expiration-description" xml:space="preserve">
+    <value>Veuillez sélectionner une année d'expiration valide</value>
+  </data>
+  <data name="credit-card-expiration-month" xml:space="preserve">
+    <value>Mois d'expiration</value>
+  </data>
+  <data name="credit-card-expiration-month-description" xml:space="preserve">
+    <value>Veuillez sélectionner un mois d'expiration valide</value>
+  </data>
+  <data name="credit-card-expiration-year" xml:space="preserve">
+    <value>Année d'expiration</value>
+  </data>
+  <data name="credit-card-number" xml:space="preserve">
+    <value>Numéro de carte de crédit</value>
+  </data>
+  <data name="credit-card-number-description" xml:space="preserve">
+    <value>Veuillez saisir un numéro de carte de crédit valide</value>
+  </data>
+  <data name="credit-card-postal-code" xml:space="preserve">
+    <value>Code postal</value>
+  </data>
+  <data name="credit-card-postal-code-description" xml:space="preserve">
+    <value>Veuillez entrer un code postal valide</value>
+  </data>
+  <data name="credit-card-state" xml:space="preserve">
+    <value>État</value>
+  </data>
+  <data name="credit-card-state-description" xml:space="preserve">
+    <value>Veuillez saisir un état</value>
+  </data>
+  <data name="customer-service" xml:space="preserve">
+    <value>Service client</value>
+  </data>
+  <data name="customer-service-description-1" xml:space="preserve">
+    <value>Trouvez que vous êtes la réponse à vos questions ici.</value>
+  </data>
+  <data name="customer-service-description-2" xml:space="preserve">
+    <value>Tous les sujets en un clin d'œil !</value>
+  </data>
+  <data name="date-ordered" xml:space="preserve">
+    <value>Date de commande</value>
+  </data>
+  <data name="discounts" xml:space="preserve">
+    <value>Preferentiels</value>
+  </data>
+  <data name="empty-cart" xml:space="preserve">
+    <value>Il semble que vous n'ayez aucun article dans votre liste de panier.</value>
+  </data>
+  <data name="empty-cart-description" xml:space="preserve">
+    <value>Veuillez ajouter des articles à votre liste de panier.</value>
+  </data>
+  <data name="empty-wishlist" xml:space="preserve">
+    <value>Votre liste de souhaits est vide.</value>
+  </data>
+  <data name="empty-wishlist-description" xml:space="preserve">
+    <value>Vous pouvez afficher les pages d'artefacts et les ajouter à votre liste de souhaits.</value>
+  </data>
+  <data name="era-unavailable" xml:space="preserve">
+    <value>L'ère que vous avez fournie est actuellement indisponible.</value>
+  </data>
+  <data name="eras" xml:space="preserve">
+    <value>Époques</value>
+  </data>
+  <data name="error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="error-description" xml:space="preserve">
+    <value>Oups, quelque chose s'est mal passé.</value>
+  </data>
+  <data name="founded-on" xml:space="preserve">
+    <value>Fondée sur : </value>
+  </data>
+  <data name="general-guidelines" xml:space="preserve">
+    <value>Lignes directrices générales</value>
+  </data>
+  <data name="general-guidelines-text" xml:space="preserve">
+    <value>Fusce fermentum facilisis felis, in ullamcorper lectus fermentum a.
+Sed id elit nec nisl malesuada vehicula eu nec dui.
+Integer nec quam vel urna bibendum feugiat.
+Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
+  </data>
+  <data name="hello" xml:space="preserve">
+    <value>Bonjour</value>
+  </data>
+  <data name="home" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+  <data name="image-above-limit" xml:space="preserve">
+    <value>Votre image est supérieure à 5 Mo</value>
+  </data>
+  <data name="information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="learn-more" xml:space="preserve">
+    <value>Pour en savoir plus</value>
+  </data>
+  <data name="load-preview" xml:space="preserve">
+    <value>Aperçu du chargement</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>chargement...</value>
+  </data>
+  <data name="loading-description" xml:space="preserve">
+    <value>Nous sommes en train de charger la page, s'il vous plaît rester patient.</value>
+  </data>
+  <data name="login" xml:space="preserve">
+    <value>Connectez-vous</value>
+  </data>
+  <data name="logout" xml:space="preserve">
+    <value>Déconnexion</value>
+  </data>
+  <data name="make-artifact" xml:space="preserve">
+    <value>Créer un artefact</value>
+  </data>
+  <data name="make-review" xml:space="preserve">
+    <value>Faire un avis</value>
+  </data>
+  <data name="make-review-for" xml:space="preserve">
+    <value>Faire un avis pour </value>
+  </data>
+  <data name="make-vendor" xml:space="preserve">
+    <value>Faire un fournisseur</value>
+  </data>
+  <data name="my-orders" xml:space="preserve">
+    <value>Mes commandes</value>
+  </data>
+  <data name="no-user-found" xml:space="preserve">
+    <value>Aucun utilisateur n'a été trouvé</value>
+  </data>
+  <data name="no-vendor-found" xml:space="preserve">
+    <value>Aucun fournisseur n'a été trouvé</value>
+  </data>
+  <data name="not-allowed" xml:space="preserve">
+    <value>Non autorisé</value>
+  </data>
+  <data name="not-authorized" xml:space="preserve">
+    <value>Non autorisé</value>
+  </data>
+  <data name="not-authorized-description" xml:space="preserve">
+    <value>Vous n'êtes pas autorisé à accéder à cette ressource.</value>
+  </data>
+  <data name="not-found" xml:space="preserve">
+    <value>404 - Introuvable</value>
+  </data>
+  <data name="not-logged-in-make-review" xml:space="preserve">
+    <value>Il semble qu'une erreur vous ait identifié. Réessayez de vous connecter.</value>
+  </data>
+  <data name="open-details" xml:space="preserve">
+    <value>Ouvrir les détails</value>
+  </data>
+  <data name="open-order" xml:space="preserve">
+    <value>Commande ouverte</value>
+  </data>
+  <data name="order-details" xml:space="preserve">
+    <value>Détails de la commande</value>
+  </data>
+  <data name="order-details-description" xml:space="preserve">
+    <value>Détails de la commande Id de commande</value>
+  </data>
+  <data name="order-listing" xml:space="preserve">
+    <value>Liste des commandes</value>
+  </data>
+  <data name="ordering" xml:space="preserve">
+    <value>Classement</value>
+  </data>
+  <data name="orders" xml:space="preserve">
+    <value>Les commandes</value>
+  </data>
+  <data name="our-artifacts" xml:space="preserve">
+    <value>Nos artefacts</value>
+  </data>
+  <data name="page-not-found" xml:space="preserve">
+    <value>Page introuvable</value>
+  </data>
+  <data name="page-not-found-description" xml:space="preserve">
+    <value>La page que vous recherchez a peut-être été supprimée si son nom a changé.</value>
+  </data>
+  <data name="payment-confirmed" xml:space="preserve">
+    <value>Paiement confirmé.</value>
+  </data>
+  <data name="previous-orders" xml:space="preserve">
+    <value>Mes commandes précédentes</value>
+  </data>
+  <data name="price" xml:space="preserve">
+    <value>Prix €</value>
+  </data>
+  <data name="product-information-support" xml:space="preserve">
+    <value>Informations sur le produit</value>
+  </data>
+  <data name="quantity" xml:space="preserve">
+    <value>Quantité</value>
+  </data>
+  <data name="rating" xml:space="preserve">
+    <value>évaluations</value>
+  </data>
+  <data name="refund-return-support" xml:space="preserve">
+    <value>Retours et remboursements</value>
+  </data>
+  <data name="results" xml:space="preserve">
+    <value>résultats</value>
+  </data>
+  <data name="review-description" xml:space="preserve">
+    <value>Description de la revue</value>
+  </data>
+  <data name="review-title" xml:space="preserve">
+    <value>Titre de la revue</value>
+  </data>
+  <data name="reviews" xml:space="preserve">
+    <value>Critiques</value>
+  </data>
+  <data name="sample-data" xml:space="preserve">
+    <value>Exemples de données</value>
+  </data>
+  <data name="search" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="see-less" xml:space="preserve">
+    <value>Voir moins</value>
+  </data>
+  <data name="see-more" xml:space="preserve">
+    <value>Voir plus</value>
+  </data>
+  <data name="shipping-support" xml:space="preserve">
+    <value>Assistance à l'expédition</value>
+  </data>
+  <data name="shopping-cart" xml:space="preserve">
+    <value>Caddie</value>
+  </data>
+  <data name="show-events" xml:space="preserve">
+    <value>Afficher les événements</value>
+  </data>
+  <data name="technical-assistance-support" xml:space="preserve">
+    <value>Assistance technique</value>
+  </data>
+  <data name="technical-support" xml:space="preserve">
+    <value>Soutien technique</value>
+  </data>
+  <data name="total-price" xml:space="preserve">
+    <value>Prix total €</value>
+  </data>
+  <data name="user-unavailable" xml:space="preserve">
+    <value>L'utilisateur que vous avez fourni est actuellement indisponible.</value>
+  </data>
+  <data name="vendor" xml:space="preserve">
+    <value>Fournisseur</value>
+  </data>
+  <data name="vendor-date-founded" xml:space="preserve">
+    <value>Date de fondation</value>
+  </data>
+  <data name="vendor-date-founded-description" xml:space="preserve">
+    <value>Fournissez la date de fondation du fournisseur</value>
+  </data>
+  <data name="vendor-description" xml:space="preserve">
+    <value>Description du fournisseur</value>
+  </data>
+  <data name="vendor-description-description" xml:space="preserve">
+    <value>Décrivez le fournisseur. Qui sont-ils? Que font-ils? etc...</value>
+  </data>
+  <data name="vendor-name" xml:space="preserve">
+    <value>Nom du fournisseur</value>
+  </data>
+  <data name="vendor-name-description" xml:space="preserve">
+    <value>Entrez le nom du fournisseur</value>
+  </data>
+  <data name="vendor-owner" xml:space="preserve">
+    <value>Propriétaire du fournisseur</value>
+  </data>
+  <data name="vendor-owner-description" xml:space="preserve">
+    <value>Select the owner of the vendor</value>
+  </data>
+  <data name="vendors" xml:space="preserve">
+    <value>Sélectionnez le propriétaire du fournisseur</value>
+  </data>
+  <data name="wishlist" xml:space="preserve">
+    <value>Liste de souhaits</value>
+  </data>
+  <data name="wishlist-total-part-1" xml:space="preserve">
+    <value>Vous avez un total de </value>
+  </data>
+  <data name="wishlist-total-part-2" xml:space="preserve">
+    <value>artefacts dans votre liste de souhaits.</value>
+  </data>
+  <data name="written-by" xml:space="preserve">
+    <value>Ecrit par:</value>
+  </data>
+  <data name="your-rating" xml:space="preserve">
+    <value>Votre note</value>
   </data>
 </root>

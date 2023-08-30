@@ -27,35 +27,31 @@
     <MudItem xs="12" Class="mt-2">
         <MudPaper Class="pa-3 rounded" Elevation="5">
             <MudGrid>
-                <MudItem xs="6">
+                <MudItem xs="4">
                     <div class="d-flex justify-content-start">
                         <MudStack Row="true" Spacing="3">
-                            <MudButton StartIcon="@Icons.Material.Filled.List"
-                                       OnClick="LoadWishListPage">
-                                @Localizer["wishlist"]
-                            </MudButton>
+                            <MudFab StartIcon="@Icons.Material.Filled.List"
+                                    OnClick="LoadWishListPage" Label="@Localizer["wishlist"]"
+                                    Color="Color.Dark" />
                         </MudStack>
                     </div>
                 </MudItem>
-                <MudItem xs="6">
+                <MudItem xs="8">
                     <div class="d-flex justify-content-end">
                         <MudStack Row="true" Spacing="3">
-                            <MudButton StartIcon="@Icons.Material.Filled.Discount"
-                                       OnClick="LoadDiscountPage">
-                                @Localizer["discounts"]
-                            </MudButton>
-                            <MudButton StartIcon="@Icons.Material.Filled.Shop"
-                                       OnClick="LoadOrdersPage">
-                                @Localizer["my-orders"]
-                            </MudButton>
-                            <MudButton StartIcon="@Icons.Material.Filled.DesignServices"
-                                       OnClick="LoadCustomerServicePage">
-                                @Localizer["customer-service"]
-                            </MudButton>
-                            <MudButton StartIcon="@Icons.Material.Filled.Language"
-                                       OnClick="LoadLanguageDialogAsync">
-                                @Localizer["language"]
-                            </MudButton>
+                            <MudFab StartIcon="@Icons.Material.Filled.Discount"
+                                    OnClick="LoadDiscountPage" Label="@Localizer["discounts"]"
+                                    Color="Color.Dark" />
+                            <MudFab StartIcon="@Icons.Material.Filled.Shop"
+                                    OnClick="LoadOrdersPage" Label="@Localizer["my-orders"]"
+                                    Color="Color.Dark" />
+
+                            <MudFab StartIcon="@Icons.Material.Filled.DesignServices"
+                                    OnClick="LoadCustomerServicePage" Label="@Localizer["customer-service"]"
+                                    Color="Color.Dark" />
+                            <MudFab StartIcon="@Icons.Material.Filled.Language"
+                                    OnClick="LoadLanguageDialogAsync"
+                                    Color="Color.Dark" Label="@Localizer["language"]" />
                         </MudStack>
                     </div>
                 </MudItem>
