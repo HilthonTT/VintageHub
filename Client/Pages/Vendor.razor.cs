@@ -187,7 +187,7 @@ public partial class Vendor
                 { x => x.LoggedInUser, loggedInUser }
             };
 
-            await DialogService.ShowAsync<DeleteVendor>("Delete Vendor", parameters);
+            await DialogService.ShowAsync<DeleteVendor>($"Delete Vendor {vendor?.Name}", parameters);
         }
     }
 

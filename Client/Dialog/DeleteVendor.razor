@@ -4,24 +4,27 @@
 
 <MudDialog Options="options">
     <DialogContent>
-        <MudItem>
-            <MudText>
-                Are you sure you really want to delete your vendor?
-            </MudText>
-            <MudText>
-                This action is not reversible. The vendor will be gone forever.
-            </MudText>
-        </MudItem>
-        <MudDivider Class="mt-3 mb-3" />
-        <MudItem>
-            <MudTextField @bind-Value="typedVendorName" Immediate="true" />
-            @if (string.IsNullOrWhiteSpace(errorMessage) is false)
-            {
-                <MudAlert Severity="Severity.Error">
-                    @errorMessage
-                </MudAlert>
-            }
-        </MudItem>
+        <MudContainer MaxWidth="MaxWidth.Medium">
+            <MudItem>
+                <MudText>
+                    Are you sure you really want to delete your vendor?
+                </MudText>
+                <MudText>
+                    This action is not reversible. The vendor will be gone forever.
+                </MudText>
+            </MudItem>
+            <MudDivider Class="mt-3 mb-3" />
+            <MudItem>
+                <MudTextField @bind-Value="typedVendorName" Placeholder="Enter vendor's name"
+                              Immediate="true" Variant="Variant.Filled" />
+                @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+                {
+                    <MudAlert Severity="Severity.Error" Class="mt-2">
+                        @errorMessage
+                    </MudAlert>
+                }
+            </MudItem>
+        </MudContainer>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel" Variant="Variant.Filled"
@@ -35,84 +38,4 @@
     </DialogActions>
 </MudDialog>
 
-@code {
-    [CascadingParameter]
-    public MudDialogInstance MudDialog { get; set; }
 
-    [Parameter]
-    public VendorDisplayModel Vendor { get; set; }
-
-    [Parameter]
-    public UserModel LoggedInUser { get; set; }
-
-    private bool isAllowed = false;
-    private string typedVendorName = "";
-    private string errorMessage = "";
-    private DialogOptions options = new()
-        {
-            ClassBackground = "dialog-backdrop",
-            CloseButton = true,
-            CloseOnEscapeKey = true,
-        };
-
-    protected override void OnInitialized()
-    {
-        isAllowed = IsAllowed();
-        if (isAllowed is false)
-        {
-            Cancel();
-        }
-    }
-
-    private async Task DeleteVendorAsync()
-    {
-        if (CanNotDelete())
-        {
-            return;
-        }
-
-        if (isAllowed is false)
-        {
-            Snackbar.Add("You do have not have permission to delete the vendor.", Severity.Error);
-            Cancel();
-        }
-        else
-        {
-            await VendorEndpoint.DeleteVendorAsync(new VendorModel(Vendor));
-            Snackbar.Add($"Successfully deleted vendor {Vendor.Id}", Severity.Success);
-            ClosePage();
-        }
-    }
-
-    private bool CanNotDelete()
-    {
-        if (string.IsNullOrWhiteSpace(typedVendorName) || 
-            typedVendorName == Vendor?.Name)
-        {
-            errorMessage = "The vendor name you've provided is incorrect.";
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool IsAllowed()
-    {
-        if (Vendor?.Owner?.Id == LoggedInUser?.Id)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private void Cancel()
-    {
-        MudDialog?.Close();
-    }
-
-    private void ClosePage()
-    {
-        Navigation.NavigateTo("/");
-    }
-}
