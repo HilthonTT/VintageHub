@@ -12,11 +12,12 @@
         </MudText>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">
+        <MudButton OnClick="Cancel" Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Cancel">
             Cancel
         </MudButton>
         <MudButton Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete"
-            Variant="Variant.Filled" OnClick="DeleteArtifactAsync">
+                   Variant="Variant.Filled" OnClick="DeleteArtifactAsync">
             Delete
         </MudButton>
     </DialogActions>
@@ -32,29 +33,55 @@
     [Parameter]
     public UserModel LoggedInUser { get; set; }
 
+    private bool isAllowed = false;
     private DialogOptions options = new()
+        {
+            ClassBackground = "dialog-backdrop",
+            CloseButton = true,
+            CloseOnEscapeKey = true,
+        };
+
+    protected override void OnInitialized()
     {
-        ClassBackground = "dialog-backdrop",
-        CloseButton = true,
-        CloseOnEscapeKey = true,
-    };
+        isAllowed = IsAllowed();
+        if (isAllowed is false)
+        {
+            Cancel();
+        }
+    }
 
     private async Task DeleteArtifactAsync()
     {
         if (Artifact?.Vendor.OwnerUserId != LoggedInUser?.Id)
         {
-            Snackbar.Add("You do not have permission to delete the artifact.");
+            Snackbar.Add("You do not have permission to delete the artifact.", Severity.Error);
+            Cancel();
         }
         else
         {
             await ArtifactEndpoint.DeleteArtifactAsync(new ArtifactModel(Artifact));
             Snackbar.Add($"Successfully deleted artifact {Artifact.Id}", Severity.Success);
-            Navigation.NavigateTo("/");
+            ClosePage();
         }
+    }
+
+    private bool IsAllowed()
+    {
+        if (Artifact?.Vendor.OwnerUserId != LoggedInUser?.Id)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private void Cancel()
     {
-        MudDialog.Close();
+        MudDialog?.Close();
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
     }
 }

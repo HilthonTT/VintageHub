@@ -38,7 +38,7 @@ public partial class ShoppingCartItemTemplate
 
     private void CalculateTotalPrice()
     {
-        totalPrice = CartItem.Artifact.Price * CartItem.Quantity;
+        totalPrice = CartItem.Artifact.FinalPrice * CartItem.Quantity;
     }
 
     private void OpenDetails()

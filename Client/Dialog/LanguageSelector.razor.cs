@@ -2,6 +2,9 @@ namespace VintageHub.Client.Dialog;
 
 public partial class LanguageSelector
 {
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; }
+
     private DialogOptions options = new()
     {
         ClassBackground = "dialog-backdrop",
@@ -26,5 +29,10 @@ public partial class LanguageSelector
                 Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
             }
         }
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Close();
     }
 }

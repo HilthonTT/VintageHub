@@ -6,6 +6,10 @@
 @inject IEraEndpoint EraEndpoint
 @inject IImageEndpoint ImageEndpoint
 @inject ISessionStorageService SessionStorage
+@inject IUserEndpoint UserEndpoint
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @attribute [Authorize]
 
@@ -84,9 +88,16 @@
                 </MudItem>
                 <MudDivider Class="mt-3 mb-3" />
                 <MudItem>
-                    <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
-                        @vendor?.Name
-                    </MudText>
+                    <MudItem Class="d-flex justify-content-between">
+                        <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
+                            @vendor?.Name
+                        </MudText>
+                        @if (vendor?.Owner?.Id == loggedInUser?.Id)
+                        {
+                            <MudFab Color="Color.Error" OnClick="SendDeleteRequestAsync"
+                                    StartIcon="@Icons.Material.Filled.Delete" Label="Delete Vendor" />
+                        }
+                    </MudItem>
                     <MudText Typo="Typo.subtitle1">
                         @vendor?.Description
                     </MudText>
@@ -112,22 +123,22 @@
                          </MudStack>
                      </MudItem>
                  </MudGrid>
-            </MudItem>
-            <MudItem xs="12">
-                <MudAutocomplete T="string" Label=@Localizer["search"]
-                                 SearchFunc="SearchArtifactsAsync" ResetValueOnEmptyText="true"
-                                 ValueChanged="OnSearchInputAsync" />
-            </MudItem>
-            <MudDivider Class="mb-3 mt-3" />
-            <MudItem xs="12">
-                <div class="d-flex justify-content-end">
-                    <MudButton OnClick="LoadListingPage"
-                               Variant="Variant.Filled" Color="Color.Primary">
-                        @Localizer["see-more"]
-                    </MudButton>
-                </div>
-                <MudGrid>
-                    @if (artifacts is not null)
+             </MudItem>
+             <MudItem xs="12">
+                 <MudAutocomplete T="string" Label=@Localizer["search"]
+                                  SearchFunc="SearchArtifactsAsync" ResetValueOnEmptyText="true"
+                                  ValueChanged="OnSearchInputAsync" />
+             </MudItem>
+             <MudDivider Class="mb-3 mt-3" />
+             <MudItem xs="12">
+                 <div class="d-flex justify-content-end">
+                     <MudButton OnClick="LoadListingPage"
+                                Variant="Variant.Filled" Color="Color.Primary">
+                         @Localizer["see-more"]
+                     </MudButton>
+                 </div>
+                 <MudGrid>
+                     @if (artifacts is not null)
                     {
                         <MudVirtualize Items="artifacts" Context="a">
                             <ArtifactTemplate @key="a.Id" Artifact="a" />

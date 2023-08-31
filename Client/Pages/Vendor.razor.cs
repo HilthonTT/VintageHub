@@ -5,6 +5,7 @@ public partial class Vendor
     [Parameter]
     public int Id { get; set; }
 
+    private UserModel loggedInUser;
     private VendorDisplayModel vendor;
     private List<ArtifactDisplayModel> artifacts;
     private List<CategoryModel> categories;
@@ -27,8 +28,10 @@ public partial class Vendor
         Rating.FourStar,
         Rating.FiveStar,
     };
+
     protected override async Task OnInitializedAsync()
     {
+        loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
         vendor = await VendorEndpoint.GetVendorByIdAsync(Id);
         if (vendor is not null)
         {
@@ -168,6 +171,24 @@ public partial class Vendor
     {
         showAllEras = showAll;
         await LoadErasAsync();
+    }
+
+    private async Task SendDeleteRequestAsync()
+    {
+        if (loggedInUser?.Id != vendor?.Owner?.Id)
+        {
+            Snackbar.Add("You do not have permission to delete the vendor.");
+        }
+        else
+        {
+            var parameters = new DialogParameters<DeleteVendor>
+            {
+                { x => x.Vendor, vendor },
+                { x => x.LoggedInUser, loggedInUser }
+            };
+
+            await DialogService.ShowAsync<DeleteVendor>("Delete Vendor", parameters);
+        }
     }
 
     private void ClosePage()

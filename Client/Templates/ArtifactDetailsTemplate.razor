@@ -33,7 +33,7 @@
         </MudText>
         <MudDivider Class="mt-3 mb-3" />
         <MudRating SelectedValue="@((int)Artifact.Rating)" ReadOnly="true"/>
-        <MudText Typo="Typo.body1">@Localizer["price"]: @Artifact?.Price.ToString("0.####")</MudText>
+        <MudText Typo="Typo.body1">@Localizer["price"]: @Artifact?.FinalPrice.ToString("0.####")</MudText>
         <MudText Typo="Typo.body2">@Artifact.Vendor?.Name</MudText>
     </MudCardContent>
     <MudCardActions>
