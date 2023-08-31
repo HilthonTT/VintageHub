@@ -1,6 +1,6 @@
 ﻿global using Blazored.LocalStorage;
 global using Blazored.SessionStorage;
-global using Shared.Library.Endpoints.Web.Interfaces;
+global using Shared.Library.Endpoints.Interfaces;
 global using Shared.Library.Endpoints;
 global using Shared.Library.LocalStorage.Interfaces;
 global using Shared.Library.LocalStorage;
@@ -15,7 +15,7 @@ global using VintageHub.Client;
 global using System.ComponentModel.DataAnnotations;
 global using Shared.Library.Models;
 global using Microsoft.AspNetCore.Components.Authorization;
-global using Shared.Library.Endpoints.Web;
+global using Shared.Library.Endpoints;
 global using Microsoft.AspNetCore.Components;
 global using Shared.Library.Models.Display;
 global using Shared.Library.Models.NonStored;

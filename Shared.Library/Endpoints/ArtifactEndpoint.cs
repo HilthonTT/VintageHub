@@ -1,14 +1,17 @@
-﻿namespace Shared.Library.Endpoints.Web;
-public class UserEndpoint : IUserEndpoint
+﻿using Shared.Library.Endpoints.Interfaces;
+
+namespace Shared.Library.Endpoints;
+public class ArtifactEndpoint : IArtifactEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
-    private const string CacheName = nameof(UserEndpoint);
+    private const string CacheName = nameof(ArtifactEndpoint);
     private const string CacheNameSingle = $"{CacheName}_Single";
-    private const string ApiEndpointUrl = "api/User";
+    private const string CacheNameVendorPrefix = $"{CacheName}_Vendor_";
+    private const string ApiEndpointUrl = "api/Artifact";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
-    public UserEndpoint(
+    public ArtifactEndpoint(
         HttpClient httpClient,
         ILocalStorage localStorage)
     {
@@ -16,20 +19,21 @@ public class UserEndpoint : IUserEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<UserModel>> GetAllUsersAsync()
+    public async Task<List<ArtifactDisplayModel>> GetAllArtifactsAsync()
     {
         try
         {
-            var output = await _localStorage.GetAsync<List<UserModel>>(CacheName);
+            var output = await _localStorage.GetAsync<List<ArtifactDisplayModel>>(CacheName);
+
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<UserModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<ArtifactDisplayModel>>();
                 await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
             }
- 
+
             return output;
         }
         catch (AccessTokenNotAvailableException ex)
@@ -44,27 +48,26 @@ public class UserEndpoint : IUserEndpoint
         return null;
     }
 
-    public async Task<UserModel> GetUserByIdAsync(int id)
+    public async Task<ArtifactDisplayModel> GetArtifactByIdAsync(int id)
     {
         try
         {
-            var cachedUsers = await _localStorage.GetAsync<List<UserModel>>(CacheNameSingle);
-            cachedUsers ??= new();
+            var cachedArtifacts = await _localStorage.GetAsync<List<ArtifactDisplayModel>>(CacheNameSingle);
+            cachedArtifacts ??= new();
 
-            var cachedUser = cachedUsers.FirstOrDefault(x => x.Id == id);
-
-            if (cachedUser is null)
+            var cachedArtifact = cachedArtifacts.FirstOrDefault(a => a.Id == id);
+            if (cachedArtifact is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
-                cachedUser = await response.Content.ReadFromJsonAsync<UserModel>();
+                cachedArtifact = await response.Content.ReadFromJsonAsync<ArtifactDisplayModel>();
 
-                cachedUsers.Add(cachedUser);
-                await _localStorage.SetAsync(CacheNameSingle, cachedUsers, CacheTimeSpan);
+                cachedArtifacts.Add(cachedArtifact);
+                await _localStorage.SetAsync(CacheNameSingle, cachedArtifacts, CacheTimeSpan);
             }
-      
-            return cachedUser;
+
+            return cachedArtifact;
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -78,15 +81,23 @@ public class UserEndpoint : IUserEndpoint
         return null;
     }
 
-    public async Task<UserModel> GetUserByOidAsync(string oid)
+    public async Task<List<ArtifactDisplayModel>> GetArtifactByVendorIdAsync(int vendorId)
     {
         try
         {
-            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/auth/{oid}");
-            response.EnsureSuccessStatusCode();
+            string key = CacheNameVendorPrefix + vendorId;
+            var output = await _localStorage.GetAsync<List<ArtifactDisplayModel>>(key);
 
-            var user = await response.Content.ReadFromJsonAsync<UserModel>();
-            return user;
+            if (output is null)
+            {
+                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/vendor/{vendorId}");
+                response.EnsureSuccessStatusCode();
+
+                output = await response.Content.ReadFromJsonAsync<List<ArtifactDisplayModel>>();
+                await _localStorage.SetAsync(key, output, CacheTimeSpan);
+            }
+
+            return output;
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -100,14 +111,14 @@ public class UserEndpoint : IUserEndpoint
         return null;
     }
 
-    public async Task<UserModel> InsertUserAsync(UserModel user)
+    public async Task<ArtifactDisplayModel> InsertArtifactAsync(ArtifactModel artifact)
     {
         try
         {
-            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, user);
+            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, artifact);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<UserModel>();
+            return await response.Content.ReadFromJsonAsync<ArtifactDisplayModel>();
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -121,11 +132,11 @@ public class UserEndpoint : IUserEndpoint
         return null;
     }
 
-    public async Task UpdateUserAsync(UserModel user)
+    public async Task UpdateArtifactAsync(ArtifactModel artifact)
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, user);
+            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, artifact);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -138,11 +149,11 @@ public class UserEndpoint : IUserEndpoint
         }
     }
 
-    public async Task DeleteUserAsync(UserModel user)
+    public async Task DeleteArtifactAsync(ArtifactModel artifact)
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{user.Id}");
+            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{artifact.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)

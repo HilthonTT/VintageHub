@@ -1,4 +1,6 @@
-﻿namespace Shared.Library.Endpoints.Web;
+﻿using Shared.Library.Endpoints.Interfaces;
+
+namespace Shared.Library.Endpoints;
 public class CategoryEndpoint : ICategoryEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
@@ -88,7 +90,7 @@ public class CategoryEndpoint : ICategoryEndpoint
         }
         catch (AccessTokenNotAvailableException ex)
         {
-            ex.Redirect();;
+            ex.Redirect(); ;
         }
         catch (Exception ex)
         {

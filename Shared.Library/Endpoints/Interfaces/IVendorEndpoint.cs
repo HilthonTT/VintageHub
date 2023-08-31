@@ -1,4 +1,4 @@
-﻿namespace Shared.Library.Endpoints.Web.Interfaces;
+﻿namespace Shared.Library.Endpoints.Interfaces;
 public interface IVendorEndpoint
 {
     Task DeleteVendorAsync(VendorModel vendor);

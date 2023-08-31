@@ -1,4 +1,6 @@
-﻿namespace Shared.Library.Endpoints.Web;
+﻿using Shared.Library.Endpoints.Interfaces;
+
+namespace Shared.Library.Endpoints;
 public class OrderEndpoint : IOrderEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);

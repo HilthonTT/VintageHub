@@ -1,7 +1,4 @@
-﻿using Microsoft.JSInterop;
-using System.Globalization;
-
-namespace VintageHub.Client;
+﻿namespace VintageHub.Client;
 
 public static class RegisterServices
 {

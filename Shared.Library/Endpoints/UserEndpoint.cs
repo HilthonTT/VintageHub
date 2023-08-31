@@ -1,15 +1,16 @@
-﻿namespace Shared.Library.Endpoints.Web;
-public class VendorEndpoint : IVendorEndpoint
+﻿using Shared.Library.Endpoints.Interfaces;
+
+namespace Shared.Library.Endpoints;
+public class UserEndpoint : IUserEndpoint
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
-    private const string CacheName = nameof(VendorEndpoint);
-    private const string CacheNamePrefix = $"{CacheName}_";
+    private const string CacheName = nameof(UserEndpoint);
     private const string CacheNameSingle = $"{CacheName}_Single";
-    private const string ApiEndpointUrl = "api/Vendor";
+    private const string ApiEndpointUrl = "api/User";
     private readonly HttpClient _httpClient;
     private readonly ILocalStorage _localStorage;
 
-    public VendorEndpoint(
+    public UserEndpoint(
         HttpClient httpClient,
         ILocalStorage localStorage)
     {
@@ -17,17 +18,17 @@ public class VendorEndpoint : IVendorEndpoint
         _localStorage = localStorage;
     }
 
-    public async Task<List<VendorDisplayModel>> GetAllVendorsAsync()
+    public async Task<List<UserModel>> GetAllUsersAsync()
     {
         try
         {
-            var output = await _localStorage.GetAsync<List<VendorDisplayModel>>(CacheName);
+            var output = await _localStorage.GetAsync<List<UserModel>>(CacheName);
             if (output is null)
             {
                 using var response = await _httpClient.GetAsync(ApiEndpointUrl);
                 response.EnsureSuccessStatusCode();
 
-                output = await response.Content.ReadFromJsonAsync<List<VendorDisplayModel>>();
+                output = await response.Content.ReadFromJsonAsync<List<UserModel>>();
                 await _localStorage.SetAsync(CacheName, output, CacheTimeSpan);
             }
 
@@ -45,25 +46,27 @@ public class VendorEndpoint : IVendorEndpoint
         return null;
     }
 
-    public async Task<VendorDisplayModel> GetVendorByIdAsync(int id)
+    public async Task<UserModel> GetUserByIdAsync(int id)
     {
         try
         {
-            var cachedVendors = await _localStorage.GetAsync<List<VendorDisplayModel>>(CacheNameSingle);
-            cachedVendors ??= new();
+            var cachedUsers = await _localStorage.GetAsync<List<UserModel>>(CacheNameSingle);
+            cachedUsers ??= new();
 
-            var cachedVendor = cachedVendors.FirstOrDefault(v => v.Id == id);
-            if (cachedVendor is null)
+            var cachedUser = cachedUsers.FirstOrDefault(x => x.Id == id);
+
+            if (cachedUser is null)
             {
                 using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/{id}");
                 response.EnsureSuccessStatusCode();
 
-                cachedVendor = await response.Content.ReadFromJsonAsync<VendorDisplayModel>();
-                cachedVendors.Add(cachedVendor);
-                await _localStorage.SetAsync(CacheNameSingle, cachedVendors, CacheTimeSpan);
+                cachedUser = await response.Content.ReadFromJsonAsync<UserModel>();
+
+                cachedUsers.Add(cachedUser);
+                await _localStorage.SetAsync(CacheNameSingle, cachedUsers, CacheTimeSpan);
             }
 
-            return cachedVendor;
+            return cachedUser;
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -77,44 +80,15 @@ public class VendorEndpoint : IVendorEndpoint
         return null;
     }
 
-    public async Task<List<VendorDisplayModel>> GetAllVendorsByOwnerUserIdAsync(int ownerUserId)
+    public async Task<UserModel> GetUserByOidAsync(string oid)
     {
         try
         {
-            string key = CacheNamePrefix + ownerUserId;
-            var vendors = await _localStorage.GetAsync<List<VendorDisplayModel>>(key);
-
-            if (vendors?.Count <= 0)
-            {
-                using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/owner/{ownerUserId}");
-                response.EnsureSuccessStatusCode();
-
-                vendors = await response.Content.ReadFromJsonAsync<List<VendorDisplayModel>>();
-                await _localStorage.SetAsync(key, vendors, CacheTimeSpan);
-            }
-
-            return vendors;
-        }
-        catch (AccessTokenNotAvailableException ex)
-        {
-            ex.Redirect();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-
-        return null;
-    }
-
-    public async Task<VendorDisplayModel> InsertVendorAsync(VendorModel vendor)
-    {
-        try
-        {
-            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, vendor);
+            using var response = await _httpClient.GetAsync($"{ApiEndpointUrl}/auth/{oid}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<VendorDisplayModel>();
+            var user = await response.Content.ReadFromJsonAsync<UserModel>();
+            return user;
         }
         catch (AccessTokenNotAvailableException ex)
         {
@@ -128,11 +102,32 @@ public class VendorEndpoint : IVendorEndpoint
         return null;
     }
 
-    public async Task UpdateVendorAsync(VendorModel vendor)
+    public async Task<UserModel> InsertUserAsync(UserModel user)
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, vendor);
+            using var response = await _httpClient.PostAsJsonAsync(ApiEndpointUrl, user);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<UserModel>();
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
+    }
+
+    public async Task UpdateUserAsync(UserModel user)
+    {
+        try
+        {
+            using var response = await _httpClient.PutAsJsonAsync(ApiEndpointUrl, user);
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)
@@ -145,11 +140,11 @@ public class VendorEndpoint : IVendorEndpoint
         }
     }
 
-    public async Task DeleteVendorAsync(VendorModel vendor)
+    public async Task DeleteUserAsync(UserModel user)
     {
         try
         {
-            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{vendor.Id}");
+            using var response = await _httpClient.DeleteAsync($"{ApiEndpointUrl}/{user.Id}");
             response.EnsureSuccessStatusCode();
         }
         catch (AccessTokenNotAvailableException ex)

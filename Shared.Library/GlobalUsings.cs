@@ -16,7 +16,7 @@ global using Shared.Library.DataAccess.MongoDb.Interfaces;
 global using Shared.Library.Models.NonStored;
 global using Shared.Library.LocalStorage.Interfaces;
 global using Blazored.LocalStorage;
-global using Shared.Library.Endpoints.Web.Interfaces;
+global using Shared.Library.Endpoints.Interfaces;
 global using System.Net.Http.Json;
 global using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 global using Microsoft.AspNetCore.Components.Forms;

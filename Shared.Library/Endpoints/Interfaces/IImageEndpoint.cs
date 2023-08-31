@@ -1,6 +1,4 @@
-﻿
-
-namespace Shared.Library.Endpoints.Web.Interfaces;
+﻿namespace Shared.Library.Endpoints.Interfaces;
 public interface IImageEndpoint
 {
     Task DeleteImageAsync(string objectId);
