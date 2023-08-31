@@ -114,11 +114,13 @@ public class SqlDataAccess : ISqlDataAccess
                     var secondaryObject = objects[i];
 
                     var propertyName = secondaryObject.GetType().Name;
-                    propertyName = propertyName.EndsWith("Model") ? propertyName.Substring(0, propertyName.Length - "Model".Length) : propertyName;
 
-                    var propertyInfo = typeof(T).GetProperty(propertyName);
+                    var properties = typeof(T).GetProperties();
+                    var selectedProperty = properties.FirstOrDefault(
+                        x => x.PropertyType == secondaryObject.GetType() || 
+                        x.Name == secondaryObject.GetType().Name);
 
-                    propertyInfo?.SetValue(primaryEntity, secondaryObject);
+                    selectedProperty?.SetValue(primaryEntity, secondaryObject);
                 }
 
                 return primaryEntity;
