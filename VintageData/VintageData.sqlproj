@@ -69,11 +69,6 @@
     <Folder Include="dbo\Stored Procedures\Review" />
     <Folder Include="dbo\Stored Procedures\Vendor" />
     <Folder Include="dbo\Scripts" />
-    <Folder Include="dbo\Scripts\User" />
-    <Folder Include="dbo\Scripts\Artifact" />
-    <Folder Include="dbo\Scripts\Order" />
-    <Folder Include="dbo\Scripts\OrderDetails" />
-    <Folder Include="dbo\Scripts\Review" />
     <Folder Include="dbo\Stored Procedures\Wishlist" />
   </ItemGroup>
   <ItemGroup>
@@ -126,11 +121,6 @@
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_Update.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Artifact\spArtifact_GetByVendorIdDetailed.sql" />
-    <Build Include="dbo\Scripts\Artifact\Index_Artifact_Id.sql" />
-    <Build Include="dbo\Scripts\OrderDetails\Index_OrderDetails_Id.sql" />
-    <Build Include="dbo\Scripts\Order\Index_Order_Id.sql" />
-    <Build Include="dbo\Scripts\User\Index_User_Id.sql" />
-    <Build Include="dbo\Scripts\User\Index_User_Oid.sql" />
     <Build Include="dbo\Stored Procedures\Review\spReview_GetByIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByOwnerId.sql" />
     <Build Include="dbo\Tables\Wishlist.sql" />
@@ -149,10 +139,18 @@
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\Vendor\spVendor_GetByOwnerIdDetailed.sql" />
     <Build Include="dbo\Stored Procedures\OrderDetails\spOrderDetails_GetByOrderIdDetails.sql" />
+    <Build Include="dbo\Scripts\Index_Artifact_Id.sql" />
+    <Build Include="dbo\Scripts\Index_Order_Id.sql" />
+    <Build Include="dbo\Scripts\Index_OrderDetails_Id.sql" />
+    <None Include="dbo\Scripts\Index_Review_Id.sql" />
+    <Build Include="dbo\Scripts\Index_User_Id.sql" />
+    <Build Include="dbo\Scripts\Index_User_Oid.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dbo\Scripts\Review\Index_Review_Id.sql" />
     <None Include="Publish Locations\VintageData.publish.xml" />
+    <None Include="dbo\Scripts\Index_Era_Id.sql" />
+    <None Include="dbo\Scripts\Index_Category_Id.sql" />
+    <None Include="dbo\Scripts\Index_Vendor_Id.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VintageData.refactorlog" />

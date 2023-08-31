@@ -1,0 +1,1 @@
+﻿CREATE UNIQUE INDEX IX_Category_Id ON [dbo].[Category] ([Id]);

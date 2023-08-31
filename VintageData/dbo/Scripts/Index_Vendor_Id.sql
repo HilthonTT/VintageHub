@@ -1,0 +1,1 @@
+﻿CREATE UNIQUE INDEX IX_Vendor_Id ON [dbo].[Vendor] ([Id]);
