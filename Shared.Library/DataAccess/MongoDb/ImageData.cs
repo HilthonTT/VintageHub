@@ -26,7 +26,8 @@ public class ImageData : IImageData
         var output = _cache.Get<byte[]>(objectId);
         if (output is null)
         {
-            output = await _connection.Bucket.DownloadAsBytesAsync(new ObjectId(objectId));
+            var id = new ObjectId(objectId);
+            output = await _connection.Bucket.DownloadAsBytesAsync(id);
 
             _cache.Set(objectId, output, CacheTimeSpan);
         }
@@ -38,6 +39,7 @@ public class ImageData : IImageData
     {
         _cache.Remove(objectId);
 
-        await _connection.Bucket.DeleteAsync(objectId);
+        var id = new ObjectId(objectId);
+        await _connection.Bucket.DeleteAsync(id);
     }
 }

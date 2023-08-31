@@ -3,6 +3,7 @@ public class ArtifactData : IArtifactData
 {
     private static readonly TimeSpan CacheTimeSpan = TimeSpan.FromMinutes(30);
     private readonly ISqlDataAccess _sql;
+    private readonly IImageData _imageData;
     private readonly IMemoryCache _cache;
     private const string CacheName = nameof(ArtifactData);
     private const string CacheNamePrefix = $"{CacheName}_";
@@ -10,9 +11,11 @@ public class ArtifactData : IArtifactData
 
     public ArtifactData(
         ISqlDataAccess sql,
+        IImageData imageData,
         IMemoryCache cache)
     {
         _sql = sql;
+        _imageData = imageData;
         _cache = cache;
     }
 
@@ -138,10 +141,13 @@ public class ArtifactData : IArtifactData
 
     public async Task<int> DeleteArtifactAsync(int id)
     {
+        var artifact = await GetArtifactByIdAsync(id);
         RemoveArtifactCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
         var parameters = ParameterHelper.GetIdParameters(id);
+
+        await _imageData.DeleteImageAsync(artifact.ImageId);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }

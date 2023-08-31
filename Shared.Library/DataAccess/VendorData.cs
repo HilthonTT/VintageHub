@@ -6,13 +6,16 @@ public class VendorData : IVendorData
     private const string CacheNamePrefix = $"{CacheName}_";
     private const string CacheNameUserPrefix = $"{CacheName}_User_";
     private readonly ISqlDataAccess _sql;
+    private readonly IImageData _imageData;
     private readonly IMemoryCache _cache;
 
     public VendorData(
         ISqlDataAccess sql,
+        IImageData imageData,
         IMemoryCache cache)
     {
         _sql = sql;
+        _imageData = imageData;
         _cache = cache;
     }
 
@@ -128,10 +131,13 @@ public class VendorData : IVendorData
 
     public async Task<int> DeleteVendorAsync(int id)
     {
+        var vendor = await GetVendorByIdAsync(id);
         RemoveVendorCache(id);
 
         string storedProcedure = GetStoredProcedure("Delete");
         var parameters = ParameterHelper.GetIdParameters(id);
+
+        await _imageData.DeleteImageAsync(vendor.ImageId);
 
         return await _sql.SaveDataAsync(storedProcedure, parameters);
     }
