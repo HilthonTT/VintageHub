@@ -1390,6 +1390,24 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select your language.
+        /// </summary>
+        public static string select_language {
+            get {
+                return ResourceManager.GetString("select-language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select your prefered language.
+        /// </summary>
+        public static string select_language_helper {
+            get {
+                return ResourceManager.GetString("select-language-helper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shipping Assistance.
         /// </summary>
         public static string shipping_support {

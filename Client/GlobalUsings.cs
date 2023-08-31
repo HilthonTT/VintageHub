@@ -27,3 +27,5 @@ global using VintageHub.Client.Enums;
 global using MudBlazor;
 global using System.Collections.ObjectModel;
 global using Microsoft.AspNetCore.Components.Forms;
+global using Microsoft.JSInterop;
+global using System.Globalization;

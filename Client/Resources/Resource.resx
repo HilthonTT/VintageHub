@@ -564,6 +564,12 @@ Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
   <data name="see-more" xml:space="preserve">
     <value>See More</value>
   </data>
+  <data name="select-language" xml:space="preserve">
+    <value>Select your language</value>
+  </data>
+  <data name="select-language-helper" xml:space="preserve">
+    <value>Select your prefered language</value>
+  </data>
   <data name="shipping-support" xml:space="preserve">
     <value>Shipping Assistance</value>
   </data>
