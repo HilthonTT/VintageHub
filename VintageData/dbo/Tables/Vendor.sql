@@ -6,5 +6,5 @@
     [Description] NVARCHAR(1000) NOT NULL, 
     [ImageId] NVARCHAR(MAX) NOT NULL, 
     [DateFounded] DATETIME2 NOT NULL, 
-    CONSTRAINT [FK_Vendor_ToUser] FOREIGN KEY ([OwnerUserId]) REFERENCES [User]([Id]), 
+    CONSTRAINT [FK_Vendor_ToUser] FOREIGN KEY ([OwnerUserId]) REFERENCES [User]([Id]) ON DELETE SET NULL, 
 )

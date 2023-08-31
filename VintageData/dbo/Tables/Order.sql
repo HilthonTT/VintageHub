@@ -6,5 +6,5 @@
     [IsComplete] BIT NOT NULL DEFAULT 0, 
     [IsCanceled] BIT NOT NULL DEFAULT 0, 
     [DateOrdered] DATETIME2 NOT NULL DEFAULT GETUTCDATE(), 
-    CONSTRAINT [FK_Order_ToUser] FOREIGN KEY ([UserId]) REFERENCES [User]([Id])
+    CONSTRAINT [FK_Order_ToUser] FOREIGN KEY ([UserId]) REFERENCES [User]([Id]) ON DELETE SET NULL
 )
