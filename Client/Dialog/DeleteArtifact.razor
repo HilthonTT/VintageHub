@@ -1,0 +1,60 @@
+﻿@inject IArtifactEndpoint ArtifactEndpoint
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<MudDialog Options="options">
+    <DialogContent>
+        <MudText>
+            Are you sure you really want to delete this artifact?
+        </MudText>
+        <MudText>
+            This action is not reversible. The artifact will be gone forever.
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">
+            Cancel
+        </MudButton>
+        <MudButton Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete"
+            Variant="Variant.Filled" OnClick="DeleteArtifactAsync">
+            Delete
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ArtifactDisplayModel Artifact { get; set; }
+
+    [Parameter]
+    public UserModel LoggedInUser { get; set; }
+
+    private DialogOptions options = new()
+    {
+        ClassBackground = "dialog-backdrop",
+        CloseButton = true,
+        CloseOnEscapeKey = true,
+    };
+
+    private async Task DeleteArtifactAsync()
+    {
+        if (Artifact?.Vendor.OwnerUserId != LoggedInUser?.Id)
+        {
+            Snackbar.Add("You do not have permission to delete the artifact.");
+        }
+        else
+        {
+            await ArtifactEndpoint.DeleteArtifactAsync(new ArtifactModel(Artifact));
+            Snackbar.Add($"Successfully deleted artifact {Artifact.Id}", Severity.Success);
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Close();
+    }
+}

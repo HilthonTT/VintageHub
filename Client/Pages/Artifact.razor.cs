@@ -44,6 +44,7 @@ public partial class Artifact
             canAddToCart = CanAddToCart(artifact);
             artifactImageSource = ImageEndpoint.GetImage(artifact.ImageId);
             vendorImageSource = ImageEndpoint.GetImage(artifact.Vendor.ImageId);
+
             canAddToWishlist = await CanAddToWishlistAsync();
             reviews = await ReviewEndpoint.GetAllReviewsByArtifactId(artifact.Id);
         }
@@ -57,6 +58,24 @@ public partial class Artifact
         randomArtifacts = artifacts.OrderBy(x => random.Next()).Take(25).ToList();
     }
 
+    private async Task SendDeletingRequestAsync()
+    {
+        if (loggedInUser?.Id != artifact?.Vendor?.OwnerUserId)
+        {
+            Snackbar.Add("You do not have permission to delete the artifact.");
+        }
+        else
+        {
+            var parameters = new DialogParameters<DeleteArtifact>
+            {
+                { x => x.Artifact, artifact },
+                { x => x.LoggedInUser, loggedInUser }
+            };
+
+            await DialogService.ShowAsync<DeleteArtifact>("Delete Artifact", parameters);
+        }
+    }
+    
     private void LoadReviewPage()
     {
         if (artifact is null)

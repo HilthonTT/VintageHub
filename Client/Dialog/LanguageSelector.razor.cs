@@ -2,13 +2,13 @@ namespace VintageHub.Client.Dialog;
 
 public partial class LanguageSelector
 {
-    [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; }
-
     private DialogOptions options = new()
     {
-        ClassBackground = "dialog-backdrop"
+        ClassBackground = "dialog-backdrop",
+        CloseButton = true,
+        CloseOnEscapeKey = true,
     };
+
     private List<CultureInfo> cultures = new()
     {
         new("en-US"),

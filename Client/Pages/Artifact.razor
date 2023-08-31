@@ -6,6 +6,8 @@
 @inject IReviewEndpoint ReviewEndpoint
 @inject IShoppingCartStorage ShoppingCartStorage
 @inject IWishlistEndpoint WishlistEndpoint
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @attribute [Authorize]
@@ -36,12 +38,13 @@ else
                         <MudCardHeader>
                             <MudItem xs="12">
                                 <div class="d-flex justify-content-between">
-                                    <div class="d-flex">
+                                    <div class="d-flex mt-auto mb-auto">
                                         <MudAvatar>
                                             <MudImage Src="@(string.IsNullOrWhiteSpace(vendorImageSource)? "https://dummyimage.com/600x400/000/fff": vendorImageSource)"
                                                       Alt="@artifact?.Vendor?.Name" />
                                         </MudAvatar>
-                                        <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
+                                        <MudText Typo="Typo.body1"
+                                                 Class="fw-bold text-uppercase mt-auto mb-auto mx-1">
                                             @Localizer["vendor"]:
                                             <MudButton OnClick="LoadVendorPage"
                                                        StartIcon="@Icons.Material.Filled.BrandingWatermark" Color="Color.Primary">
@@ -62,9 +65,20 @@ else
                                 @if (artifact is not null)
                                 {
                                     <MudItem xs="12">
-                                        <MudText Typo="Typo.h5">
-                                            @artifact?.Name
-                                        </MudText>
+                                        <MudItem Class="mt-auto mb-auto">
+                                            <div class="d-flex justify-content-between">
+                                                <MudText Typo="Typo.h5" Class="mt-auto mb-auto">
+                                                    @artifact?.Name
+                                                </MudText>
+                                                @if (loggedInUser?.Id == artifact?.Vendor.OwnerUserId)
+                                                {
+                                                    <MudFab Color="Color.Error"
+                                                            OnClick="SendDeletingRequestAsync"
+                                                            Label="Delete"
+                                                            StartIcon="@Icons.Material.Filled.Delete" />
+                                                }
+                                            </div>
+                                        </MudItem>
                                         <MudDivider Class="mt-3 mb-3" />
                                         <MudText Typo="Typo.body1">
                                             @artifact?.Description
@@ -77,14 +91,6 @@ else
                                         </MudText>
                                     </MudItem>
                                     <MudItem xs="12">
-                                        <MudItem>
-                                            <div class="d-flex justify-content-end">
-                                                <MudButton OnClick="AddToWishlistAsync" StartIcon="@Icons.Material.Filled.List"
-                                                           Color="Color.Secondary" Disabled="!canAddToWishlist">
-                                                    @Localizer["add-wishlist"]
-                                                </MudButton>
-                                            </div>
-                                        </MudItem>
                                         <div class="d-flex justify-content-between">
                                             <MudRating SelectedValue="(int)artifact?.Rating" ReadOnly="true"
                                                        Class="mt-auto mb-auto" />
@@ -94,6 +100,10 @@ else
                                              <MudButton OnClick="AddToCartAsync" StartIcon="@Icons.Material.Filled.AddShoppingCart"
                                                         Color="Color.Error" Disabled="!canAddToCart" Class="mt-auto mb-auto">
                                                  @Localizer["add-cart"]
+                                             </MudButton>
+                                             <MudButton OnClick="AddToWishlistAsync" StartIcon="@Icons.Material.Filled.List"
+                                                        Color="Color.Secondary" Disabled="!canAddToWishlist">
+                                                 @Localizer["add-wishlist"]
                                              </MudButton>
                                          </MudStack>
                                      </div>
