@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Review]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [UserId] INT NOT NULL, 
-    [ArtifactId] INT NOT NULL, 
+    [UserId] INT NULL, 
+    [ArtifactId] INT NULL, 
     [Title] NVARCHAR(100) NOT NULL, 
     [Description] NVARCHAR(1000) NOT NULL, 
     [Rating] INT NOT NULL , 

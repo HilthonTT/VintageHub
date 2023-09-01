@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Vendor]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [OwnerUserId] INT NOT NULL,
+    [OwnerUserId] INT NULL,
     [Name] NVARCHAR(100) NOT NULL, 
     [Description] NVARCHAR(1000) NOT NULL, 
     [ImageId] NVARCHAR(MAX) NOT NULL, 

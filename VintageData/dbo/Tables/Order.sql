@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Order]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [UserId] INT NOT NULL, 
+    [UserId] INT NULL, 
     [TotalPrice] MONEY NOT NULL, 
     [IsComplete] BIT NOT NULL DEFAULT 0, 
     [IsCanceled] BIT NOT NULL DEFAULT 0, 
