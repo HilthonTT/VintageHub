@@ -65,7 +65,6 @@ public class ArtifactController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "Admin")]
     public async Task<ActionResult<ArtifactDisplayModel>> InsertArtifactAsync([FromBody] ArtifactModel artifact)
     {
         if (ModelState.IsValid is false)
@@ -88,7 +87,6 @@ public class ArtifactController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> UpdateArtifactAsync([FromBody] ArtifactModel artifact)
     {
         if (ModelState.IsValid is false)
@@ -98,7 +96,7 @@ public class ArtifactController : ControllerBase
 
         try
         {
-            await _artifactData.InsertArtifactAsync(artifact);
+            await _artifactData.UpdateArtifactAsync(artifact);
             return NoContent();
         }
         catch (Exception ex)
