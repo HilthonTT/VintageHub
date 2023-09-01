@@ -70,13 +70,19 @@ else
                                                 <MudText Typo="Typo.h5" Class="mt-auto mb-auto">
                                                     @artifact?.Name
                                                 </MudText>
-                                                @if (loggedInUser?.Id == artifact?.Vendor.OwnerUserId)
-                                                {
-                                                    <MudFab Color="Color.Error"
-                                                            OnClick="SendDeletingRequestAsync"
-                                                            Label="Delete"
-                                                            StartIcon="@Icons.Material.Filled.Delete" />
-                                                }
+                                                <MudItem>
+                                                    @if (loggedInUser?.Id == artifact?.Vendor.OwnerUserId)
+                                                    {
+                                                        <MudFab Color="Color.Primary"
+                                                                OnClick="SendEditRequestAsync"
+                                                                Label="Edit"
+                                                                StartIcon="@Icons.Material.Filled.Edit" />
+                                                        <MudFab Color="Color.Error"
+                                                                OnClick="SendDeletingRequestAsync"
+                                                                Label="Delete"
+                                                                StartIcon="@Icons.Material.Filled.Delete" />
+                                                    }
+                                                </MudItem>
                                             </div>
                                         </MudItem>
                                         <MudDivider Class="mt-3 mb-3" />

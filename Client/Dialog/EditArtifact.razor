@@ -1,0 +1,271 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IArtifactEndpoint ArtifactEndpoint
+@inject ICategoryEndpoint CategoryEndpoint
+@inject IImageEndpoint ImageEndpoint
+@inject IEraEndpoint EraEndpoint
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<EditForm Model="model" OnValidSubmit="EditArtifactAsync">
+    <DataAnnotationsValidator />
+    <MudDialog Options="options">
+        <DialogContent>
+            @if (isCurrentlyEditing)
+            {
+                <LoadingTemplate ShowDescription="false"/>
+            }
+            else
+            {
+                <MudItem>
+                    <MudText>
+                        You are now currently editing your artifact.
+                    </MudText>
+                    <MudText>
+                        When submitting the edit, you will not visually see the change yet.
+                    </MudText>
+                </MudItem>
+                <MudDivider Class="mt-3 mb-3" />
+                <MudItem>
+                    <MudGrid Justify="Justify.Center">
+                        <MudAvatar Size="Size.Large" Style="width: 7rem; height: 7rem;">
+                            <MudImage Width="200" Height="200"
+                                      Src="@((string.IsNullOrWhiteSpace(modelImageSource) ? imageSource : modelImageSource))" />
+                        </MudAvatar>
+                    </MudGrid>
+                </MudItem>
+                <MudItem>
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudTextField @bind-Value="model.Name" Label=@Localizer["artifact-name"]
+                                          Required="true" Variant="Variant.Outlined" Clearable="true"
+                                          HelperText=@Localizer["artifact-name-description"] />
+                            <MudText Color="Color.Error">
+                                <ValidationMessage For="() => model.Name" />
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField @bind-Value="model.Description" Label=@Localizer["artifact-description"]
+                                          Lines="2" Required="true" Variant="Variant.Outlined" Clearable="true"
+                                          HelperText=@Localizer["artifact-description-description"] />
+                            <MudText Color="Color.Error">
+                                <ValidationMessage For="() => model.Description" />
+                            </MudText>
+                        </MudItem>
+
+                        <MudItem xs="6">
+                            <MudNumericField @bind-Value="model.Quantity" Label=@Localizer["quantity"] Required="true"
+                                             Variant="Variant.Outlined" Clearable="true"
+                                             HelperText=@Localizer["artifact-quantity-description"] />
+                            <MudText Color="Color.Error">
+                                <ValidationMessage For="() => model.Quantity" />
+                            </MudText>
+                        </MudItem>
+
+                        <MudItem xs="6">
+                            <MudNumericField @bind-Value="model.Price" Label=@Localizer["price"] Required="true"
+                                             Variant="Variant.Outlined" Clearable="true"
+                                             HelperText=@Localizer["artifact-price-description"] />
+                            <MudText Color="Color.Error">
+                                <ValidationMessage For="() => model.Price" />
+                            </MudText>
+                        </MudItem>
+
+                        <MudItem xs="12">
+                            <MudNumericField @bind-Value="model.DiscountAmount" Label=@Localizer["artifact-discount-amount"]
+                                             Required="true"
+                                             Variant="Variant.Outlined" Clearable="true"
+                                             HelperText=@Localizer["artifact-discount-amount-description"] />
+                            <MudText Color="Color.Error">
+                                <ValidationMessage For="() => model.DiscountAmount" />
+                            </MudText>
+                        </MudItem>
+
+                        <MudItem xs="6">
+                            <MudSelect @bind-Value="model.CategoryId" Variant="Variant.Outlined"
+                                       Label=@Localizer["artifact-category"]>
+                                @if (categories is not null)
+                                {
+                                    <MudVirtualize Items="categories" Context="c" OverscanCount="10">
+                                        <MudSelectItem @key="@c.Id" Value="@c.Id">@c.Name</MudSelectItem>
+                                    </MudVirtualize>
+                                }
+                            </MudSelect>
+                            <MudText Color="Color.Error">
+                                <ValidationMessage For="() => model.CategoryId" />
+                            </MudText>
+                        </MudItem>
+
+                        <MudItem xs="6">
+                            <MudSelect @bind-Value="model.EraId" Variant="Variant.Outlined"
+                                       Label=@Localizer["artifact-era"]>
+                                @if (eras is not null)
+                                {
+                                    <MudVirtualize Items="eras" Context="e" OverscanCount="10">
+                                        <MudSelectItem @key="@e.Id" Value="@e.Id">@e.Name</MudSelectItem>
+                                    </MudVirtualize>
+                                }
+                            </MudSelect>
+                            <MudText Color="Color.Error">
+                                <ValidationMessage For="() => model.EraId" />
+                            </MudText>
+                        </MudItem>
+                        <MudItem Class="d-flex justify-content-start">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="HandleImageSelected" Context="file_context">
+                                <ButtonTemplate>
+                                    <MudFab HtmlTag="label"
+                                            Color="Color.Secondary"
+                                            StartIcon="@Icons.Material.Filled.Image"
+                                            Label="Load picture"
+                                            for="@file_context" />
+                                </ButtonTemplate>
+                            </MudFileUpload>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            }
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Filled" ButtonType="ButtonType.Button"
+                       StartIcon="@Icons.Material.Filled.Cancel">
+                Cancel
+            </MudButton>
+            <MudButton Color="Color.Success" StartIcon="@Icons.Material.Filled.Edit"
+                       Variant="Variant.Filled" ButtonType="ButtonType.Submit">
+                Edit
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ArtifactDisplayModel Artifact { get; set; }
+
+    [Parameter]
+    public UserModel LoggedInUser { get; set; }
+
+    private CreateArtifactModel model = new();
+    private List<CategoryModel> categories;
+    private List<EraModel> eras;
+    private IBrowserFile selectedImageFile;
+    private bool isAllowed = false;
+    private bool isCurrentlyEditing = false;
+    private string modelImageSource = "";
+    private string imageSource = "";
+    private DialogOptions options = new()
+        {
+            ClassBackground = "dialog-backdrop",
+            CloseButton = true,
+            CloseOnEscapeKey = true,
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        isAllowed = IsAllowed();
+        if (isAllowed is false)
+        {
+            Cancel();
+        }
+
+        imageSource = ImageEndpoint.GetImage(Artifact.ImageId);
+        MapModelToArtifact();
+
+        categories = await CategoryEndpoint.GetAllCategoriesAsync();
+        eras = await EraEndpoint.GetAllErasAsync();
+    }
+
+    private async Task EditArtifactAsync()
+    {
+        if (isAllowed is false)
+        {
+            Snackbar.Add("You do not have permission to edit the artifact.", Severity.Error);
+            Cancel();
+        }
+        else
+        {
+            isCurrentlyEditing = true;
+            MapArtifactToModel();
+
+            if (selectedImageFile?.Size > 0)
+            {
+                Artifact.ImageId = await ImageEndpoint.UploadImageAsync(selectedImageFile);
+            }
+
+            await ArtifactEndpoint.UpdateArtifactAsync(new ArtifactModel(Artifact));
+            isCurrentlyEditing = false;
+            Snackbar.Add($"Successfully edited artifact {Artifact.Id}", Severity.Success);
+            Cancel();
+        }
+    }
+
+    private async Task LoadImageSourceAsync()
+    {
+        if (selectedImageFile is null)
+        {
+            return;
+        }
+
+        using var stream = selectedImageFile.OpenReadStream(selectedImageFile.Size);
+        using var memoryStream = new MemoryStream();
+
+        await stream.CopyToAsync(memoryStream);
+        byte[] bytes = memoryStream.ToArray();
+
+        modelImageSource = $"data:{selectedImageFile.ContentType};base64,{Convert.ToBase64String(bytes)}";
+    }
+
+    private async Task HandleImageSelected(IBrowserFile e)
+    {
+        selectedImageFile = e;
+        await LoadImageSourceAsync();
+    }
+
+    private void MapArtifactToModel()
+    {
+        Artifact.Name = model.Name;
+        Artifact.Description = model.Description;
+        Artifact.ImageId = model.ImageId;
+        Artifact.Quantity = model.Quantity;
+        Artifact.Price = model.Price;
+        Artifact.DiscountAmount = model.DiscountAmount;
+        Artifact.Category.Id = model.CategoryId;
+        Artifact.Era.Id = model.EraId;
+        Artifact.Availability = model.Availability;
+    }
+
+    private void MapModelToArtifact()
+    {
+        model.Name = Artifact.Name;
+        model.Description = Artifact.Description;
+        model.ImageId = Artifact.ImageId;
+        model.Quantity = Artifact.Quantity;
+        model.Price = Artifact.Price;
+        model.DiscountAmount = Artifact.DiscountAmount;
+        model.CategoryId = Artifact.Category.Id;
+        model.EraId = Artifact.Era.Id;
+        model.Availability = Artifact.Availability;
+    }
+
+    private bool IsAllowed()
+    {
+        if (Artifact?.Vendor?.OwnerUserId == LoggedInUser?.Id)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void Cancel()
+    {
+        MudDialog?.Close();
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

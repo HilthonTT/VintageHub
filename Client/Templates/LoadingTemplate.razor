@@ -11,9 +11,17 @@
                     @Localizer["loading"]
                 </MudText>
                 <MudText Typo="Typo.subtitle1" Class="mt-1">
-                    @Localizer["loading-description"]
+                    @if (ShowDescription)
+                    {
+                        @Localizer["loading-description"]
+                    }       
                 </MudText>
             </MudItem>
         </MudGrid>
     </MudItem>
 </MudGrid>
+
+@code {
+    [Parameter]
+    public bool ShowDescription { get; set; } = true;
+}

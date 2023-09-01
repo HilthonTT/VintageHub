@@ -3,7 +3,7 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 
-<EditForm Model="model">
+<EditForm Model="model" OnValidSubmit="EditReviewAsync">
     <DataAnnotationsValidator />
     <MudDialog Options="options">
         <DialogContent>
@@ -12,7 +12,7 @@
                     You are now currently editing your review.
                 </MudText>
                 <MudText>
-                    When submitting the edit, you will visually see the change yet.
+                    When submitting the edit, you will not visually see the change yet.
                 </MudText>
             </MudItem>
             <MudDivider Class="mt-3 mb-3" />
@@ -49,7 +49,7 @@
                 Cancel
             </MudButton>
             <MudButton Color="Color.Success" StartIcon="@Icons.Material.Filled.Edit"
-                       Variant="Variant.Filled" OnClick="EditReviewAsync" ButtonType="ButtonType.Submit">
+                       Variant="Variant.Filled" ButtonType="ButtonType.Submit">
                 Edit
             </MudButton>
         </DialogActions>

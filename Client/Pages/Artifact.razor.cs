@@ -75,6 +75,24 @@ public partial class Artifact
             await DialogService.ShowAsync<DeleteArtifact>("Delete Artifact", parameters);
         }
     }
+
+    private async Task SendEditRequestAsync()
+    {
+        if (loggedInUser?.Id != artifact?.Vendor?.OwnerUserId)
+        {
+            Snackbar.Add("You do not have permission to edit the artifact.");
+        }
+        else
+        {
+            var parameters = new DialogParameters<EditArtifact>
+            {
+                { x => x.Artifact, artifact },
+                { x => x.LoggedInUser, loggedInUser }
+            };
+
+            await DialogService.ShowAsync<EditArtifact>("Edit Artifact", parameters);
+        }
+    }
     
     private void LoadReviewPage()
     {
