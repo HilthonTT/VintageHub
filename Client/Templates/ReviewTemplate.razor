@@ -1,19 +1,23 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @inject NavigationManager Navigation
 
 <MudCard Outlined="true" Class="mb-3">
     <MudCardContent>
         <MudGrid>
             <MudItem xs="12">
-                <MudText Typo="Typo.body1">
-                    @Review.Title
-                </MudText>
-                <MudDivider Class="mt-3 mb-3"/>
+                <MudItem Class="d-flex justify-content-between">
+                    <MudText Typo="Typo.body1">
+                        @Review.Title
+                    </MudText>
+                </MudItem>
+                <MudDivider Class="mt-3 mb-3" />
                 <MudText Typo="Typo.body2">
                     @Review.Description
                 </MudText>
                 <MudText Typo="Typo.subtitle1">
-                    @Localizer["written-by"] 
+                    @Localizer["written-by"]
                     @reviewerFullName
                 </MudText>
             </MudItem>
@@ -26,6 +30,11 @@
         <MudButton StartIcon="@Icons.Material.Filled.AdsClick" OnClick="LoadReviewPage">
             @Localizer["learn-more"]
         </MudButton>
+        @if (IsAuthor())
+        {
+            <MudIconButton OnClick="SendEditRequestAsync" Color="Color.Primary"
+                           Icon="@Icons.Material.Filled.Edit" />
+        }
     </MudCardActions>
 </MudCard>
 

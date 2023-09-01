@@ -1,6 +1,21 @@
 ﻿namespace Shared.Library.Models;
 public class ReviewModel
 {
+    public ReviewModel()
+    {
+        
+    }
+
+    public ReviewModel(ReviewDisplayModel review)
+    {
+        Id = review.Id;
+        UserId = review.User.Id;
+        ArtifactId = review.Artifact.Id;
+        Title = review.Title;
+        Description = review.Description;
+        Rating = review.Rating;
+    }
+
     public int Id { get; set; }
 
     [Required]

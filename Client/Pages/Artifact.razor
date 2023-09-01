@@ -131,7 +131,7 @@ else
                             @if (reviews is not null && artifact is not null)
                             {
                                 <MudVirtualize Items="reviews" Context="r" OverscanCount="10">
-                                    <ReviewTemplate @key="r.Id" Review="r" Artifact="artifact" />
+                                    <ReviewTemplate @key="r.Id" Review="r" Artifact="artifact" LoggedInUser="loggedInUser"/>
                                 </MudVirtualize>
                             }
                         </MudItem>

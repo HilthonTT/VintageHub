@@ -1,0 +1,129 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IReviewEndpoint ReviewEndpoint
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<EditForm Model="model">
+    <DataAnnotationsValidator />
+    <MudDialog Options="options">
+        <DialogContent>
+            <MudItem>
+                <MudText>
+                    You are now currently editing your review.
+                </MudText>
+                <MudText>
+                    When submitting the edit, you will visually see the change yet.
+                </MudText>
+            </MudItem>
+            <MudDivider Class="mt-3 mb-3" />
+            <MudItem>
+                <MudItem xs="12">
+                    <MudItem>
+                        <MudTextField @bind-Value="model.Title" T="string" Label=@Localizer["review-title"]
+                                      Required="true" Variant="Variant.Outlined" Clearable="true" />
+                        <MudText Color="Color.Error">
+                            <ValidationMessage For="() => model.Title" />
+                        </MudText>
+                    </MudItem>
+                    <MudItem>
+                        <MudTextField @bind-Value="model.Description" T="string" Label=@Localizer["review-description"]
+                                      Required="true" Lines="2" Variant="Variant.Outlined" Clearable="true" />
+                        <MudText Color="Color.Error">
+                            <ValidationMessage For="() => model.Description" />
+                        </MudText>
+                    </MudItem>
+                    <MudDivider Class="mt-3 mb-3" />
+                    <MudText Typo="Typo.subtitle1">@Localizer["your-rating"]</MudText>
+                    <MudItem>
+                        <MudRating @bind-SelectedValue="model.Rating" Size="Size.Large" MaxValue="5" />
+                        <MudText Color="Color.Error">
+                            <ValidationMessage For="() => model.Rating" />
+                        </MudText>
+                    </MudItem>
+                </MudItem>
+            </MudItem>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Filled" ButtonType="ButtonType.Button"
+                       StartIcon="@Icons.Material.Filled.Cancel">
+                Cancel
+            </MudButton>
+            <MudButton Color="Color.Success" StartIcon="@Icons.Material.Filled.Edit"
+                       Variant="Variant.Filled" OnClick="EditReviewAsync" ButtonType="ButtonType.Submit">
+                Edit
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ReviewDisplayModel Review { get; set; }
+
+    [Parameter]
+    public UserModel LoggedInUser { get; set; }
+
+    private CreateReviewModel model = new();
+    private bool isAllowed = false;
+    private DialogOptions options = new()
+    {
+        ClassBackground = "dialog-backdrop",
+        CloseButton = true,
+        CloseOnEscapeKey = true,
+    };
+
+    protected override void OnInitialized()
+    {
+        isAllowed = IsAllowed();
+        if (isAllowed is false)
+        {
+            Cancel();
+        }
+
+        model.Title = Review.Title;
+        model.Description = Review.Description;
+        model.Rating = Review.Rating;
+    }
+
+    private async Task EditReviewAsync()
+    {
+        if (isAllowed is false)
+        {
+            Snackbar.Add("You do not have permission to edit the review.", Severity.Error);
+            Cancel();
+        }
+        else
+        {
+            Review.Title = model.Title;
+            Review.Description = model.Description;
+            Review.Rating = model.Rating;
+
+            await ReviewEndpoint.UpdateReviewAsync(new ReviewModel(Review));
+            Snackbar.Add($"Successfully edited review {Review.Id}", Severity.Success);
+            Cancel();
+        }
+    }
+
+    private bool IsAllowed()
+    {
+        if (Review?.User.Id == LoggedInUser?.Id)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void Cancel()
+    {
+        MudDialog?.Close();
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+}
