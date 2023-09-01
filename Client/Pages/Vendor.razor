@@ -78,74 +78,82 @@
             </MudItem>
         </MudItem>
         <MudItem xs="9">
-            <MudItem xs="12">
-                <div class="d-flex justify-content-end">
-                    <button @onclick="ClosePage" class="btn btn-close btn-close-white"></button>
-                </div>
-                <MudItem>
-                    <MudImage Src="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/1100x250/000/fff" : imageSource))"
-                              Fluid="true" Alt="@vendor?.Name" />
-                </MudItem>
-                <MudDivider Class="mt-3 mb-3" />
-                <MudItem>
-                    <MudItem Class="d-flex justify-content-between">
-                        <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
-                            @vendor?.Name
-                        </MudText>
-                        @if (vendor?.Owner?.Id == loggedInUser?.Id)
-                        {
-                            <MudFab Color="Color.Error" OnClick="SendDeleteRequestAsync"
-                                    StartIcon="@Icons.Material.Filled.Delete" Label="Delete Vendor" />
-                        }
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudItem Class="d-flex justify-content-end">
+                        <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="ClosePage" />
                     </MudItem>
-                    <MudText Typo="Typo.subtitle1">
-                        @vendor?.Description
-                    </MudText>
-                    <MudDivider Class="mt-3 mb-3" />
-                    <MudText Typo="Typo.subtitle2">
-                        @Localizer["founded-on"] @vendor?.DateFounded
-                    </MudText>
-                </MudItem>
-            </MudItem>
-            <MudItem xs="12" Class="mt-5">
-                <MudGrid>
-                    <MudItem xs="6" Class="mt-auto mb-auto">
-                        <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
-                            @artifacts?.Count @Localizer["results"]
-                        </MudText>
-                    </MudItem>
-                    <MudItem xs="6" Class="d-flex justify-content-end">
-                        <MudStack Row Spacing="3">
-                             <MudFab OnClick="() => OnFilterButtonClickAsync(false)" Color="GetSelectedFiltering(false)"
-                                     StartIcon="@Icons.Material.Filled._18UpRating" Label="@Localizer["rating"]" />
-                             <MudFab OnClick="() => OnFilterButtonClickAsync(true)" Color="GetSelectedFiltering(true)"
-                                     StartIcon="@Icons.Material.Filled.PriceCheck" Label="@Localizer["price"]" />
-                         </MudStack>
+                    <MudItem xs="12">
+                        <MudGrid Justify="Justify.Center">
+                            <MudImage Src="@((string.IsNullOrWhiteSpace(imageSource) ? "https://dummyimage.com/1100x250/000/fff" : imageSource))"
+                                      ObjectFit="ObjectFit.Contain" Width="332" Height="250" Alt="@vendor?.Name" />
+                        </MudGrid>
                      </MudItem>
-                 </MudGrid>
-             </MudItem>
-             <MudItem xs="12">
-                 <MudAutocomplete T="string" Label=@Localizer["search"]
-                                  SearchFunc="SearchArtifactsAsync" ResetValueOnEmptyText="true"
-                                  ValueChanged="OnSearchInputAsync" />
-             </MudItem>
-             <MudDivider Class="mb-3 mt-3" />
-             <MudItem xs="12">
-                 <div class="d-flex justify-content-end">
-                     <MudButton OnClick="LoadListingPage"
-                                Variant="Variant.Filled" Color="Color.Primary">
-                         @Localizer["see-more"]
-                     </MudButton>
-                 </div>
-                 <MudGrid>
-                     @if (artifacts is not null)
-                    {
-                        <MudVirtualize Items="artifacts" Context="a">
-                            <ArtifactTemplate @key="a.Id" Artifact="a" />
-                        </MudVirtualize>
-                    }
-                </MudGrid>
-            </MudItem>
+                     <MudDivider Class="mt-5 mb-3" />
+                     <MudItem>
+                         <MudItem Class="d-flex justify-content-between">
+                             <MudText Typo="Typo.h5" Class="fw-bold text-uppercase">
+                                 @vendor?.Name
+                             </MudText>
+                             <MudItem>
+                                 @if (vendor?.Owner?.Id == loggedInUser?.Id)
+                                {
+                                    <MudFab Color="Color.Primary" OnClick="SendEditRequestAsync"
+                                            StartIcon="@Icons.Material.Filled.Edit" Label="Edit" />
+                                    <MudFab Color="Color.Error" OnClick="SendDeleteRequestAsync"
+                                            StartIcon="@Icons.Material.Filled.Delete" Label="Delete" />
+                                }
+                            </MudItem>
+                        </MudItem>
+                        <MudText Typo="Typo.subtitle1">
+                            @vendor?.Description
+                        </MudText>
+                        <MudDivider Class="mt-3 mb-3" />
+                        <MudText Typo="Typo.subtitle2">
+                            @Localizer["founded-on"] @vendor?.DateFounded
+                        </MudText>
+                    </MudItem>
+                </MudItem>
+                <MudItem xs="12" Class="mt-5">
+                    <MudGrid>
+                        <MudItem xs="6" Class="mt-auto mb-auto">
+                            <MudText Typo="Typo.body1" Class="fw-bold text-uppercase">
+                                @artifacts?.Count @Localizer["results"]
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="6" Class="d-flex justify-content-end">
+                            <MudStack Row Spacing="3">
+                                 <MudFab OnClick="() => OnFilterButtonClickAsync(false)" Color="GetSelectedFiltering(false)"
+                                         StartIcon="@Icons.Material.Filled._18UpRating" Label="@Localizer["rating"]" />
+                                 <MudFab OnClick="() => OnFilterButtonClickAsync(true)" Color="GetSelectedFiltering(true)"
+                                         StartIcon="@Icons.Material.Filled.PriceCheck" Label="@Localizer["price"]" />
+                             </MudStack>
+                         </MudItem>
+                     </MudGrid>
+                 </MudItem>
+                 <MudItem xs="12">
+                     <MudAutocomplete T="string" Label=@Localizer["search"]
+                                      SearchFunc="SearchArtifactsAsync" ResetValueOnEmptyText="true"
+                                      ValueChanged="OnSearchInputAsync" />
+                 </MudItem>
+                 <MudDivider Class="mb-3 mt-3" />
+                 <MudItem xs="12">
+                     <div class="d-flex justify-content-end">
+                         <MudButton OnClick="LoadListingPage"
+                                    Variant="Variant.Filled" Color="Color.Primary">
+                             @Localizer["see-more"]
+                         </MudButton>
+                     </div>
+                     <MudGrid>
+                         @if (artifacts is not null)
+                        {
+                            <MudVirtualize Items="artifacts" Context="a">
+                                <ArtifactTemplate @key="a.Id" Artifact="a" />
+                            </MudVirtualize>
+                        }
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
         </MudItem>
     </MudGrid>
 }

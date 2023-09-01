@@ -175,7 +175,7 @@ public partial class Vendor
 
     private async Task SendDeleteRequestAsync()
     {
-        if (loggedInUser?.Id != vendor?.Owner?.Id)
+        if (IsOwner() is false)
         {
             Snackbar.Add("You do not have permission to delete the vendor.");
         }
@@ -189,6 +189,34 @@ public partial class Vendor
 
             await DialogService.ShowAsync<DeleteVendor>($"Delete Vendor {vendor?.Name}", parameters);
         }
+    }
+
+    private async Task SendEditRequestAsync()
+    {
+        if (IsOwner() is false)
+        {
+            Snackbar.Add("You do not have permission to delete the vendor.");
+        }
+        else
+        {
+            var parameters = new DialogParameters<EditVendor>
+            {
+                { x => x.Vendor, vendor },
+                { x => x.LoggedInUser, loggedInUser }
+            };
+
+            await DialogService.ShowAsync<EditVendor>($"Delete Vendor {vendor?.Name}", parameters);
+        }
+    }
+
+    private bool IsOwner()
+    {
+        if (loggedInUser?.Id == vendor?.Owner?.Id)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private void ClosePage()
