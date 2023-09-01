@@ -26,15 +26,21 @@
             </MudItem>
         </MudGrid>
     </MudCardContent>
-    <MudCardActions>
-        <MudButton StartIcon="@Icons.Material.Filled.AdsClick" OnClick="LoadReviewPage">
-            @Localizer["learn-more"]
-        </MudButton>
-        @if (IsAuthor())
-        {
-            <MudIconButton OnClick="SendEditRequestAsync" Color="Color.Primary"
-                           Icon="@Icons.Material.Filled.Edit" />
-        }
+    <MudCardActions Class="d-flex justify-content-between">
+        <MudItem>
+            <MudButton StartIcon="@Icons.Material.Filled.AdsClick" OnClick="LoadReviewPage">
+                @Localizer["learn-more"]
+            </MudButton>
+        </MudItem>
+        <MudItem>
+            @if (IsAuthor())
+            {
+                <MudIconButton OnClick="SendEditRequestAsync" Color="Color.Primary"
+                               Icon="@Icons.Material.Filled.Edit" Title="Edit" />
+                <MudIconButton OnClick="SendDeleteRequestAsync" Color="Color.Error"
+                               Icon="@Icons.Material.Filled.Delete" Title="Delete" />
+            }
+        </MudItem>
     </MudCardActions>
 </MudCard>
 

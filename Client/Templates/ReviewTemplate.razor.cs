@@ -49,6 +49,24 @@ public partial class ReviewTemplate
         }
     }
 
+    private async Task SendDeleteRequestAsync()
+    {
+        if (IsAuthor() is false)
+        {
+            Snackbar.Add("You do not have permission to delete this review");
+        }
+        else
+        {
+            var parameters = new DialogParameters<DeleteReview>()
+            {
+                { x => x.Review, Review },
+                { x => x.LoggedInUser, LoggedInUser },
+            };
+
+            await DialogService.ShowAsync<DeleteReview>("Delete Review", parameters);
+        }
+    }
+
     private void LoadReviewPage()
     {
         Navigation.NavigateTo($"/Artifact/{Artifact.Id}/Review/{Review.Id}");

@@ -1,0 +1,87 @@
+﻿@inject IReviewEndpoint ReviewEndpoint
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<MudDialog Options="options">
+    <DialogContent>
+        <MudText>
+            Are you sure you really want to delete your review?
+        </MudText>
+        <MudText>
+            This action is not reversible. Your review will be gone forever.
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Cancel">
+            Cancel
+        </MudButton>
+        <MudButton Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete"
+                   Variant="Variant.Filled" OnClick="DeleteReviewAsync">
+            Delete
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ReviewDisplayModel Review { get; set; }
+
+    [Parameter]
+    public UserModel LoggedInUser { get; set; }
+
+    private bool isAllowed = false;
+    private DialogOptions options = new()
+        {
+            ClassBackground = "dialog-backdrop",
+            CloseButton = true,
+            CloseOnEscapeKey = true,
+        };
+
+    protected override void OnInitialized()
+    {
+        isAllowed = IsAllowed();
+        if (isAllowed is false)
+        {
+            Cancel();
+        }
+    }
+
+    private async Task DeleteReviewAsync()
+    {
+        if (isAllowed is false)
+        {
+            Snackbar.Add("You do not have permission to delete the review.", Severity.Error);
+            Cancel();
+        }
+        else
+        {
+            await ReviewEndpoint.DeleteReviewAsync(new ReviewModel(Review));
+            Snackbar.Add("Sucessfully deleted the review.", Severity.Success);
+            ClosePage();
+        }
+    }
+
+    private bool IsAllowed()
+    {
+        if (Review?.User.Id == LoggedInUser?.Id)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void Cancel()
+    {
+        MudDialog?.Close();
+    }
+
+    private void ClosePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+}
