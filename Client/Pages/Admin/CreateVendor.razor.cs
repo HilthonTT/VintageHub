@@ -9,10 +9,12 @@ public partial class CreateVendor
     private string errorMessage = "";
     private string imageSource = "";
     private bool isCreatingVendor = false;
+    private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
         users = await UserEndpoint.GetAllUsersAsync();
+        isLoading = false;
     }
 
     private async Task<IEnumerable<UserModel>> SearchUserAsync(string value)

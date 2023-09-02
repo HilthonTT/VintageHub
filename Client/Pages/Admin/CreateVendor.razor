@@ -9,7 +9,15 @@
 
 <PageTitle>@Localizer["create-vendor"]</PageTitle>
 
-@if (isCreatingVendor is false)
+@if (isLoading)
+{
+    <LoadingTemplate />
+}
+else if (isCreatingVendor)
+{
+    <CreatingTemplate ItemType="Item.Vendor" />
+}
+else 
 {
     <MudGrid Class="mt-3 mb-5">
         @if (string.IsNullOrWhiteSpace(errorMessage) is false)
@@ -104,10 +112,4 @@
         </MudItem>
     </MudGrid>
 }
-else
-{
-    <LoadingTemplate />
-}
-
-
 

@@ -11,8 +11,10 @@ public partial class CreateArtifact
     private IBrowserFile selectedImageFile;
     private string errorMessage = "";
     private string imageSource = "";
+    private bool isLoading = true;
     private bool isCreatingArtifact = false;
     private bool viewPreview = false;
+
     protected override async Task OnInitializedAsync()
     {
         vendors = await VendorEndpoint.GetAllVendorsAsync();
@@ -22,6 +24,7 @@ public partial class CreateArtifact
         artifact.CategoryId = categories.FirstOrDefault().Id;
         artifact.EraId = eras.FirstOrDefault().Id;
         artifact.VendorId = vendors.FirstOrDefault().Id;
+        isLoading = false;
     }
 
     private async Task<IEnumerable<VendorDisplayModel>> SearchVendorsAsync(string value)

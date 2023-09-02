@@ -631,6 +631,60 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Currently creating the artifact....
+        /// </summary>
+        public static string creating_artifact {
+            get {
+                return ResourceManager.GetString("creating-artifact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We are currenty creating your artifact please remain patient..
+        /// </summary>
+        public static string creating_artifact_description {
+            get {
+                return ResourceManager.GetString("creating-artifact-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently creating your review....
+        /// </summary>
+        public static string creating_review {
+            get {
+                return ResourceManager.GetString("creating-review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We are currently creating your review please remain patient..
+        /// </summary>
+        public static string creating_review_description {
+            get {
+                return ResourceManager.GetString("creating-review-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently creating your vendor....
+        /// </summary>
+        public static string creating_vendor {
+            get {
+                return ResourceManager.GetString("creating-vendor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We are currently creating your vendor please remain patient..
+        /// </summary>
+        public static string creating_vendor_description {
+            get {
+                return ResourceManager.GetString("creating-vendor-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Billing Address.
         /// </summary>
         public static string credit_card_billing_address {

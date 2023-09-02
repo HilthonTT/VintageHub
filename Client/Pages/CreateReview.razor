@@ -10,14 +10,19 @@
 
 <PageTitle>@Localizer["create-review"]</PageTitle>
 
-@if (noArtifact)
+@if (isLoading)
 {
-    <MudAlert Severity="Severity.Error" CloseIcon="@Icons.Material.Filled.Close"
-              CloseIconClicked="ClosePage" ShowCloseIcon="true">
-        @Localizer["not-found"]
-    </MudAlert>
+    <LoadingTemplate />
 }
-else if (isCreatingReview is false)
+else if (artifact is null)
+{
+    <NotFound />
+}
+else if (isCreatingReview)
+{
+    <CreatingTemplate ItemType="Item.Review" />
+}
+else
 {
     <MudGrid Class="mt-3 mb-5">
         @if (string.IsNullOrWhiteSpace(errorMessage) is false)
@@ -37,7 +42,7 @@ else if (isCreatingReview is false)
                             <MudText>
                                 <div class="d-flex">
                                     <MudText Color="Color.Default" Typo="Typo.h6" Class="mx-1">
-                                        @Localizer["make-review-for"] 
+                                        @Localizer["make-review-for"]
                                     </MudText>
                                     <MudText Color="Color.Primary" Typo="Typo.h6">
                                         '@artifact?.Name'
@@ -53,16 +58,16 @@ else if (isCreatingReview is false)
                         <MudItem xs="12">
                             <MudItem>
                                 <MudTextField @bind-Value="review.Title" T="string" Label=@Localizer["review-title"]
-                                              Required="true" Variant="Variant.Outlined" Clearable="true"/>
+                                              Required="true" Variant="Variant.Outlined" Clearable="true" />
                                 <MudText Color="Color.Error">
-                                    <ValidationMessage For="() => review.Title"/>
+                                    <ValidationMessage For="() => review.Title" />
                                 </MudText>
                             </MudItem>
                             <MudItem>
                                 <MudTextField @bind-Value="review.Description" T="string" Label=@Localizer["review-description"]
-                                              Required="true" Lines="2" Variant="Variant.Outlined"Clearable="true"/>
+                                              Required="true" Lines="2" Variant="Variant.Outlined" Clearable="true" />
                                 <MudText Color="Color.Error">
-                                    <ValidationMessage For="() => review.Description"/>
+                                    <ValidationMessage For="() => review.Description" />
                                 </MudText>
                             </MudItem>
                         </MudItem>
@@ -71,13 +76,13 @@ else if (isCreatingReview is false)
                         <MudItem xs="12">
                             <MudRating @bind-SelectedValue="review.Rating" Size="Size.Large" MaxValue="5" />
                             <MudText Color="Color.Error">
-                                <ValidationMessage For="() => review.Rating"/>
+                                <ValidationMessage For="() => review.Rating" />
                             </MudText>
                         </MudItem>
                     </MudCardContent>
                     <MudCardActions>
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
-                                    Color="Color.Primary" Class="ml-auto" Size="Size.Large">
+                                   Color="Color.Primary" Class="ml-auto" Size="Size.Large">
                             @Localizer["make-review"]
                         </MudButton>
                     </MudCardActions>
@@ -86,9 +91,3 @@ else if (isCreatingReview is false)
         </MudItem>
     </MudGrid>
 }
-else
-{
-    <LoadingTemplate />
-}
-
-

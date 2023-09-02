@@ -12,7 +12,15 @@
 
 <PageTitle>@Localizer["create-artifact"]</PageTitle>
 
-@if (isCreatingArtifact is false && viewPreview is false)
+@if (isLoading)
+{
+    <LoadingTemplate />
+}
+else if (isCreatingArtifact)
+{
+    <CreatingTemplate ItemType="Item.Artifact"/>
+}
+else if (viewPreview is false)
 {
     <MudGrid Class="mt-3 mb-5">
         @if (string.IsNullOrWhiteSpace(errorMessage) is false)
@@ -159,7 +167,7 @@
         </MudItem>
     </MudGrid>
 }
-else if (viewPreview && isCreatingArtifact is false)
+else
 {
     <MudGrid Justify="Justify.Center" Class="mt-3 mb-5">
         <MudItem xs="12">
@@ -202,9 +210,6 @@ else if (viewPreview && isCreatingArtifact is false)
         </MudItem>
     </MudGrid>
 }
-else
-{
-    <LoadingTemplate />
-}
+
 
 

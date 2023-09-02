@@ -7,7 +7,7 @@ public enum Rating
     TwoStar,
     ThreeStar,
     FourStar,
-    FiveStar
+    FiveStar,
 }
 
 public enum AuthState
@@ -19,5 +19,12 @@ public enum AuthState
     Logout,
     LogoutFailed,
     LogoutSuceeded,
-    Registering
+    Registering,
+}
+
+public enum Item
+{
+    Artifact,
+    Vendor,
+    Review,
 }

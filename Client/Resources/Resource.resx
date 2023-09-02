@@ -309,6 +309,24 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="create-vendors" xml:space="preserve">
     <value>Create Vendors</value>
   </data>
+  <data name="creating-artifact" xml:space="preserve">
+    <value>Currently creating the artifact...</value>
+  </data>
+  <data name="creating-artifact-description" xml:space="preserve">
+    <value>We are currenty creating your artifact please remain patient.</value>
+  </data>
+  <data name="creating-review" xml:space="preserve">
+    <value>Currently creating your review...</value>
+  </data>
+  <data name="creating-review-description" xml:space="preserve">
+    <value>We are currently creating your review please remain patient.</value>
+  </data>
+  <data name="creating-vendor" xml:space="preserve">
+    <value>Currently creating your vendor...</value>
+  </data>
+  <data name="creating-vendor-description" xml:space="preserve">
+    <value>We are currently creating your vendor please remain patient.</value>
+  </data>
   <data name="credit-card-billing-address" xml:space="preserve">
     <value>Billing Address</value>
   </data>

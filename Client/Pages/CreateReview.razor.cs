@@ -11,18 +11,20 @@ public partial class CreateReview
     private string errorMessage = "";
     private string imageSource = "";
     private bool isCreatingReview = false;
-    private bool noArtifact = false;
+    private bool isLoading = true;
+
     protected override async Task OnInitializedAsync()
     {
         artifact = await ArtifactEndpoint.GetArtifactByIdAsync(Id);
         if (artifact is null)
         {
-            noArtifact = true;
+            isLoading = false;
             return;
         }
 
         loggedInUser = await AuthProvider.GetUserFromAuth(UserEndpoint);
         imageSource = ImageEndpoint.GetImage(artifact.ImageId);
+        isLoading = false;
     }
 
     private void ClosePage()
