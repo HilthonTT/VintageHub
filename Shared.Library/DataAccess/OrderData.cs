@@ -137,7 +137,7 @@ public class OrderData : IOrderData
             var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel>("dbo.spGetById",
                 ParameterHelper.GetIdParameters(kvp.Value));
 
-            price += artifact.Price * kvp.Value;
+            price += artifact.FinalPrice * kvp.Value;
         }
 
         return price;
@@ -312,7 +312,7 @@ public class OrderData : IOrderData
             {
                 var artifact = await _sql.LoadFirstOrDefaultInTransactionAsync<ArtifactModel>
                     ("dbo.spArtifact_GetById", ParameterHelper.GetIdParameters(item.ArtifactId));
-                totalPrice += artifact.Price * item.Quantity;
+                totalPrice += artifact.FinalPrice * item.Quantity;
             }
 
             order.TotalPrice = totalPrice;
