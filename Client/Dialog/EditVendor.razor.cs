@@ -11,12 +11,14 @@ public partial class EditVendor
     [Parameter]
     public UserModel LoggedInUser { get; set; }
 
+    private const long MaxFileSize = 1024 * 1024 * 5; // represents 5MB
     private CreateVendorModel model = new();
     private IBrowserFile selectedImageFile;
     private bool isAllowed = false;
     private bool isCurrentlyEditing = false;
     private string modelImageSource = "";
     private string imageSource = "";
+    private string errorMessage = "";
     private DialogOptions options = new()
     {
         ClassBackground = "dialog-backdrop",
@@ -47,12 +49,20 @@ public partial class EditVendor
         {
             isCurrentlyEditing = true;
             MapVendorToModel();
+            var modifiedVendor = new VendorModel(Vendor);
+
+            if (IsVendorInvalid(modifiedVendor))
+            {
+                isCurrentlyEditing = false;
+                return;
+            }
+
             if (selectedImageFile?.Size > 0)
             {
                 Vendor.ImageId = await ImageEndpoint.UploadImageAsync(selectedImageFile);
             }
 
-            await VendorEndpoint.UpdateVendorAsync(new VendorModel(Vendor));
+            await VendorEndpoint.UpdateVendorAsync(modifiedVendor);
             
             isCurrentlyEditing = false;
             Snackbar.Add(Localizer["edit-vendor-successful"], Severity.Success);
@@ -94,6 +104,18 @@ public partial class EditVendor
         model.Name = Vendor.Name;
         model.Description = Vendor.Description;
         model.DateFounded = Vendor.DateFounded;
+    }
+
+    private bool IsVendorInvalid(VendorModel vendor)
+    {
+        if (selectedImageFile?.Size > MaxFileSize)
+        {
+            errorMessage = $"{Localizer["image-above-limit"]} 5MB";
+            selectedImageFile = null;
+            return true;
+        }
+
+        return false;
     }
 
     private bool IsAllowed()

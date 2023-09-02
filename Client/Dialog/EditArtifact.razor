@@ -12,7 +12,7 @@
         <DialogContent>
             @if (isCurrentlyEditing)
             {
-                <LoadingTemplate ShowDescription="false"/>
+                <LoadingTemplate ShowDescription="false" />
             }
             else
             {
@@ -32,6 +32,15 @@
                                       Src="@((string.IsNullOrWhiteSpace(modelImageSource) ? imageSource : modelImageSource))" />
                         </MudAvatar>
                     </MudGrid>
+                </MudItem>
+                <MudItem Class="mt-3 mb-3">
+                    @if (string.IsNullOrWhiteSpace(errorMessage) is false)
+                    {
+                        <MudAlert Severity="Severity.Error" ShowCloseIcon="true"
+                                  CloseIconClicked="() => errorMessage = string.Empty">
+                            @errorMessage
+                        </MudAlert>
+                    }
                 </MudItem>
                 <MudItem>
                     <MudGrid>

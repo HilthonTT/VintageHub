@@ -12,7 +12,8 @@
 
 @if (string.IsNullOrWhiteSpace(errorMessage) is false)
 {
-    <MudAlert Severity="Severity.Error" Class="mb-2" Elevation="5" Variant="Variant.Outlined">
+    <MudAlert Severity="Severity.Error" ShowCloseIcon="true" CloseIconClicked="() => errorMessage = string.Empty"
+        Class="mb-2" Elevation="5" Variant="Variant.Outlined">
         @errorMessage
     </MudAlert>
 }

@@ -11,6 +11,7 @@ public partial class EditArtifact
     [Parameter]
     public UserModel LoggedInUser { get; set; }
 
+    private const long MaxFileSize = 1024 * 1024 * 5; // represents 5MB
     private CreateArtifactModel model = new();
     private List<CategoryModel> categories;
     private List<EraModel> eras;
@@ -19,6 +20,7 @@ public partial class EditArtifact
     private bool isCurrentlyEditing = false;
     private string modelImageSource = "";
     private string imageSource = "";
+    private string errorMessage = "";
     private DialogOptions options = new()
     {
         ClassBackground = "dialog-backdrop",
@@ -50,12 +52,21 @@ public partial class EditArtifact
         {
             isCurrentlyEditing = true;
             MapArtifactToModel();
+            var modifiedArtifact = new ArtifactModel(Artifact);
+
+            if (IsArtifactInvalid(modifiedArtifact))
+            {
+                isCurrentlyEditing = false;
+                return;
+            }
+
             if (selectedImageFile?.Size > 0)
             {
                 Artifact.ImageId = await ImageEndpoint.UploadImageAsync(selectedImageFile);
             }
 
-            await ArtifactEndpoint.UpdateArtifactAsync(new ArtifactModel(Artifact));
+            await ArtifactEndpoint.UpdateArtifactAsync(modifiedArtifact);
+
             isCurrentlyEditing = false;
             Snackbar.Add(Localizer["edit-artifact-sucessful"], Severity.Success);
             Cancel();
@@ -106,6 +117,33 @@ public partial class EditArtifact
         model.CategoryId = Artifact.Category.Id;
         model.EraId = Artifact.Era.Id;
         model.Availability = Artifact.Availability;
+    }
+
+    private bool IsArtifactInvalid(ArtifactModel artifact)
+    {
+        var selectedEra = eras.Where(e => e.Id == artifact.EraId).FirstOrDefault();
+        var selectedCategory = categories.Where(c => c.Id == artifact.CategoryId).FirstOrDefault();
+
+        if (selectedEra is null || selectedCategory is null)
+        {
+            errorMessage = Localizer["era-unavailable"];
+            return true;
+        }
+
+        if (selectedCategory is null)
+        {
+            errorMessage = Localizer["category-unavailable"];
+            return true;
+        }
+
+        if (selectedImageFile?.Size > MaxFileSize)
+        {
+            errorMessage = $"{Localizer["image-above-limit"]} 5MB";
+            selectedImageFile = null;
+            return true;
+        }
+
+        return false;
     }
 
     private bool IsAllowed()
