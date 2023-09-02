@@ -249,6 +249,9 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="call-support" xml:space="preserve">
     <value>Call Support</value>
   </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="canceled" xml:space="preserve">
     <value>Canceled</value>
   </data>
@@ -381,8 +384,62 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="date-ordered" xml:space="preserve">
     <value>Date Ordered</value>
   </data>
+  <data name="delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="delete-artifact" xml:space="preserve">
+    <value>Are you sure you really want to delete this artifact?</value>
+  </data>
+  <data name="delete-artifact-successful" xml:space="preserve">
+    <value>Successfully deleted the artifact </value>
+  </data>
+  <data name="delete-description" xml:space="preserve">
+    <value>This action is not reversible. It will be gone forever.</value>
+  </data>
+  <data name="delete-no-permission" xml:space="preserve">
+    <value>You do not have permission to delete this item</value>
+  </data>
+  <data name="delete-review" xml:space="preserve">
+    <value>Are you sure you really want to delete your review?</value>
+  </data>
+  <data name="delete-review-successful" xml:space="preserve">
+    <value>Sucessfully deleted the review</value>
+  </data>
+  <data name="delete-vendor" xml:space="preserve">
+    <value>Are you sure you really want to delete your vendor?</value>
+  </data>
+  <data name="delete-vendor-successful" xml:space="preserve">
+    <value>Successfully deleted the vendor</value>
+  </data>
   <data name="discounts" xml:space="preserve">
     <value>Discounts</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="edit-artifact" xml:space="preserve">
+    <value>You are now currently editing your artifact.</value>
+  </data>
+  <data name="edit-artifact-sucessful" xml:space="preserve">
+    <value>Sucessfully edited the artifact</value>
+  </data>
+  <data name="edit-description" xml:space="preserve">
+    <value>When submitting the edit, you will not visually see the change yet.</value>
+  </data>
+  <data name="edit-no-permission" xml:space="preserve">
+    <value>You do not have permission to edit this item</value>
+  </data>
+  <data name="edit-review" xml:space="preserve">
+    <value>You are now currently editing your review</value>
+  </data>
+  <data name="edit-review-successful" xml:space="preserve">
+    <value>Sucessfully edited the review</value>
+  </data>
+  <data name="edit-vendor" xml:space="preserve">
+    <value>You are now currently editing your vendor</value>
+  </data>
+  <data name="edit-vendor-successful" xml:space="preserve">
+    <value>Successfully edited the vendor</value>
   </data>
   <data name="empty-cart" xml:space="preserve">
     <value>It seems you do not have any items in your shopping cart list.</value>
@@ -437,6 +494,9 @@ Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
   </data>
   <data name="learn-more" xml:space="preserve">
     <value>Learn More</value>
+  </data>
+  <data name="load-picture" xml:space="preserve">
+    <value>Load Picture</value>
   </data>
   <data name="load-preview" xml:space="preserve">
     <value>Load Preview</value>
@@ -611,6 +671,9 @@ Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
   </data>
   <data name="vendor-name-description" xml:space="preserve">
     <value>Enter the vendor's name</value>
+  </data>
+  <data name="vendor-name-incorrect" xml:space="preserve">
+    <value>The vendor name you've provided is incorrect.</value>
   </data>
   <data name="vendor-owner" xml:space="preserve">
     <value>Vendor Owner</value>

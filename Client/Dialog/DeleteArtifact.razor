@@ -1,24 +1,25 @@
-﻿@inject IArtifactEndpoint ArtifactEndpoint
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IArtifactEndpoint ArtifactEndpoint
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 
 <MudDialog Options="options">
     <DialogContent>
         <MudText>
-            Are you sure you really want to delete this artifact?
+            @Localizer["delete-artifact"]
         </MudText>
         <MudText>
-            This action is not reversible. The artifact will be gone forever.
+            @Localizer["delete-description"]
         </MudText>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel" Variant="Variant.Filled"
                    StartIcon="@Icons.Material.Filled.Cancel">
-            Cancel
+            @Localizer["cancel"]
         </MudButton>
         <MudButton Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete"
                    Variant="Variant.Filled" OnClick="DeleteArtifactAsync">
-            Delete
+            @Localizer["Delete"]
         </MudButton>
     </DialogActions>
 </MudDialog>

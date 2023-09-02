@@ -38,13 +38,13 @@ public partial class DeleteVendor
 
         if (isAllowed is false)
         {
-            Snackbar.Add("You do have not have permission to delete the vendor.", Severity.Error);
+            Snackbar.Add(Localizer["delete-no-permission"], Severity.Error);
             Cancel();
         }
         else
         {
             await VendorEndpoint.DeleteVendorAsync(new VendorModel(Vendor));
-            Snackbar.Add($"Successfully deleted vendor {Vendor.Id}", Severity.Success);
+            Snackbar.Add(Localizer["delete-vendor-successful"], Severity.Success);
             ClosePage();
         }
     }
@@ -53,7 +53,7 @@ public partial class DeleteVendor
     {
         if (string.IsNullOrWhiteSpace(typedVendorName) || typedVendorName == Vendor?.Name)
         {
-            errorMessage = "The vendor name you've provided is incorrect.";
+            errorMessage = Localizer["vendor-name-incorrect"];
             return true;
         }
 

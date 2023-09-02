@@ -1,4 +1,5 @@
-﻿@inject IVendorEndpoint VendorEndpoint
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IVendorEndpoint VendorEndpoint
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 
@@ -7,15 +8,15 @@
         <MudContainer MaxWidth="MaxWidth.Medium">
             <MudItem>
                 <MudText>
-                    Are you sure you really want to delete your vendor?
+                    @Localizer["delete-vendor"]
                 </MudText>
                 <MudText>
-                    This action is not reversible. The vendor will be gone forever.
+                    @Localizer["delete-description"]
                 </MudText>
             </MudItem>
             <MudDivider Class="mt-3 mb-3" />
             <MudItem>
-                <MudTextField @bind-Value="typedVendorName" Placeholder="Enter vendor's name"
+                <MudTextField @bind-Value="typedVendorName" Placeholder=@Localizer["vendor-name"]
                               Immediate="true" Variant="Variant.Filled" />
                 @if (string.IsNullOrWhiteSpace(errorMessage) is false)
                 {
@@ -29,11 +30,11 @@
     <DialogActions>
         <MudButton OnClick="Cancel" Variant="Variant.Filled"
                    StartIcon="@Icons.Material.Filled.Cancel">
-            Cancel
+            @Localizer["cancel"]
         </MudButton>
         <MudButton Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete"
                    Variant="Variant.Filled" OnClick="DeleteVendorAsync">
-            Delete
+            @Localizer["delete"]
         </MudButton>
     </DialogActions>
 </MudDialog>

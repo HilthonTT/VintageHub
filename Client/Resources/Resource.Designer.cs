@@ -451,6 +451,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string cancel {
+            get {
+                return ResourceManager.GetString("cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Canceled.
         /// </summary>
         public static string canceled {
@@ -847,11 +856,173 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string delete {
+            get {
+                return ResourceManager.GetString("delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you really want to delete this artifact?.
+        /// </summary>
+        public static string delete_artifact {
+            get {
+                return ResourceManager.GetString("delete-artifact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully deleted the artifact .
+        /// </summary>
+        public static string delete_artifact_successful {
+            get {
+                return ResourceManager.GetString("delete-artifact-successful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action is not reversible. It will be gone forever..
+        /// </summary>
+        public static string delete_description {
+            get {
+                return ResourceManager.GetString("delete-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have permission to delete this item.
+        /// </summary>
+        public static string delete_no_permission {
+            get {
+                return ResourceManager.GetString("delete-no-permission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you really want to delete your review?.
+        /// </summary>
+        public static string delete_review {
+            get {
+                return ResourceManager.GetString("delete-review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sucessfully deleted the review.
+        /// </summary>
+        public static string delete_review_successful {
+            get {
+                return ResourceManager.GetString("delete-review-successful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you really want to delete your vendor?.
+        /// </summary>
+        public static string delete_vendor {
+            get {
+                return ResourceManager.GetString("delete-vendor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully deleted the vendor.
+        /// </summary>
+        public static string delete_vendor_successful {
+            get {
+                return ResourceManager.GetString("delete-vendor-successful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discounts.
         /// </summary>
         public static string discounts {
             get {
                 return ResourceManager.GetString("discounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string edit {
+            get {
+                return ResourceManager.GetString("edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are now currently editing your artifact..
+        /// </summary>
+        public static string edit_artifact {
+            get {
+                return ResourceManager.GetString("edit-artifact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sucessfully edited the artifact.
+        /// </summary>
+        public static string edit_artifact_sucessful {
+            get {
+                return ResourceManager.GetString("edit-artifact-sucessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When submitting the edit, you will not visually see the change yet..
+        /// </summary>
+        public static string edit_description {
+            get {
+                return ResourceManager.GetString("edit-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have permission to edit this item.
+        /// </summary>
+        public static string edit_no_permission {
+            get {
+                return ResourceManager.GetString("edit-no-permission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are now currently editing your review.
+        /// </summary>
+        public static string edit_review {
+            get {
+                return ResourceManager.GetString("edit-review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sucessfully edited the review.
+        /// </summary>
+        public static string edit_review_successful {
+            get {
+                return ResourceManager.GetString("edit-review-successful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are now currently editing your vendor.
+        /// </summary>
+        public static string edit_vendor {
+            get {
+                return ResourceManager.GetString("edit-vendor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully edited the vendor.
+        /// </summary>
+        public static string edit_vendor_successful {
+            get {
+                return ResourceManager.GetString("edit-vendor-successful", resourceCulture);
             }
         }
         
@@ -1008,6 +1179,15 @@ namespace VintageHub.Client.Resources {
         public static string learn_more {
             get {
                 return ResourceManager.GetString("learn-more", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Picture.
+        /// </summary>
+        public static string load_picture {
+            get {
+                return ResourceManager.GetString("load-picture", resourceCulture);
             }
         }
         
@@ -1530,6 +1710,15 @@ namespace VintageHub.Client.Resources {
         public static string vendor_name_description {
             get {
                 return ResourceManager.GetString("vendor-name-description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The vendor name you&apos;ve provided is incorrect..
+        /// </summary>
+        public static string vendor_name_incorrect {
+            get {
+                return ResourceManager.GetString("vendor-name-incorrect", resourceCulture);
             }
         }
         

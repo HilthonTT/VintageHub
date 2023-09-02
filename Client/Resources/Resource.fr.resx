@@ -381,8 +381,62 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="date-ordered" xml:space="preserve">
     <value>Date de commande</value>
   </data>
+  <data name="delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="delete-artifact" xml:space="preserve">
+    <value>Are you sure you really want to delete this artifact?</value>
+  </data>
+  <data name="delete-artifact-successful" xml:space="preserve">
+    <value>Successfully deleted the artifact </value>
+  </data>
+  <data name="delete-description" xml:space="preserve">
+    <value>This action is not reversible. It will be gone forever.</value>
+  </data>
+  <data name="delete-no-permission" xml:space="preserve">
+    <value>You do not have permission to delete this item</value>
+  </data>
+  <data name="delete-review" xml:space="preserve">
+    <value>Are you sure you really want to delete your review?</value>
+  </data>
+  <data name="delete-review-successful" xml:space="preserve">
+    <value>Sucessfully deleted the review</value>
+  </data>
+  <data name="delete-vendor" xml:space="preserve">
+    <value>Are you sure you really want to delete your vendor?</value>
+  </data>
+  <data name="delete-vendor-successful" xml:space="preserve">
+    <value>Successfully deleted the vendor</value>
+  </data>
   <data name="discounts" xml:space="preserve">
     <value>Preferentiels</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="edit-artifact" xml:space="preserve">
+    <value>Vous êtes en train de modifier votre artefact</value>
+  </data>
+  <data name="edit-artifact-sucessful" xml:space="preserve">
+    <value>Modification réussie de l'artefact</value>
+  </data>
+  <data name="edit-description" xml:space="preserve">
+    <value>Lors de la soumission de la modification, vous ne verrez pas encore visuellement la modification.</value>
+  </data>
+  <data name="edit-no-permission" xml:space="preserve">
+    <value>Vous n'êtes pas autorisé à modifier cet élément</value>
+  </data>
+  <data name="edit-review" xml:space="preserve">
+    <value>Vous êtes en train de modifier votre avis</value>
+  </data>
+  <data name="edit-review-successful" xml:space="preserve">
+    <value>Modification réussie de la revue</value>
+  </data>
+  <data name="edit-vendor" xml:space="preserve">
+    <value>Vous êtes en train de modifier votre fournisseur</value>
+  </data>
+  <data name="edit-vendor-successful" xml:space="preserve">
+    <value>Modification réussie du fournisseur</value>
   </data>
   <data name="empty-cart" xml:space="preserve">
     <value>Il semble que vous n'ayez aucun article dans votre liste de panier.</value>
@@ -437,6 +491,9 @@ Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
   </data>
   <data name="learn-more" xml:space="preserve">
     <value>Pour en savoir plus</value>
+  </data>
+  <data name="load-picture" xml:space="preserve">
+    <value>Charger l'Image</value>
   </data>
   <data name="load-preview" xml:space="preserve">
     <value>Aperçu du chargement</value>

@@ -1,16 +1,17 @@
 namespace VintageHub.Client.Dialog;
 
-public partial class DeleteArtifact
+public partial class EditReview
 {
     [CascadingParameter]
     public MudDialogInstance MudDialog { get; set; }
 
     [Parameter]
-    public ArtifactDisplayModel Artifact { get; set; }
+    public ReviewDisplayModel Review { get; set; }
 
     [Parameter]
     public UserModel LoggedInUser { get; set; }
 
+    private CreateReviewModel model = new();
     private bool isAllowed = false;
     private DialogOptions options = new()
     {
@@ -18,7 +19,6 @@ public partial class DeleteArtifact
         CloseButton = true,
         CloseOnEscapeKey = true,
     };
-
     protected override void OnInitialized()
     {
         isAllowed = IsAllowed();
@@ -26,26 +26,33 @@ public partial class DeleteArtifact
         {
             Cancel();
         }
+
+        model.Title = Review.Title;
+        model.Description = Review.Description;
+        model.Rating = Review.Rating;
     }
 
-    private async Task DeleteArtifactAsync()
+    private async Task EditReviewAsync()
     {
         if (isAllowed is false)
         {
-            Snackbar.Add(Localizer["delete-no-permission"], Severity.Error);
+            Snackbar.Add(Localizer["edit-no-permission"], Severity.Error);
             Cancel();
         }
         else
         {
-            await ArtifactEndpoint.DeleteArtifactAsync(new ArtifactModel(Artifact));
-            Snackbar.Add(Localizer["delete-artifact-successfull"], Severity.Success);
-            ClosePage();
+            Review.Title = model.Title;
+            Review.Description = model.Description;
+            Review.Rating = model.Rating;
+            await ReviewEndpoint.UpdateReviewAsync(new ReviewModel(Review));
+            Snackbar.Add(Localizer["edit-review-successful"], Severity.Success);
+            Cancel();
         }
     }
 
     private bool IsAllowed()
     {
-        if (Artifact?.Vendor.OwnerUserId == LoggedInUser?.Id)
+        if (Review?.User.Id == LoggedInUser?.Id)
         {
             return true;
         }

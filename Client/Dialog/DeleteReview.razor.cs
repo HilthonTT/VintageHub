@@ -1,12 +1,12 @@
 namespace VintageHub.Client.Dialog;
 
-public partial class DeleteArtifact
+public partial class DeleteReview
 {
     [CascadingParameter]
     public MudDialogInstance MudDialog { get; set; }
 
     [Parameter]
-    public ArtifactDisplayModel Artifact { get; set; }
+    public ReviewDisplayModel Review { get; set; }
 
     [Parameter]
     public UserModel LoggedInUser { get; set; }
@@ -28,7 +28,7 @@ public partial class DeleteArtifact
         }
     }
 
-    private async Task DeleteArtifactAsync()
+    private async Task DeleteReviewAsync()
     {
         if (isAllowed is false)
         {
@@ -37,15 +37,15 @@ public partial class DeleteArtifact
         }
         else
         {
-            await ArtifactEndpoint.DeleteArtifactAsync(new ArtifactModel(Artifact));
-            Snackbar.Add(Localizer["delete-artifact-successfull"], Severity.Success);
+            await ReviewEndpoint.DeleteReviewAsync(new ReviewModel(Review));
+            Snackbar.Add(Localizer["delete-review-successful"], Severity.Success);
             ClosePage();
         }
     }
 
     private bool IsAllowed()
     {
-        if (Artifact?.Vendor.OwnerUserId == LoggedInUser?.Id)
+        if (Review?.User.Id == LoggedInUser?.Id)
         {
             return true;
         }
