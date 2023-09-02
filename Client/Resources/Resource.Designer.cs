@@ -433,6 +433,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Billing address is required.
+        /// </summary>
+        public static string billing_address_required {
+            get {
+                return ResourceManager.GetString("billing_address_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Buyer.
         /// </summary>
         public static string buyer {
@@ -465,6 +474,15 @@ namespace VintageHub.Client.Resources {
         public static string canceled {
             get {
                 return ResourceManager.GetString("canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cardholder name is required.
+        /// </summary>
+        public static string cardholder_name_required {
+            get {
+                return ResourceManager.GetString("cardholder_name_required", resourceCulture);
             }
         }
         
@@ -523,6 +541,15 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to City is required.
+        /// </summary>
+        public static string city_required {
+            get {
+                return ResourceManager.GetString("city_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         public static string clear {
@@ -564,6 +591,15 @@ namespace VintageHub.Client.Resources {
         public static string confirm_payment {
             get {
                 return ResourceManager.GetString("confirm-payment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country is required.
+        /// </summary>
+        public static string country_required {
+            get {
+                return ResourceManager.GetString("country_required", resourceCulture);
             }
         }
         
@@ -838,6 +874,24 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid credit card number.
+        /// </summary>
+        public static string credit_card_number_invalid {
+            get {
+                return ResourceManager.GetString("credit_card_number_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credit card number is required.
+        /// </summary>
+        public static string credit_card_number_required {
+            get {
+                return ResourceManager.GetString("credit_card_number_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Postal Code.
         /// </summary>
         public static string credit_card_postal_code {
@@ -897,6 +951,24 @@ namespace VintageHub.Client.Resources {
         public static string customer_service_description_2 {
             get {
                 return ResourceManager.GetString("customer-service-description-2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid CVV code.
+        /// </summary>
+        public static string cvv_code_invalid {
+            get {
+                return ResourceManager.GetString("cvv_code_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CVV code is required.
+        /// </summary>
+        public static string cvv_code_required {
+            get {
+                return ResourceManager.GetString("cvv_code_required", resourceCulture);
             }
         }
         
@@ -1153,6 +1225,42 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a valid expiration month.
+        /// </summary>
+        public static string expiration_month_invalid {
+            get {
+                return ResourceManager.GetString("expiration_month_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration month is required.
+        /// </summary>
+        public static string expiration_month_required {
+            get {
+                return ResourceManager.GetString("expiration_month_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a valid expiration year.
+        /// </summary>
+        public static string expiration_year_invalid {
+            get {
+                return ResourceManager.GetString("expiration_year_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration year is required.
+        /// </summary>
+        public static string expiration_year_required {
+            get {
+                return ResourceManager.GetString("expiration_year_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please specify the availability.
         /// </summary>
         public static string form_artifact_availability_required {
@@ -1257,6 +1365,114 @@ namespace VintageHub.Client.Resources {
         public static string form_artifact_vendor_required {
             get {
                 return ResourceManager.GetString("form-artifact_vendor_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The description must not be above 1000 characters.
+        /// </summary>
+        public static string form_review_description_length {
+            get {
+                return ResourceManager.GetString("form_review_description_length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the review&apos;s description.
+        /// </summary>
+        public static string form_review_description_required {
+            get {
+                return ResourceManager.GetString("form_review_description_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your rating must not be above 5.
+        /// </summary>
+        public static string form_review_rating_range {
+            get {
+                return ResourceManager.GetString("form_review_rating_range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must provide the review&apos;s rating.
+        /// </summary>
+        public static string form_review_rating_required {
+            get {
+                return ResourceManager.GetString("form_review_rating_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title must not be above 100 characters.
+        /// </summary>
+        public static string form_review_title_length {
+            get {
+                return ResourceManager.GetString("form_review_title_length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the review&apos;s title.
+        /// </summary>
+        public static string form_review_title_required {
+            get {
+                return ResourceManager.GetString("form_review_title_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the date founded.
+        /// </summary>
+        public static string form_vendor_date_founded_required {
+            get {
+                return ResourceManager.GetString("form_vendor_date_founded_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The vendor&apos;s description must not be above 1000 characters.
+        /// </summary>
+        public static string form_vendor_description_length {
+            get {
+                return ResourceManager.GetString("form_vendor_description_length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the vendor&apos;s description.
+        /// </summary>
+        public static string form_vendor_description_required {
+            get {
+                return ResourceManager.GetString("form_vendor_description_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The vendor&apos;s name must not be above 100 characters.
+        /// </summary>
+        public static string form_vendor_name_length {
+            get {
+                return ResourceManager.GetString("form_vendor_name_length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the vendor&apos;s name.
+        /// </summary>
+        public static string form_vendor_name_required {
+            get {
+                return ResourceManager.GetString("form_vendor_name_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide a value for the owner.
+        /// </summary>
+        public static string form_vendor_owner_required {
+            get {
+                return ResourceManager.GetString("form_vendor_owner_required", resourceCulture);
             }
         }
         
@@ -1597,11 +1813,47 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid payment amount.
+        /// </summary>
+        public static string payment_amount_invalid {
+            get {
+                return ResourceManager.GetString("payment_amount_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment amount is required.
+        /// </summary>
+        public static string payment_amount_required {
+            get {
+                return ResourceManager.GetString("payment_amount_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Payment confirmed..
         /// </summary>
         public static string payment_confirmed {
             get {
                 return ResourceManager.GetString("payment-confirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid postal code.
+        /// </summary>
+        public static string postal_code_invalid {
+            get {
+                return ResourceManager.GetString("postal_code_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Postal code is required.
+        /// </summary>
+        public static string postal_code_required {
+            get {
+                return ResourceManager.GetString("postal_code_required", resourceCulture);
             }
         }
         
@@ -1773,6 +2025,15 @@ namespace VintageHub.Client.Resources {
         public static string show_events {
             get {
                 return ResourceManager.GetString("show-events", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State is required.
+        /// </summary>
+        public static string state_required {
+            get {
+                return ResourceManager.GetString("state_required", resourceCulture);
             }
         }
         

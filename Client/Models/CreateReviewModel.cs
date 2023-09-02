@@ -2,15 +2,15 @@
 
 public class CreateReviewModel
 {
-    [Required(ErrorMessage = "Please provide the review's title.")]
-    [StringLength(100, ErrorMessage = "The title mut not be above 100 characters.")]
+    [Required(ErrorMessageResourceName = "form_review_title_required", ErrorMessageResourceType = typeof(Resource))]
+    [StringLength(100, ErrorMessageResourceName = "form_review_title_length", ErrorMessageResourceType = typeof(Resource))]
     public string Title { get; set; }
 
-    [Required(ErrorMessage = "Please provide the review's description.")]
-    [StringLength(1000, ErrorMessage = "The description must not be above 1000 characters.")]
+    [Required(ErrorMessageResourceName = "form_review_description_required", ErrorMessageResourceType = typeof(Resource))]
+    [StringLength(1000, ErrorMessageResourceName = "form_review_description_length", ErrorMessageResourceType = typeof(Resource))]
     public string Description { get; set; }
 
-    [Required(ErrorMessage = "You must provide the review's rating.")]
-    [Range(0, 5, ErrorMessage = "Your rating must not be above 5.")]
+    [Required(ErrorMessageResourceName = "form_review_rating_required", ErrorMessageResourceType = typeof(Resource))]
+    [Range(0, 5, ErrorMessageResourceName = "form_review_rating_range", ErrorMessageResourceType = typeof(Resource))]
     public int Rating { get; set; }
 }

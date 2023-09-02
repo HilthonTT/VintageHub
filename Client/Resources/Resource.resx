@@ -243,6 +243,9 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="auth-registering-description" xml:space="preserve">
     <value>You are now being registered, please remain patient.</value>
   </data>
+  <data name="billing_address_required" xml:space="preserve">
+    <value>Billing address is required</value>
+  </data>
   <data name="buyer" xml:space="preserve">
     <value>Buyer</value>
   </data>
@@ -254,6 +257,9 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   </data>
   <data name="canceled" xml:space="preserve">
     <value>Canceled</value>
+  </data>
+  <data name="cardholder_name_required" xml:space="preserve">
+    <value>Cardholder name is required</value>
   </data>
   <data name="cart" xml:space="preserve">
     <value>Cart</value>
@@ -273,6 +279,9 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="checkout" xml:space="preserve">
     <value>Checkout</value>
   </data>
+  <data name="city_required" xml:space="preserve">
+    <value>City is required</value>
+  </data>
   <data name="clear" xml:space="preserve">
     <value>Clear</value>
   </data>
@@ -287,6 +296,9 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   </data>
   <data name="confirm-payment" xml:space="preserve">
     <value>Confirm Payment</value>
+  </data>
+  <data name="country_required" xml:space="preserve">
+    <value>Country is required</value>
   </data>
   <data name="create-artifact" xml:space="preserve">
     <value>Create An Artifact</value>
@@ -390,6 +402,12 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="credit-card-state-description" xml:space="preserve">
     <value>Please enter a state</value>
   </data>
+  <data name="credit_card_number_invalid" xml:space="preserve">
+    <value>Please enter a valid credit card number</value>
+  </data>
+  <data name="credit_card_number_required" xml:space="preserve">
+    <value>Credit card number is required</value>
+  </data>
   <data name="customer-service" xml:space="preserve">
     <value>Customer Service</value>
   </data>
@@ -398,6 +416,12 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   </data>
   <data name="customer-service-description-2" xml:space="preserve">
     <value>All the subjects in a blink of an eye!</value>
+  </data>
+  <data name="cvv_code_invalid" xml:space="preserve">
+    <value>Please enter a valid CVV code</value>
+  </data>
+  <data name="cvv_code_required" xml:space="preserve">
+    <value>CVV code is required</value>
   </data>
   <data name="date-ordered" xml:space="preserve">
     <value>Date Ordered</value>
@@ -483,6 +507,18 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="error-description" xml:space="preserve">
     <value>Oops, something went wrong.</value>
   </data>
+  <data name="expiration_month_invalid" xml:space="preserve">
+    <value>Please select a valid expiration month</value>
+  </data>
+  <data name="expiration_month_required" xml:space="preserve">
+    <value>Expiration month is required</value>
+  </data>
+  <data name="expiration_year_invalid" xml:space="preserve">
+    <value>Please select a valid expiration year</value>
+  </data>
+  <data name="expiration_year_required" xml:space="preserve">
+    <value>Expiration year is required</value>
+  </data>
   <data name="form-artifact-availability-required" xml:space="preserve">
     <value>Please specify the availability</value>
   </data>
@@ -518,6 +554,42 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   </data>
   <data name="form-artifact_vendor_required" xml:space="preserve">
     <value>Please provide the vendor</value>
+  </data>
+  <data name="form_review_description_length" xml:space="preserve">
+    <value>The description must not be above 1000 characters</value>
+  </data>
+  <data name="form_review_description_required" xml:space="preserve">
+    <value>Please provide the review's description</value>
+  </data>
+  <data name="form_review_rating_range" xml:space="preserve">
+    <value>Your rating must not be above 5</value>
+  </data>
+  <data name="form_review_rating_required" xml:space="preserve">
+    <value>You must provide the review's rating</value>
+  </data>
+  <data name="form_review_title_length" xml:space="preserve">
+    <value>The title must not be above 100 characters</value>
+  </data>
+  <data name="form_review_title_required" xml:space="preserve">
+    <value>Please provide the review's title</value>
+  </data>
+  <data name="form_vendor_date_founded_required" xml:space="preserve">
+    <value>Please provide the date founded</value>
+  </data>
+  <data name="form_vendor_description_length" xml:space="preserve">
+    <value>The vendor's description must not be above 1000 characters</value>
+  </data>
+  <data name="form_vendor_description_required" xml:space="preserve">
+    <value>Please provide the vendor's description</value>
+  </data>
+  <data name="form_vendor_name_length" xml:space="preserve">
+    <value>The vendor's name must not be above 100 characters</value>
+  </data>
+  <data name="form_vendor_name_required" xml:space="preserve">
+    <value>Please provide the vendor's name</value>
+  </data>
+  <data name="form_vendor_owner_required" xml:space="preserve">
+    <value>Please provide a value for the owner</value>
   </data>
   <data name="founded-on" xml:space="preserve">
     <value>Founded on the: </value>
@@ -636,6 +708,18 @@ Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
   <data name="payment-confirmed" xml:space="preserve">
     <value>Payment confirmed.</value>
   </data>
+  <data name="payment_amount_invalid" xml:space="preserve">
+    <value>Please enter a valid payment amount</value>
+  </data>
+  <data name="payment_amount_required" xml:space="preserve">
+    <value>Payment amount is required</value>
+  </data>
+  <data name="postal_code_invalid" xml:space="preserve">
+    <value>Please enter a valid postal code</value>
+  </data>
+  <data name="postal_code_required" xml:space="preserve">
+    <value>Postal code is required</value>
+  </data>
   <data name="previous-orders" xml:space="preserve">
     <value>My Previous Orders</value>
   </data>
@@ -692,6 +776,9 @@ Quisque luctus est at turpis sollicitudin, at pellentesque nunc semper.</value>
   </data>
   <data name="show-events" xml:space="preserve">
     <value>Show Events</value>
+  </data>
+  <data name="state_required" xml:space="preserve">
+    <value>State is required</value>
   </data>
   <data name="technical-assistance-support" xml:space="preserve">
     <value>Technical Assistance</value>

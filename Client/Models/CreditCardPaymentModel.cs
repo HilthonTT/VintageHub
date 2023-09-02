@@ -2,42 +2,42 @@
 
 public class CreditCardPaymentModel
 {
-    [Required(ErrorMessage = "Credit card number is required")]
-    [CreditCard(ErrorMessage = "Please enter a valid credit card number")]
+    [Required(ErrorMessageResourceName = "credit_card_number_required", ErrorMessageResourceType = typeof(Resource))]
+    [CreditCard(ErrorMessageResourceName = "credit_card_number_invalid", ErrorMessageResourceType = typeof(Resource))]
     public string CreditCardNumber { get; set; }
 
-    [Required(ErrorMessage = "Cardholder name is required")]
+    [Required(ErrorMessageResourceName = "cardholder_name_required", ErrorMessageResourceType = typeof(Resource))]
     public string CardholderName { get; set; }
 
-    [Required(ErrorMessage = "Expiration month is required")]
-    [Range(1, 12, ErrorMessage = "Please select a valid expiration month")]
+    [Required(ErrorMessageResourceName = "expiration_month_required", ErrorMessageResourceType = typeof(Resource))]
+    [Range(1, 12, ErrorMessageResourceName = "expiration_month_invalid", ErrorMessageResourceType = typeof(Resource))]
     public int ExpirationMonth { get; set; }
 
-    [Required(ErrorMessage = "Expiration year is required")]
-    [Range(2023, 2100, ErrorMessage = "Please select a valid expiration year")]
+    [Required(ErrorMessageResourceName = "expiration_year_required", ErrorMessageResourceType = typeof(Resource))]
+    [Range(2023, 2100, ErrorMessageResourceName = "expiration_year_invalid", ErrorMessageResourceType = typeof(Resource))]
     public int ExpirationYear { get; set; }
 
-    [Required(ErrorMessage = "CVV code is required")]
-    [RegularExpression("^[0-9]{3,4}$", ErrorMessage = "Please enter a valid CVV code")]
+    [Required(ErrorMessageResourceName = "cvv_code_required", ErrorMessageResourceType = typeof(Resource))]
+    [RegularExpression("^[0-9]{3,4}$", ErrorMessageResourceName = "cvv_code_invalid", ErrorMessageResourceType = typeof(Resource))]
     public string CVV { get; set; }
 
-    [Required(ErrorMessage = "Billing address is required")]
+    [Required(ErrorMessageResourceName = "billing_address_required", ErrorMessageResourceType = typeof(Resource))]
     public string BillingAddress { get; set; }
 
-    [Required(ErrorMessage = "City is required")]
+    [Required(ErrorMessageResourceName = "city_required", ErrorMessageResourceType = typeof(Resource))]
     public string City { get; set; }
 
-    [Required(ErrorMessage = "State is required")]
+    [Required(ErrorMessageResourceName = "state_required", ErrorMessageResourceType = typeof(Resource))]
     public string State { get; set; }
 
-    [Required(ErrorMessage = "Postal code is required")]
-    [RegularExpression("^[0-9]{5}$", ErrorMessage = "Please enter a valid postal code")]
+    [Required(ErrorMessageResourceName = "postal_code_required", ErrorMessageResourceType = typeof(Resource))]
+    [RegularExpression("^[0-9]{5}$", ErrorMessageResourceName = "postal_code_invalid", ErrorMessageResourceType = typeof(Resource))]
     public string PostalCode { get; set; }
 
-    [Required(ErrorMessage = "Country is required")]
+    [Required(ErrorMessageResourceName = "country_required", ErrorMessageResourceType = typeof(Resource))]
     public string Country { get; set; }
 
-    [Required(ErrorMessage = "Payment amount is required")]
-    [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a valid payment amount")]
+    [Required(ErrorMessageResourceName = "payment_amount_required", ErrorMessageResourceType = typeof(Resource))]
+    [Range(0.01, double.MaxValue, ErrorMessageResourceName = "payment_amount_invalid", ErrorMessageResourceType = typeof(Resource))]
     public decimal PaymentAmount { get; set; }
 }
