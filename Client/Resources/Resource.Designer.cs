@@ -1099,6 +1099,114 @@ namespace VintageHub.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please specify the availability.
+        /// </summary>
+        public static string form_artifact_availability_required {
+            get {
+                return ResourceManager.GetString("form-artifact-availability-required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the category.
+        /// </summary>
+        public static string form_artifact_category_required {
+            get {
+                return ResourceManager.GetString("form-artifact-category-required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The artifact&apos;s description must not exceed 1000 characters.
+        /// </summary>
+        public static string form_artifact_description_length {
+            get {
+                return ResourceManager.GetString("form-artifact-description-length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the artifact&apos;s description.
+        /// </summary>
+        public static string form_artifact_description_required {
+            get {
+                return ResourceManager.GetString("form-artifact-description-required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the discount amount.
+        /// </summary>
+        public static string form_artifact_discount_amount_required {
+            get {
+                return ResourceManager.GetString("form-artifact-discount-amount-required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the era.
+        /// </summary>
+        public static string form_artifact_era_required {
+            get {
+                return ResourceManager.GetString("form-artifact-era-required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The artifact&apos;s name must not exceed 100 characters.
+        /// </summary>
+        public static string form_artifact_name_length {
+            get {
+                return ResourceManager.GetString("form-artifact-name-length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the artifact&apos;s name.
+        /// </summary>
+        public static string form_artifact_name_required {
+            get {
+                return ResourceManager.GetString("form-artifact-name-required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The price must be above 0 Euros.
+        /// </summary>
+        public static string form_artifact_price_range {
+            get {
+                return ResourceManager.GetString("form-artifact-price-range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the artifact&apos;s price..
+        /// </summary>
+        public static string form_artifact_price_required {
+            get {
+                return ResourceManager.GetString("form-artifact-price-required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the artifact&apos;s quantity.
+        /// </summary>
+        public static string form_artifact_quantity_required {
+            get {
+                return ResourceManager.GetString("form-artifact-quantity-required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide the vendor.
+        /// </summary>
+        public static string form_artifact_vendor_required {
+            get {
+                return ResourceManager.GetString("form-artifact_vendor_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Founded on the: .
         /// </summary>
         public static string founded_on {

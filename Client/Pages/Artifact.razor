@@ -62,59 +62,56 @@ else
                                     <MudImage Src="@(string.IsNullOrWhiteSpace(artifactImageSource) ? "https://dummyimage.com/600x400/000/fff": artifactImageSource)"
                                               Alt="@artifact?.Name" Width="500" Height="500" />
                                 </MudItem>
-                                @if (artifact is not null)
-                                {
-                                    <MudItem xs="12">
-                                        <MudItem Class="mt-auto mb-auto">
-                                            <div class="d-flex justify-content-between">
-                                                <MudText Typo="Typo.h5" Class="mt-auto mb-auto">
-                                                    @artifact?.Name
-                                                </MudText>
-                                                <MudItem>
-                                                    @if (loggedInUser?.Id == artifact?.Vendor.OwnerUserId)
-                                                    {
-                                                        <MudFab Color="Color.Primary"
-                                                                OnClick="SendEditRequestAsync"
-                                                                Label="Edit"
-                                                                StartIcon="@Icons.Material.Filled.Edit" />
-                                                        <MudFab Color="Color.Error"
-                                                                OnClick="SendDeletingRequestAsync"
-                                                                Label="Delete"
-                                                                StartIcon="@Icons.Material.Filled.Delete" />
-                                                    }
-                                                </MudItem>
-                                            </div>
-                                        </MudItem>
-                                        <MudDivider Class="mt-3 mb-3" />
-                                        <MudText Typo="Typo.body1">
-                                            @artifact?.Description
-                                        </MudText>
-                                        <MudText Typo="Typo.subtitle1">
-                                            @Localizer["quantity"]: @artifact?.Quantity
-                                        </MudText>
-                                        <MudText Typo="Typo.subtitle1">
-                                            @Localizer["total-price"]: @artifact?.FinalPrice.ToString("0.####")
-                                        </MudText>
-                                    </MudItem>
-                                    <MudItem xs="12">
+                                <MudItem xs="12">
+                                    <MudItem Class="mt-auto mb-auto">
                                         <div class="d-flex justify-content-between">
-                                            <MudRating SelectedValue="(int)artifact?.Rating" ReadOnly="true"
-                                                       Class="mt-auto mb-auto" />
-                                            <MudStack Row>
-                                             <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity"
-                                                              Class="mt-auto mb-auto" />
-                                             <MudButton OnClick="AddToCartAsync" StartIcon="@Icons.Material.Filled.AddShoppingCart"
-                                                        Color="Color.Error" Disabled="!canAddToCart" Class="mt-auto mb-auto">
-                                                 @Localizer["add-cart"]
-                                             </MudButton>
-                                             <MudButton OnClick="AddToWishlistAsync" StartIcon="@Icons.Material.Filled.List"
-                                                        Color="Color.Secondary" Disabled="!canAddToWishlist">
-                                                 @Localizer["add-wishlist"]
-                                             </MudButton>
-                                         </MudStack>
-                                     </div>
-                                 </MudItem>
-                                }
+                                            <MudText Typo="Typo.h5" Class="mt-auto mb-auto">
+                                                @artifact?.Name
+                                            </MudText>
+                                            <MudItem>
+                                                @if (loggedInUser?.Id == artifact?.Vendor.OwnerUserId)
+                                                {
+                                                    <MudFab Color="Color.Primary"
+                                                            OnClick="SendEditRequestAsync"
+                                                            Label=@Localizer["edit"]
+                                                            StartIcon="@Icons.Material.Filled.Edit" />
+                                                    <MudFab Color="Color.Error"
+                                                            OnClick="SendDeletingRequestAsync"
+                                                            Label=@Localizer["delete"]
+                                                            StartIcon="@Icons.Material.Filled.Delete" />
+                                                }
+                                            </MudItem>
+                                        </div>
+                                    </MudItem>
+                                    <MudDivider Class="mt-3 mb-3" />
+                                    <MudText Typo="Typo.body1">
+                                        @artifact?.Description
+                                    </MudText>
+                                    <MudText Typo="Typo.subtitle1">
+                                        @Localizer["quantity"]: @artifact?.Quantity
+                                    </MudText>
+                                    <MudText Typo="Typo.subtitle1">
+                                        @Localizer["total-price"]: @artifact?.FinalPrice.ToString("0.####")
+                                    </MudText>
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <div class="d-flex justify-content-between">
+                                        <MudRating SelectedValue="(int)artifact?.Rating" ReadOnly="true"
+                                                    Class="mt-auto mb-auto" />
+                                        <MudStack Row>
+                                            <MudNumericField @bind-Value="selectedQuantity" Label="Quantity" Min="0" Max="(int)artifact?.Quantity"
+                                                            Class="mt-auto mb-auto" />
+                                            <MudButton OnClick="AddToCartAsync" StartIcon="@Icons.Material.Filled.AddShoppingCart"
+                                                    Color="Color.Error" Disabled="!canAddToCart" Class="mt-auto mb-auto">
+                                                @Localizer["add-cart"]
+                                            </MudButton>
+                                            <MudButton OnClick="AddToWishlistAsync" StartIcon="@Icons.Material.Filled.List"
+                                                    Color="Color.Secondary" Disabled="!canAddToWishlist">
+                                                @Localizer["add-wishlist"]
+                                            </MudButton>
+                                        </MudStack>
+                                    </div>
+                                </MudItem>
                             </MudGrid>
                         </MudCardContent>
                     </MudCard>
@@ -134,7 +131,7 @@ else
                             <MudDivider />
                         </MudItem>
                         <MudItem xs="12" Class="mt-3">
-                            @if (reviews is not null && artifact is not null)
+                            @if (reviews is not null)
                             {
                                 <MudVirtualize Items="reviews" Context="r" OverscanCount="10">
                                     <ReviewTemplate @key="r.Id" Review="r" Artifact="artifact" LoggedInUser="loggedInUser"/>

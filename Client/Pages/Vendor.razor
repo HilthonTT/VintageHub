@@ -98,10 +98,14 @@
                              <MudItem>
                                  @if (vendor?.Owner?.Id == loggedInUser?.Id)
                                 {
-                                    <MudFab Color="Color.Primary" OnClick="SendEditRequestAsync"
-                                            StartIcon="@Icons.Material.Filled.Edit" Label="Edit" />
-                                    <MudFab Color="Color.Error" OnClick="SendDeleteRequestAsync"
-                                            StartIcon="@Icons.Material.Filled.Delete" Label="Delete" />
+                                    <MudFab Color="Color.Primary"
+                                            OnClick="SendEditRequestAsync"
+                                            Label=@Localizer["edit"]
+                                            StartIcon="@Icons.Material.Filled.Edit" />
+                                    <MudFab Color="Color.Error"
+                                            OnClick="SendDeleteRequestAsync"
+                                            Label=@Localizer["delete"]
+                                            StartIcon="@Icons.Material.Filled.Delete" />
                                 }
                             </MudItem>
                         </MudItem>

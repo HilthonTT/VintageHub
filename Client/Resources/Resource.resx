@@ -465,6 +465,42 @@ Sed vitae elit id nunc aliquam volutpat in a arcu.</value>
   <data name="error-description" xml:space="preserve">
     <value>Oops, something went wrong.</value>
   </data>
+  <data name="form-artifact-availability-required" xml:space="preserve">
+    <value>Please specify the availability</value>
+  </data>
+  <data name="form-artifact-category-required" xml:space="preserve">
+    <value>Please provide the category</value>
+  </data>
+  <data name="form-artifact-description-length" xml:space="preserve">
+    <value>The artifact's description must not exceed 1000 characters</value>
+  </data>
+  <data name="form-artifact-description-required" xml:space="preserve">
+    <value>Please provide the artifact's description</value>
+  </data>
+  <data name="form-artifact-discount-amount-required" xml:space="preserve">
+    <value>Please provide the discount amount</value>
+  </data>
+  <data name="form-artifact-era-required" xml:space="preserve">
+    <value>Please provide the era</value>
+  </data>
+  <data name="form-artifact-name-length" xml:space="preserve">
+    <value>The artifact's name must not exceed 100 characters</value>
+  </data>
+  <data name="form-artifact-name-required" xml:space="preserve">
+    <value>Please provide the artifact's name</value>
+  </data>
+  <data name="form-artifact-price-range" xml:space="preserve">
+    <value>The price must be above 0 Euros</value>
+  </data>
+  <data name="form-artifact-price-required" xml:space="preserve">
+    <value>Please provide the artifact's price.</value>
+  </data>
+  <data name="form-artifact-quantity-required" xml:space="preserve">
+    <value>Please provide the artifact's quantity</value>
+  </data>
+  <data name="form-artifact_vendor_required" xml:space="preserve">
+    <value>Please provide the vendor</value>
+  </data>
   <data name="founded-on" xml:space="preserve">
     <value>Founded on the: </value>
   </data>

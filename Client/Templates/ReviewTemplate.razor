@@ -36,9 +36,9 @@
             @if (IsAuthor())
             {
                 <MudIconButton OnClick="SendEditRequestAsync" Color="Color.Primary"
-                               Icon="@Icons.Material.Filled.Edit" Title="Edit" />
+                               Icon="@Icons.Material.Filled.Edit" Title=@Localizer["edit"] />
                 <MudIconButton OnClick="SendDeleteRequestAsync" Color="Color.Error"
-                               Icon="@Icons.Material.Filled.Delete" Title="Delete" />
+                               Icon="@Icons.Material.Filled.Delete" Title=@Localizer["delete"] />
             }
         </MudItem>
     </MudCardActions>
