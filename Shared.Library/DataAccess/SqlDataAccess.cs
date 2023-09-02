@@ -2,32 +2,18 @@
 public class SqlDataAccess : ISqlDataAccess
 {
     private const string DbName = "VintageData";
-    private const string CacheName = nameof(SqlDataAccess);
-
-    private readonly IMemoryCache _cache;
     private readonly IConfiguration _config;
-
     private static IDbConnection _connection;
     private static IDbTransaction _transaction;
 
-    public SqlDataAccess(
-        IMemoryCache cache,
-        IConfiguration config)
+    public SqlDataAccess(IConfiguration config)
     {
-        _cache = cache;
         _config = config;
     }
 
     private string GetConnectionString()
     {
-        string output = _cache.Get<string>(CacheName);
-        if (string.IsNullOrWhiteSpace(output))
-        {
-            output = _config.GetConnectionString(DbName);
-            _cache.Set(CacheName, output);
-        }
-
-        return output;
+        return _config.GetConnectionString(DbName);
     }
 
     private static void Dispose()
@@ -37,6 +23,16 @@ public class SqlDataAccess : ISqlDataAccess
 
         _transaction = null;
         _connection = null;
+    }
+
+    private static void MapProperty<T, U>(T primaryEntity, U secondaryObject)
+    {
+        var properties = typeof(T).GetProperties();
+        var selectedProperty = properties.FirstOrDefault(
+            x => x.PropertyType == secondaryObject.GetType() ||
+            x.Name == secondaryObject.GetType().Name);
+
+        selectedProperty?.SetValue(primaryEntity, secondaryObject);
     }
 
     public async Task<List<T>> LoadDataAsync<T>(string storedProcedure, DynamicParameters parameters)
@@ -71,14 +67,7 @@ public class SqlDataAccess : ISqlDataAccess
 
                 for (int i = 0; i < objects.Length; i++)
                 {
-                    var secondaryObject = objects[i];
-
-                    var properties = typeof(T).GetProperties();
-                    var selectedProperty = properties.FirstOrDefault(
-                        x => x.PropertyType == secondaryObject.GetType() ||
-                        x.Name == secondaryObject.GetType().Name);
-
-                    selectedProperty?.SetValue(primaryEntity, secondaryObject);
+                    MapProperty(primaryEntity, objects[i]);
                 }
 
                 return primaryEntity;
@@ -111,16 +100,7 @@ public class SqlDataAccess : ISqlDataAccess
 
                 for (int i = 0; i < objects.Length; i++)
                 {
-                    var secondaryObject = objects[i];
-
-                    var propertyName = secondaryObject.GetType().Name;
-
-                    var properties = typeof(T).GetProperties();
-                    var selectedProperty = properties.FirstOrDefault(
-                        x => x.PropertyType == secondaryObject.GetType() || 
-                        x.Name == secondaryObject.GetType().Name);
-
-                    selectedProperty?.SetValue(primaryEntity, secondaryObject);
+                    MapProperty(primaryEntity, objects[i]);
                 }
 
                 return primaryEntity;
