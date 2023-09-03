@@ -1,6 +1,5 @@
-# VintageHub
+# VintageHub - Your Gateway to Antique Treasures
 
-VintageHub - Your Gateway to Antique Treasures
 Welcome to VintageHub, your premier destination for discovering and acquiring timeless artifacts and antique treasures from the past. Our platform brings together collectors, enthusiasts, and connoisseurs of history to explore a curated selection of vintage items. With an emphasis on authenticity and quality, VintageHub is the go-to e-commerce hub for those with a passion for the past.
 
 Key Features:
