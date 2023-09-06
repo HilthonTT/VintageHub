@@ -85,31 +85,8 @@ public class SqlDataAccess : ISqlDataAccess
         DynamicParameters parameters,
         params object[] secondaryObjects)
     {
-        string connectionString = GetConnectionString();
-        using var connection = new SqlConnection(connectionString);
-
-        var types = new List<Type> { typeof(T) };
-        types.AddRange(secondaryObjects.Select(obj => obj.GetType()));
-
-        var entities = await connection.QueryAsync(
-            storedProcedure,
-            types.ToArray(),
-            map: (objects) =>
-            {
-                var primaryEntity = (T)objects[0];
-
-                for (int i = 0; i < objects.Length; i++)
-                {
-                    MapProperty(primaryEntity, objects[i]);
-                }
-
-                return primaryEntity;
-            },
-            splitOn: splitOnColumn,
-            param: parameters,
-            commandType: CommandType.StoredProcedure);
-
-        return entities.FirstOrDefault();
+        var rows = await LoadDetailedDataAsync<T>(splitOnColumn, storedProcedure, parameters, secondaryObjects);
+        return rows.FirstOrDefault();
     }
 
     public async Task<T> LoadFirstOrDefaultAsync<T>(string storedProcedure, DynamicParameters parameters)
